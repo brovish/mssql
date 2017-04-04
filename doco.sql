@@ -19,7 +19,7 @@ GO
 --sales is the schema and product is the table. schema is a way to organize db objects(tables, views, stored procedures). sort of a namespace fo db
 --identity is a auto incrementing column. primary key(composed of one or more columns) uniquely identifies data rows in the table. there can be 
 --only one primary key and identity in a table
---varchar is varying width characters...null specifies a nullable column
+--varchar is varying length character string...null specifies a nullable column
 create table Sales.Product
 (ProductID Integer Identity Primary Key,
 Name VarChar(20),
@@ -32,6 +32,12 @@ Go
 Alter Table Sales.Product
 Add Supplier Integer Not Null
 Constraint def_supplier	Default 1;
+
+--make sure every product hahs a valid supplier
+Alter Table Sales.Product
+Add Constraint fk_product_supplier
+Foreign Key (Supplier) References Supplier(SupplierID);
+
 
 --delete deletes the data in the table while drop removes the table itself from the database. Data definition language(DDL) is comprised of
 --create, alter and drop
@@ -113,3 +119,33 @@ From Customer;
 Select CustomerID,FirstName,LastName 
 	From dbo.Customer
 	Where CreditLimit > 500;
+
+Alter Table dbo.Customer
+	Add AccountManager Int Null References dbo.AccountManagers(EmployeeID);
+
+--data types Character strings
+--1) fixed length
+--2) variable length
+--3) large text
+--4) unicode for character sets not in ascii
+
+--data types numbers
+--1) ints
+--2) exact decimals
+--3) approximate decimals
+
+--data types for temporal values
+--1) dates
+--2) times
+--3) date and time
+--4) offsets
+
+--data types
+--1) bit for true false
+--2) binary for say a pic or video
+--3) guid
+--4) xml
+--5) spatial data like coordinates
+--6) timestamp
+
+--if anything fails, nothing gets inserted
