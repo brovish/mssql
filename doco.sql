@@ -24,3 +24,35 @@ create table Sales.Product
 (ProductID Integer Identity Primary Key,
 Name VarChar(20),
 Price Decimal Null);
+
+Go
+
+--constraints are rules you apply to a particular column.Can be used to enforce integrity of data..so cant have products without suppliers
+--.alter allows u to add/remove cols, constraints, keys.
+Alter Table Sales.Product
+Add Supplier Integer Not Null
+Constraint def_supplier	Default 1;
+
+--delete deletes the data in the table while drop removes the table itself from the database. Data definition language(DDL) is comprised of
+--create, alter and drop
+Drop Table Sales.Product
+
+--position of the columns in the table correlates to the order in which we supplied the values here. so not need to specify column names
+Insert Into Sales.Product
+Values('Widget',12.99,1);
+
+Insert Into Sales.Product (Name, Price, Supplier)
+Values('Widget',12.99,1);
+
+Insert Into Sales.Product 
+Values('Widget',Null,Default);
+
+--this is an error as specifying Null won't direct the table to use the default for Supplied...only not specifying a value would
+Insert Into Sales.Product 
+Values('Widget',Null,Null);
+
+Select * from Sales.Product
+Select Name, Price, Supplier from Sales.Product
+Select Name As Product, Price * .9  As SalesPrice from Sales.Product
+--it looks at the From clause, then at the Where clause and then the Select clause
+Select Name, Price from Sales.Product Where Supplier = 2
