@@ -47,7 +47,8 @@ Values('Widget',12.99,1);
 Insert Into Sales.Product 
 Values('Widget',Null,Default);
 
---this is an error as specifying Null won't direct the table to use the default for Supplied...only not specifying a value would
+--this is an error as the supplier column is not Null. had the supplier column allowed Nulls, this would have succedded with 
+--Null insertion
 Insert Into Sales.Product 
 Values('Widget',Null,Null);
 
@@ -56,3 +57,59 @@ Select Name, Price, Supplier from Sales.Product
 Select Name As Product, Price * .9  As SalesPrice from Sales.Product
 --it looks at the From clause, then at the Where clause and then the Select clause
 Select Name, Price from Sales.Product Where Supplier = 2
+
+Use AdventureWorks2014
+Go
+
+--NvarChar is variable width unicode. maximum lenght of 20 chars
+Create Table dbo.Customer
+(CustomerID Integer Identity Primary Key,
+FirstName NVarChar(20) Not Null,
+MiddleName NVarChar(20) Null,
+LastName NVarChar(20) Null,
+AccountOpened Date Default GetDate(),
+CreditLimit Decimal(6,2) Default 1000.00);
+Go
+
+--Insert a row with values
+Insert Into dbo.Customer
+Values('Dan','D','Drayton','1/1/2016',500.00);
+Go
+
+--Insert explicit Nulls and Defaults
+Insert Into dbo.Customer
+Values('Ram',Null,'Ford',Default,Default);
+Go
+
+--Insert into specific cols
+Insert Into dbo.Customer(FirstName,LastName)
+Values('Jatt','Putt');
+Go
+
+--Insert invalid data
+Insert Into dbo.Customer(FirstName,LastName)
+Values(Null,'Putt');
+Go
+
+--Insert: Are Null credit limits allowed? We have not specified Null or Not Null for this column
+--by default Null values are allowed if not specified. We should change this default behavior in the database
+Insert Into dbo.Customer
+Values('Sphia','S','Gtot','1/1/2016',Null);
+Go
+
+--since one of the inserts above failed, the customerId col would be missing a value in the sequence
+Select * from Customer;
+Go
+
+Select CustomerID,FirstName,LastName From Customer;
+
+--select calculated cols
+Select CustomerID,
+	FirstName + ' ' + LastName As FullName,
+	DATEDIFF(dd,AccountOpened,GETDATE()) As AccountDays
+From Customer;
+
+--filter rows
+Select CustomerID,FirstName,LastName 
+	From dbo.Customer
+	Where CreditLimit > 500;
