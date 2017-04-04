@@ -149,3 +149,41 @@ Alter Table dbo.Customer
 --6) timestamp
 
 --if anything fails, nothing gets inserted
+
+--a view can be 'viewed' as a wrapper on a select statement so that user does not havd to write that select statement again and again
+Create View as vw_ProductPrice
+As
+	Select Name,Price
+	From Product
+	Where Supplier = 2;
+Go
+
+Select Name, Price
+From vw_ProductPrice;
+
+--move from checkings account to savings account..a transaction
+Create Procedure transferFunds
+As
+Begin Transaction
+	Update Savings
+	Set Balance +=500
+	Where AccountID =3;
+	Update Savings
+	Set Balance -=500
+	Where AccountID =3;
+Commit Transaction
+--or if an error
+RollBack Transaction
+
+Exec transferFunds;
+
+--indexes to improve performance of db. Data in a table is stored in pages on disk. using a clustered index on ProductId means that
+--the data in the Pprduct table will be stored in pages in order of Product Ids. The first page might have product Id 1 and 2, next page might have 
+--product Id 3 and 4 and so on..This mapping between index and pages(1-->01;3-->02) is maintained so that you do not have to read all the pages to get data
+--you are looking for.You can have index on composite cols 
+Create Clustered Index idx_ProductID
+On Sales.Product(ProductId);
+
+--so u create a clustered index to determine the order in which the data is stored on the disk. You can have one clustered index per table.
+--and then u cna create one or more non-clustered index for additional fields that you commonly search on to reduce the number of pages u
+--have to read.
