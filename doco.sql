@@ -190,4 +190,116 @@ On Sales.Product(ProductId);
 
 --A clustered index determines the order in which the rows are stored. only one clustered index per table. a table without a clustered index is 
 --a heap
---A non clustered index stores pointers either to the 1) to the rowid of the a heap OR 2) the cluster key of clustered index
+--A non clustered index stores pointers either to the 1) to the rowid of the a heap OR 2) the cluster key of clustered index.
+
+SELECT *  FROM [AdventureWorks2014].[Sales].[SalesOrderDetail]
+
+--SET STATS on to see how many pages are read...logical reads suggests the number of pages read to find the data
+Set Statistics IO On
+
+--Show the actual execution plan...visually see the sql server query engine is performing the query
+
+Select ProductID, OrderQty
+From [AdventureWorks2014].[Sales].[SalesOrderDetail]
+Where SalesOrderID = 58125;
+
+Select SalesOrderID
+From [AdventureWorks2014].[Sales].[SalesOrderDetail]
+Where ProductID = 758;
+
+--columnstore index are stored in memory and store data by column instead of by row. They use compression to optimize memory usage and performance. They can
+--be clustered or non-clustered. clustered cloumnstore indexes include all the columns in the table(by default). Only one clustered columnstore index per table
+
+--creating memory optimized tables and native stored procedures....In the create database statement, you have to use a thing called FileGroup that contains memory
+--optimized data
+CREATE DATABASE [MemDB]
+ ON  PRIMARY 
+( NAME = N'MemDB', FILENAME = N'C:\DATA\MemDB.mdf' , SIZE = 5120KB , FILEGROWTH = 1024KB )
+FILEGROUP [MemDB] Contains MEMORY_OPTIMIZED_DATA 
+( NAME = N'MemData', FILENAME = N'C:\DATA\MEMDATA' )
+ LOG ON 
+( NAME = N'MemDB_log', FILENAME = N'C:\Log\MemDB_log.ldf' , SIZE = 1024KB , FILEGROWTH = 10%)
+GO
+
+Use MemDB
+--in-memory table..are actually c# structs that are then compiled to dll 
+Create Table dbo.MemoryTable
+(id Integer not null primary key nonclustered hash with (bucket_count = 1000000),
+date_value datetime null)
+with(memory_optimized = on ,durability=schema_and_data);
+
+--for comparison, this is the table with same structure but on disk
+Create Table dbo.DiskTable
+(id Integer not null primary key nonclustered,
+date_value datetime null);
+
+--use a transaction to insert 500,000 rows in disktable...slow..took 17 seconds
+begin
+	declare @diskid int =1
+	while @diskid<=500000
+	begin
+		insert into dbo.disktable values(@diskid, getdate())
+		set @diskid += 1
+	end
+commit;
+
+select count(*) from dbo.disktable
+
+--insert 50000 rows in memorytable....much faster..took 7 seconds
+begin
+	declare @memid int =1
+	while @memid <=500000
+	begin
+		insert into dbo.memorytable values(@memid , getdate())
+		set @memid += 1
+	end
+commit;
+
+select count(*) from dbo.memorytable;
+
+delete from  disktable;--slow
+delete from  memorytable;--fast
+
+--native stored procedure are also c# code compiled to dll....instead of firing of a standalone sql insert, this compiled stored proecure 
+--takes less than a second
+create procedure dbo.insertdata
+	with native_compilation, schemabinding, execute as owner
+as 
+Begin atomic with (transaction isolation level =snapshot, language='us_english')
+	declare @memid int =1
+	while @memid <=500000
+	begin
+		insert into dbo.memorytable values(@memid , getdate())
+		set @memid += 1
+	end
+end;
+go
+	
+exec dbo.insertdata;
+
+--working with non-relational data
+--1) xml...xml data type is supported in sql server
+select top 5 lastname
+from dbo.customer
+for xml auto, root('customer')--return the results as xml using auto formatting rule and wrap them in a root element called cutomer
+
+--suppose an application passes in a xml chunk and sql server here is interpresting it
+select *
+from openxml(@idoc,'root/customer',1)--pass in a variable and telling it what part of the tree to traverse
+with (customerid varchar(10), contactname varchar(20));--and then take those results and assign them column names
+
+--2) json--store as nvarchar or documentdb
+select top 5 lastname
+from dbo.customer
+for json auto, --return the results as json using auto formatting rule
+
+declare @json nvarchar(255)
+set @json = N'[null, "string", 1, true ]';
+
+select * from openjson(@json)
+
+--3) documentdb...we are not talking about word or pdf or other documents....we are talking about json...is documentdb separate from sql server
+
+--backups: full or partial backups possible, transaction log backups for point in time recovery, backup locally or to cloud
+--security: authentication(who are u), authorization(ur permissions), encryption, auditing
+--monitoring and maintenance:server and db health, resource usage, job execution, validate backups,  tune indexes, updates to os and sql server
