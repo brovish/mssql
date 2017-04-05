@@ -1,4 +1,5 @@
-﻿--relational schema is the result of normalization
+﻿https://mva.microsoft.com/en-US/training-courses/sql-database-fundamentals-16944
+--relational schema is the result of normalization
 --only one value in each column. you might have to repeat rows to get that(First normal form)
 --if a column has duplicate data, then it might be worthwhile to extract that data to a separate table and join with a foreign
 --key relationship. the foreign key can either be placed in the original table or we can again create a separate mapping table
