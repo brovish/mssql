@@ -187,3 +187,7 @@ On Sales.Product(ProductId);
 --so u create a clustered index to determine the order in which the data is stored on the disk. You can have one clustered index per table.
 --and then u cna create one or more non-clustered index for additional fields that you commonly search on to reduce the number of pages u
 --have to read.
+
+--A clustered index determines the order in which the rows are stored. only one clustered index per table. a table without a clustered index is 
+--a heap
+--A non clustered index stores pointers either to the 1) to the rowid of the a heap OR 2) the cluster key of clustered index
