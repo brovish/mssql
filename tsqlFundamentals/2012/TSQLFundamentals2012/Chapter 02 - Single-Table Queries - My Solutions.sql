@@ -59,6 +59,6 @@ USE "TSQL2012";
 SELECT
 C.custid, C.region
 FROM SALES.Customers AS C
-ORDER BY C.region
+ORDER BY  CASE WHEN C.region IS NULL THEN 1 ELSE 0 END, C.region
 
 
