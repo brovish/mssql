@@ -78,6 +78,7 @@ USE TSQL2012
 --		ON C.custid = O.custid
 --WHERE O.orderdate = '20070212'
 
+----DONE IN 2 WAYS. FIRST IS THIS:
 --SELECT
 --C.custid, C.companyname, O.orderid, O.orderdate
 --FROM Sales.Customers AS C
@@ -94,13 +95,17 @@ USE TSQL2012
 --		ON C.custid = O.custid
 --WHERE O.orderdate <> '20070212'
 
-----THIS DOES NOT WORK AS THE 'YES' 'NO' COL CAUSES A COMPANY TO BE LSITED TWICE IF HAS BOTH ON '20070212' AND SOME OTHER DATE
-SELECT
-DISTINCT C.custid, C.companyname, /*O.orderid, O.orderdate,*/ 
-CASE O.orderdate WHEN '20070212' THEN 'Yes' ELSE 'No' END AS HasOrderOn20070212
-FROM Sales.Customers AS C
-	LEFT OUTER JOIN Sales.Orders AS O
-		ON C.custid = O.custid
-ORDER BY C.custid
+----SECOND IS THIS:
+--SELECT
+--C.custid, C.companyname, O.orderid, O.orderdate
+--FROM Sales.Customers AS C
+--	LEFT OUTER JOIN Sales.Orders AS O
+--		ON C.custid = O.custid AND O.orderdate = '20070212'
 
+
+--SELECT
+--C.custid, C.companyname, CASE  WHEN O.orderid IS NOT NULL THEN 'Yes' ELSE 'No' END AS HasOrderOn20070212
+--FROM Sales.Customers AS C
+--	LEFT OUTER JOIN Sales.Orders AS O
+--		ON C.custid = O.custid AND O.orderdate = '20070212'
 
