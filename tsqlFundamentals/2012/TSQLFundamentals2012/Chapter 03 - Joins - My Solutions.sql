@@ -51,13 +51,56 @@ USE TSQL2012
 --GROUP BY C.custid
 
 
+--SELECT
+--C.custid, C.companyname, O.orderid, O.orderdate
+--FROM Sales.Customers AS C
+--	LEFT OUTER JOIN Sales.Orders AS O
+--		ON C.custid = O.custid
+
+------2 DIFFERENT WAYS FOR SAME OPERATION. FIRST IS THIS:
+--SELECT
+--C.custid, C.companyname
+--FROM Sales.Customers AS C
+--	WHERE C.custid NOT IN (SELECT O.custid FROM Sales.Orders AS O)
+
+------2 DIFFERENT WAYS FOR SAME OPERATION. SECOND IS THIS:
+--SELECT
+--C.custid, C.companyname
+--FROM Sales.Customers AS C
+--	LEFT OUTER JOIN Sales.Orders AS O
+--		ON C.custid = O.custid
+--WHERE O.orderid IS NULL
+
+--SELECT
+--C.custid, C.companyname, O.orderid, O.orderdate
+--FROM Sales.Customers AS C
+--	INNER JOIN Sales.Orders AS O
+--		ON C.custid = O.custid
+--WHERE O.orderdate = '20070212'
+
+--SELECT
+--C.custid, C.companyname, O.orderid, O.orderdate
+--FROM Sales.Customers AS C
+--	INNER JOIN Sales.Orders AS O
+--		ON C.custid = O.custid
+--WHERE O.orderdate = '20070212'
+
+--UNION
+
+--SELECT
+--C.custid, C.companyname, NULL, NULL
+--FROM Sales.Customers AS C
+--	INNER JOIN Sales.Orders AS O
+--		ON C.custid = O.custid
+--WHERE O.orderdate <> '20070212'
+
+----THIS DOES NOT WORK AS THE 'YES' 'NO' COL CAUSES A COMPANY TO BE LSITED TWICE IF HAS BOTH ON '20070212' AND SOME OTHER DATE
 SELECT
-C.custid, COUNT(DISTINCT O.orderid) AS numorders, SUM(OD.qty) AS totalqty
+DISTINCT C.custid, C.companyname, /*O.orderid, O.orderdate,*/ 
+CASE O.orderdate WHEN '20070212' THEN 'Yes' ELSE 'No' END AS HasOrderOn20070212
 FROM Sales.Customers AS C
-	INNER JOIN Sales.Orders AS O
+	LEFT OUTER JOIN Sales.Orders AS O
 		ON C.custid = O.custid
-	INNER JOIN Sales.OrderDetails AS OD
-		ON O.orderid = OD.orderid  
-WHERE C.country = 'USA'
-GROUP BY C.custid
+ORDER BY C.custid
+
 
