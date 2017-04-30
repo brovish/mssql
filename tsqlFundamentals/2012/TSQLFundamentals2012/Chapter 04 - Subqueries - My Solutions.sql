@@ -64,5 +64,7 @@ USE TSQL2012;
 SELECT 
 *
 FROM Sales.Customers AS C
-WHERE C.custid IN (SELECT O.custid FROM Sales.Orders AS O WHERE O.orderdate >= '20070101' AND O.orderdate < '20080101')--  AND O.orderdate < '20080101' AND O.orderdate >= '20090101' )
+WHERE C.custid IN (SELECT O.custid FROM Sales.Orders AS O WHERE O.custid = C.custid AND O.orderdate >= '20070101' AND O.orderdate < '20080101')
+AND C.custid NOT IN (SELECT O.custid FROM Sales.Orders AS O WHERE O.custid = C.custid AND O.orderdate >= '20080101' AND O.orderdate < '20090101' )
+
 
