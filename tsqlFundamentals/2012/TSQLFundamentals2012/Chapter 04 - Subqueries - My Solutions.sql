@@ -61,10 +61,12 @@ USE TSQL2012;
 --ORDER BY O1.custid
 
 
-SELECT 
-*
-FROM Sales.Customers AS C
-WHERE C.custid IN (SELECT O.custid FROM Sales.Orders AS O WHERE O.custid = C.custid AND O.orderdate >= '20070101' AND O.orderdate < '20080101')
-AND C.custid NOT IN (SELECT O.custid FROM Sales.Orders AS O WHERE O.custid = C.custid AND O.orderdate >= '20080101' AND O.orderdate < '20090101' )
+--SELECT 
+--*
+--FROM Sales.Customers AS C
+--WHERE C.custid IN (SELECT O.custid FROM Sales.Orders AS O WHERE O.custid = C.custid AND O.orderdate >= '20070101' AND O.orderdate < '20080101')
+--AND C.custid NOT IN (SELECT O.custid FROM Sales.Orders AS O WHERE O.custid = C.custid AND O.orderdate >= '20080101' AND O.orderdate < '20090101' )
 
+SELECT 
+0
 
