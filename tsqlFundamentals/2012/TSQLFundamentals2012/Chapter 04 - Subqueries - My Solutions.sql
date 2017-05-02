@@ -67,6 +67,16 @@ USE TSQL2012;
 --WHERE C.custid IN (SELECT O.custid FROM Sales.Orders AS O WHERE O.custid = C.custid AND O.orderdate >= '20070101' AND O.orderdate < '20080101')
 --AND C.custid NOT IN (SELECT O.custid FROM Sales.Orders AS O WHERE O.custid = C.custid AND O.orderdate >= '20080101' AND O.orderdate < '20090101' )
 
-SELECT 
-0
+--SELECT 
+--DISTINCT C.custid,C.companyname
+--FROM Sales.Customers AS C INNER JOIN Sales.Orders AS O
+--ON C.custid = O.custid INNER JOIN Sales.OrderDetails AS OD
+--ON OD.orderid = O.orderid AND OD.productid=12
+
+SELECT
+CO.custid, CO.ordermonth,qty,(SELECT SUM(CO1.qty) 
+								FROM Sales.CustOrders AS CO1 
+								WHERE CO1.ordermonth <= CO.ordermonth AND CO1.custid = CO.custid ) AS runqty 
+FROM Sales.CustOrders AS CO
+ORDER BY CO.custid, CO.ordermonth
 
