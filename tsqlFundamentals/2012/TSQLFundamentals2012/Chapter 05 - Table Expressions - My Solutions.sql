@@ -65,4 +65,36 @@ GO
 --FROM Sales.VEmpOrders
 --ORDER BY empid, orderyear;
 
+--SELECT
+--V.empid,V.orderyear,V.qty, (SELECT SUM(VE.qty) FROM Sales.VEmpOrders AS VE WHERE VE.empid = V.empid AND VE.orderyear<=V.orderyear ) AS runqty
+--FROM Sales.VEmpOrders AS V
+--ORDER BY V.empid, V.orderyear;
 
+--CREATE FUNCTION Production.TopProducts
+--	(
+--	 @supid AS INT,
+--	 @n AS INT
+--	)
+--	RETURNS TABLE
+--AS
+--RETURN
+--	SELECT
+--	*
+--	FROM Production.Products AS P
+--	WHERE P.supplierid = @supid
+--	ORDER BY P.unitprice DESC
+--	OFFSET 0 ROWS FETCH NEXT @n ROWS ONLY--SHOULD USE TOP AS IT CAN USE WITH TIES OPTION
+--GO
+
+--SELECT 
+--*
+--FROM Production.TopProducts(5,2);
+
+--SELECT 
+--*
+--FROM Production.Suppliers AS S CROSS APPLY Production.TopProducts(S.supplierid,2) AS TP;
+
+--IF OBJECT_ID('Sales.VEmpOrders') IS NOT NULL
+--	DROP VIEW Sales.VEmpOrders;
+--IF OBJECT_ID('Production.TopProducts') IS NOT NULL
+--	DROP FUNCTION Production.TopProducts;
