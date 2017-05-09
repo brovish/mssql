@@ -60,7 +60,18 @@ GO
 --FROM Sales.Orders AS O
 --WHERE O.orderdate>= DATEFROMPARTS(2007,01,01) AND O.orderdate< DATEFROMPARTS(2008,01,01)
 
-SELECT 
-*
-FROM 
+SELECT country,region,city
+FROM
+	(
+		SELECT 
+		1 AS sortCOL,country,region,city
+		FROM HR.Employees
+
+		UNION ALL
+
+		SELECT 
+		2 AS sortCOL,country,region,city
+		FROM Production.Suppliers
+	) AS TE
+ORDER BY TE.sortCOL,TE.country,TE.region,TE.city;
 
