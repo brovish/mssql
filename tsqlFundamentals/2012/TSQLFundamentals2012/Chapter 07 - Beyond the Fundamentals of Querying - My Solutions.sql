@@ -32,4 +32,7 @@ GO
 --DENSE_RANK() OVER(PARTITION BY O.custid ORDER BY O.qty) AS drnk
 --FROM dbo.Orders AS O
 
+SELECT
+O.custid,O.orderid, O.qty, () AS diffprev, () AS diffnext
+FROM dbo.Orders AS O
 
