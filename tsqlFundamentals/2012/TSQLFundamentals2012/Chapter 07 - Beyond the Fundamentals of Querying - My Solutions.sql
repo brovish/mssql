@@ -32,7 +32,73 @@ GO
 --DENSE_RANK() OVER(PARTITION BY O.custid ORDER BY O.qty) AS drnk
 --FROM dbo.Orders AS O
 
-SELECT
-O.custid,O.orderid, O.qty, () AS diffprev, () AS diffnext
-FROM dbo.Orders AS O
+--SELECT
+--O.custid,O.orderid, O.qty,O.qty - LAG(O.qty) OVER(PARTITION BY O.custid ORDER BY O.orderdate,o.orderid) AS diffprev,
+--O.qty - LEAD(O.qty) OVER(PARTITION BY O.custid ORDER BY O.orderdate,o.orderid) AS diffnext
+--FROM dbo.Orders AS O
 
+--SELECT
+--O.empid,
+--SUM(CASE WHEN O.orderdate >= DATEFROMPARTS(2007,01,01) AND O.orderdate < DATEFROMPARTS(2008,01,01) THEN 1 END) AS cnt2007,
+--SUM(CASE WHEN O.orderdate >= DATEFROMPARTS(2008,01,01) AND O.orderdate < DATEFROMPARTS(2009,01,01) THEN 1 END) AS cnt2008,
+--SUM(CASE WHEN O.orderdate >= DATEFROMPARTS(2009,01,01) AND O.orderdate < DATEFROMPARTS(2010,01,01) THEN 1 END) AS cnt2009
+--FROM dbo.Orders AS O
+--GROUP BY O.empid
+
+--SELECT
+--O.empid,
+--COUNT(CASE WHEN O.orderdate >= DATEFROMPARTS(2007,01,01) AND O.orderdate < DATEFROMPARTS(2008,01,01) THEN 1 END) AS cnt2007,
+--COUNT(CASE WHEN O.orderdate >= DATEFROMPARTS(2008,01,01) AND O.orderdate < DATEFROMPARTS(2009,01,01) THEN 1 END) AS cnt2008,
+--COUNT(CASE WHEN O.orderdate >= DATEFROMPARTS(2009,01,01) AND O.orderdate < DATEFROMPARTS(2010,01,01) THEN 1 END) AS cnt2009
+--FROM dbo.Orders AS O
+--GROUP BY O.empid
+
+--SELECT
+--O.empid,
+--COUNT(CASE WHEN O.orderdate >= DATEFROMPARTS(2007,01,01) AND O.orderdate < DATEFROMPARTS(2008,01,01) THEN O.orderdate END) AS cnt2007,
+--COUNT(CASE WHEN O.orderdate >= DATEFROMPARTS(2008,01,01) AND O.orderdate < DATEFROMPARTS(2009,01,01) THEN O.orderdate END) AS cnt2008,
+--COUNT(CASE WHEN O.orderdate >= DATEFROMPARTS(2009,01,01) AND O.orderdate < DATEFROMPARTS(2010,01,01) THEN O.orderdate END) AS cnt2009
+--FROM dbo.Orders AS O
+--GROUP BY O.empid
+
+--SELECT 
+--empid, [2007] AS cnt2008, [2008] AS cnt2008, [2009] AS cnt2009
+--FROM (SELECT O.empid, YEAR(O.orderdate) AS OYEAR  FROM dbo.Orders AS O)AS D
+--	PIVOT(COUNT(D.OYEAR) FOR OYEAR IN ([2007],[2008],[2009])) AS P;
+
+--IF OBJECT_ID('dbo.EmpYearOrders','U') IS NOT NULL DROP TABLE dbo.EmpYearOrders;
+
+--CREATE TABLE dbo.EmpYearOrders
+--(
+--empid INT NOT NULL
+--CONSTRAINT PK_EmpYearOrders PRIMARY KEY,
+--cnt2007 INT NULL,
+--cnt2008 INT NULL,
+--cnt2009 INT NULL
+--)
+
+--INSERT INTO dbo.EmpYearOrders(empid,cnt2007,cnt2008,cnt2009)
+--	SELECT 
+--	empid, [2007] AS cnt2008, [2008] AS cnt2008, [2009] AS cnt2009
+--	FROM (SELECT O.empid, YEAR(O.orderdate) AS OYEAR  FROM dbo.Orders AS O)AS D
+--		PIVOT(COUNT(D.OYEAR) FOR OYEAR IN ([2007],[2008],[2009])) AS P;
+
+SELECT 
+*
+FROM DBO.EmpYearOrders;
+
+SELECT 
+*
+FROM (SELECT E.empid, OrderYear, 
+			CASE OrderYear 
+				WHEN 2007 THEN E.cnt2007
+				WHEN 2008 THEN E.cnt2008
+				WHEN 2009 THEN E.cnt2009
+			END AS NoOfOrders  FROM dbo.EmpYearOrders AS E CROSS JOIN (VALUES(2007),(2008),(2009)) AS Years(OrderYear)) AS D
+WHERE NoOfOrders IS NOT NULL;
+
+SELECT 
+*
+FROM DBO.EmpYearOrders
+	UNPIVOT()
+	
