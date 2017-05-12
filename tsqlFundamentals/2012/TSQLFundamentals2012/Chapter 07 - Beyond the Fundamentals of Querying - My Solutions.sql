@@ -83,22 +83,33 @@ GO
 --	FROM (SELECT O.empid, YEAR(O.orderdate) AS OYEAR  FROM dbo.Orders AS O)AS D
 --		PIVOT(COUNT(D.OYEAR) FOR OYEAR IN ([2007],[2008],[2009])) AS P;
 
-SELECT 
-*
-FROM DBO.EmpYearOrders;
+--SELECT 
+--*
+--FROM DBO.EmpYearOrders;
 
-SELECT 
-*
-FROM (SELECT E.empid, OrderYear, 
-			CASE OrderYear 
-				WHEN 2007 THEN E.cnt2007
-				WHEN 2008 THEN E.cnt2008
-				WHEN 2009 THEN E.cnt2009
-			END AS NoOfOrders  FROM dbo.EmpYearOrders AS E CROSS JOIN (VALUES(2007),(2008),(2009)) AS Years(OrderYear)) AS D
-WHERE NoOfOrders IS NOT NULL;
+--SELECT 
+--*
+--FROM (SELECT E.empid, OrderYear, 
+--			CASE OrderYear 
+--				WHEN 2007 THEN E.cnt2007
+--				WHEN 2008 THEN E.cnt2008
+--				WHEN 2009 THEN E.cnt2009
+--			END AS NoOfOrders  FROM dbo.EmpYearOrders AS E CROSS JOIN (VALUES(2007),(2008),(2009)) AS Years(OrderYear)) AS D
+--WHERE NoOfOrders <> NULL;
 
-SELECT 
-*
-FROM DBO.EmpYearOrders
-	UNPIVOT()
-	
+--SELECT 
+--empid, CAST(RIGHT(OrderYear,4) AS INT), NoOfOrders
+--FROM DBO.EmpYearOrders
+--	UNPIVOT(NoOfOrders FOR OrderYear IN(cnt2007,cnt2008,cnt2009)) AS U
+--WHERE NoOfOrders <> 0;
+
+SELECT
+GROUPING_ID(empid,custid,YEAR(O.orderdate)),O.empid,O.custid,YEAR(O.orderdate) AS orderyear, SUM(O.qty) AS sumqty
+FROM dbo.Orders AS O
+GROUP BY 
+	GROUPING SETS
+	(
+		(empid,custid,YEAR(O.orderdate)),
+		(empid,YEAR(O.orderdate)),
+		(custid,YEAR(O.orderdate))
+	);
