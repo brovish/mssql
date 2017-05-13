@@ -59,3 +59,25 @@ GO
 --	OUTPUT  inserted.custid, deleted.region AS oldregion, inserted.region AS newregion
 --	WHERE region IS NULL;
 
+WITH TBLFORUPDATE AS 
+(
+SELECT 
+O.shipcountry, O.shipregion, O.shipcity, C.country, C.region, C.city
+FROM dbo.Orders AS O INNER JOIN dbo.Customers AS C
+	ON O.custid = C.custid
+WHERE C.country = N'UK'
+)
+UPDATE TBLFORUPDATE
+	SET shipcountry = country,
+		shipregion = region,
+		shipcity = city;
+
+
+MERGE INTO dbo.Orders AS O
+USING dbo.Customers AS C
+   ON O.custid = C.custid
+   AND C.country = 'UK'
+WHEN MATCHED THEN
+  UPDATE SET shipcountry = C.country,
+             shipregion = C.region,
+             shipcity = C.city;
