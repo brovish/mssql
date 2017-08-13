@@ -1,0 +1,2 @@
+these scripts work on the data base: https://www.sqlskills.com/resources/conferences/creditbackup80.zip
+This database is also in the repo

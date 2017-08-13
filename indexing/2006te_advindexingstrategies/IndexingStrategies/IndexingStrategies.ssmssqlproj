@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="IndexingStrategies">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="(local)\SQLDev01:NEXUS\sin17h">
+          <Created>2006-08-10T17:51:31.796875+10:00</Created>
+          <Type>SQL</Type>
+          <Server>(local)\SQLDev01</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>15</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName />
+        </ConnectionNode>
+        <ConnectionNode Name="KHARAK-BM\SQL2016:NEXUS\sin17h">
+          <Created>2017-08-13T20:00:49.0751107+10:00</Created>
+          <Type>SQL</Type>
+          <Server>KHARAK-BM\SQL2016</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="Bookmark Lookup v Table Scan.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Bookmark Lookup v Table Scan.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Indexed Views Quick Setup.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Indexed Views Quick Setup.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Indexing for AND.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\SQLDev01:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)\SQLDev01</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Indexing for AND.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Indexing for Aggregates - Compare ALL.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Indexing for Aggregates - Compare ALL.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Indexing for Aggregates.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Indexing for Aggregates.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Indexing for Joins.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Indexing for Joins.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Indexing for OR.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KHARAK-BM\SQL2016:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>KHARAK-BM\SQL2016</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Indexing for OR.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>
