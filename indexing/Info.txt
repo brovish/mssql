@@ -1,2 +1,5 @@
+the accompanying video is by Kimberly from sqlskills but is recorded for microsoft MCM(microsoft certified master) series: https://technet.microsoft.com/en-us/dn912438
+http://download.microsoft.com/download/0/6/5/0654C7FC-B2A3-4BDA-B63F-1956AF0EAB9A/HDI-ITPro-TechNet-winvideo-MCM_08_IndexingStrategiesDemo(2).wmv
+
 these scripts work on the data base: https://www.sqlskills.com/resources/conferences/creditbackup80.zip
 This database is also in the repo
