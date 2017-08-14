@@ -1,0 +1,9 @@
+C:\temp\DescriptiveStatistics\DescriptiveStatistics\bin\Debug\DescriptiveStatistics.dacpac
+C:\temp\DescriptiveStatistics\DescriptiveStatistics\bin\Debug\DescriptiveStatistics.dll
+C:\temp\DescriptiveStatistics\DescriptiveStatistics\bin\Debug\DescriptiveStatistics.pdb
+C:\temp\DescriptiveStatistics\DescriptiveStatistics\obj\Debug\Model.xml
+C:\temp\DescriptiveStatistics\DescriptiveStatistics\obj\Debug\refactor.xml
+C:\temp\DescriptiveStatistics\DescriptiveStatistics\obj\Debug\postdeploy.sql
+C:\temp\DescriptiveStatistics\DescriptiveStatistics\obj\Debug\predeploy.sql
+C:\temp\DescriptiveStatistics\DescriptiveStatistics\obj\Debug\DescriptiveStatistics.dll
+C:\temp\DescriptiveStatistics\DescriptiveStatistics\obj\Debug\DescriptiveStatistics.pdb

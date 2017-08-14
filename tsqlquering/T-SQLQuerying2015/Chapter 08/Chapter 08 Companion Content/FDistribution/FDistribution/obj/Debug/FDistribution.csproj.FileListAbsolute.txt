@@ -1,0 +1,6 @@
+C:\temp\FDistribution\FDistribution\bin\Debug\FDistribution.exe.config
+C:\temp\FDistribution\FDistribution\obj\Debug\FDistribution.csprojResolveAssemblyReference.cache
+C:\temp\FDistribution\FDistribution\bin\Debug\FDistribution.exe
+C:\temp\FDistribution\FDistribution\bin\Debug\FDistribution.pdb
+C:\temp\FDistribution\FDistribution\obj\Debug\FDistribution.exe
+C:\temp\FDistribution\FDistribution\obj\Debug\FDistribution.pdb
