@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Scripts">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="KHARAK-BM\SQL2016:NEXUS\sin17h">
+          <Created>2017-08-15T06:37:14.098414+10:00</Created>
+          <Type>SQL</Type>
+          <Server>KHARAK-BM\SQL2016</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="Chapter 01 - Logical Query Processing.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KHARAK-BM\SQL2016:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>KHARAK-BM\SQL2016</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>C:\Users\sin17h\Documents\mssql\tsqlquering\T-SQLQuerying2015\Chapter 01\Chapter 01 - Logical Query Processing.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 02 - Query Tuning.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KHARAK-BM\SQL2016:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>KHARAK-BM\SQL2016</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>C:\Users\sin17h\Documents\mssql\tsqlquering\T-SQLQuerying2015\Chapter 02\Chapter 02 - Query Tuning.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 03 - Multi-Table Queries.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KHARAK-BM\SQL2016:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>KHARAK-BM\SQL2016</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>C:\Users\sin17h\Documents\mssql\tsqlquering\T-SQLQuerying2015\Chapter 03\Chapter 03 - Multi-Table Queries.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 04 - Grouping, Pivoting and Windowing.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KHARAK-BM\SQL2016:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>KHARAK-BM\SQL2016</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>C:\Users\sin17h\Documents\mssql\tsqlquering\T-SQLQuerying2015\Chapter 04\Chapter 04 - Grouping, Pivoting and Windowing.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 05 - TOP and OFFSET-FETCH.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KHARAK-BM\SQL2016:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>KHARAK-BM\SQL2016</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>C:\Users\sin17h\Documents\mssql\tsqlquering\T-SQLQuerying2015\Chapter 05\Chapter 05 - TOP and OFFSET-FETCH.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 06 - Data Modification.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KHARAK-BM\SQL2016:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>KHARAK-BM\SQL2016</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>C:\Users\sin17h\Documents\mssql\tsqlquering\T-SQLQuerying2015\Chapter 06\Chapter 06 - Data Modification.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 07 - Working with Date and Time.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KHARAK-BM\SQL2016:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>KHARAK-BM\SQL2016</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>C:\Users\sin17h\Documents\mssql\tsqlquering\T-SQLQuerying2015\Chapter 07\Chapter 07 - Working with Date and Time.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 08 - T-SQL for BI Practitioners.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KHARAK-BM\SQL2016:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>KHARAK-BM\SQL2016</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>C:\Users\sin17h\Documents\mssql\tsqlquering\T-SQLQuerying2015\Chapter 08\Chapter 08 - T-SQL for BI Practitioners.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 09 - Programmable Objects.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KHARAK-BM\SQL2016:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>KHARAK-BM\SQL2016</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>C:\Users\sin17h\Documents\mssql\tsqlquering\T-SQLQuerying2015\Chapter 09\Chapter 09 - Programmable Objects.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 10 - In-Memory OLTP.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KHARAK-BM\SQL2016:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>KHARAK-BM\SQL2016</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>C:\Users\sin17h\Documents\mssql\tsqlquering\T-SQLQuerying2015\Chapter 10\Chapter 10 - In-Memory OLTP.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Chapter 11 - Graphs and Recursive Queries.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KHARAK-BM\SQL2016:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>KHARAK-BM\SQL2016</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>C:\Users\sin17h\Documents\mssql\tsqlquering\T-SQLQuerying2015\Chapter 11\Chapter 11 - Graphs and Recursive Queries.sql</FullPath>
+        </FileNode>
+        <FileNode Name="PerformanceV3.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>C:\Users\sin17h\Documents\mssql\tsqlquering\T-SQLQuerying2015\Sample Databases\PerformanceV3.sql</FullPath>
+        </FileNode>
+        <FileNode Name="TSQLV3.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>C:\Users\sin17h\Documents\mssql\tsqlquering\T-SQLQuerying2015\Sample Databases\TSQLV3.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>
