@@ -54,24 +54,50 @@ SET STATISTICS IO ON;
 --FROM dbo.CUSTOMERS AS C
 --WHERE C.CITY = N'MADRID' AND (SELECT COUNT(*) FROM dbo.ORDERS AS O WHERE O.CUSTID = C.CUSTID ) < 3
 
-SELECT
-*, MAX(O.ORDERID) OVER()
-FROM dbo.Orders AS O
+--SELECT DISTINCT
+--*, rank() OVER(order by CUSTID)
+--FROM dbo.Orders AS O
+--WHERE CUSTID IS NOT NULL;
 
 
+--WITH MY_CTE AS
+--(
+--SELECT DISTINCT
+--CUSTID
+--FROM dbo.Orders AS O
+--WHERE CUSTID IS NOT NULL
+--order by CUSTID 
+--)
+--SELECT MY_CTE.CUSTID, rank() OVER(order by CUSTID)
+--FROM MY_CTE;
 
+--select 
+--*
+--from dbo.CUSTOMERS cross join dbo.ORDERS
 
+--except
 
+--select
+--*
+--from dbo.CUSTOMERS cross apply (select null as ass from ORDERS where 1=0 )as a;
+use TSQLV3;
+--select
+--empid,YEAR(orderdate), SUM(val)
+--from TSQLV3.Sales.OrderValues
+--group by empid, year(orderdate)
 
+--SELECT orderid, custid,
+--  COUNT(*) OVER(PARTITION BY custid) AS numordersforcust
+--FROM Sales.Orders
+--WHERE shipcountry = N'Spain'
+--ORDER BY numordersforcust DESC;
 
-
-
-
-
-
-
-
-
+(select * from (values(1),(1)) as tbl(a)
+)--union 
+except
+(select * from (values(2),(3)) as tbl2(a)
+)
+order by 1
 
 
 
