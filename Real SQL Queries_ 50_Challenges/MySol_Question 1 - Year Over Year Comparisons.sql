@@ -1,0 +1,37 @@
+USE AdventureWorks2012;
+
+
+--BASE TABLE USED IN BOTH SOLUTIONS
+SELECT SL.SalesPersonID, 
+		FY = DATEPART(YEAR,DATEADD(MONTH,6,SL.OrderDate)),
+		FQ = DATEPART (QUARTER, DATEADD (MONTH, 6, OrderDate)),
+		FQSales =		SUM (Subtotal)
+INTO #QUARTERDATA
+FROM Sales.SalesOrderHeader AS SL
+WHERE SL.OnlineOrderFlag = 0
+GROUP BY 
+		SL.SalesPersonID, DATEPART(YEAR,DATEADD(MONTH,6,SL.OrderDate)), DATEPART (QUARTER, DATEADD (MONTH, 6, OrderDate))
+
+--SOLUTION 1
+SELECT SL.LastName, D1.SalesPersonID, D1.FY, D1.FQ, D1.FQSales, /*D2.FY, D2.FQ,*/ D2.FQSales AS SALESLASTYEARQRT, D1.FQSales - D2.FQSales AS CHANGE
+FROM #QUARTERDATA AS D1
+LEFT JOIN #QUARTERDATA AS D2 ON D1.SalesPersonID = D2.SalesPersonID AND D1.FY = D2.FY + 1 AND D1.FQ = D2.FQ
+INNER JOIN SALES.vSalesPerson AS SL ON D1.SalesPersonID = SL.BusinessEntityID
+ORDER BY D1.SalesPersonID, D1.FY, D1.FQ
+
+
+--SOLUTION 2
+SELECT SL.LastName, D1.SalesPersonID, D1.FY, D1.FQ, D1.FQSales, /*D2.FY, D2.FQ,*/ LAG(D1.FQSales, 4) OVER (PARTITION BY D1.SalesPersonID ORDER BY D1.SalesPersonID, D1.FY, D1.FQ) AS SALESLASTYEARQRT, 
+	D1.FQSales - LAG(D1.FQSales, 4) OVER (PARTITION BY D1.SalesPersonID ORDER BY D1.SalesPersonID, D1.FY, D1.FQ)  AS CHANGE
+FROM #QUARTERDATA AS D1
+INNER JOIN SALES.vSalesPerson AS SL ON D1.SalesPersonID = SL.BusinessEntityID
+ORDER BY D1.SalesPersonID, D1.FY, D1.FQ
+
+
+
+--SELECT empid, ordermonth, qty,
+--  SUM(qty) OVER(PARTITION BY empid
+--                ORDER BY ordermonth
+--                ROWS BETWEEN UNBOUNDED PRECEDING
+--                         AND CURRENT ROW) AS runqty
+--FROM dbo.EmpOrders;

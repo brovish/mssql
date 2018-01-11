@@ -15,7 +15,7 @@ USE AdventureWorks2012
 
 --	Part I
 
---DROP TABLE #data
+DROP TABLE #data
 
 SELECT
 	N1.SalesOrderID
@@ -51,7 +51,7 @@ FROM Sales.SalesOrderHeader N1
 INNER JOIN Person.BusinessEntityAddress N2 ON N1.ShipToAddressID = N2.AddressID
 INNER JOIN Person.[Address] N3 ON N2.AddressID = N3.AddressID
 INNER JOIN Person.StateProvince N4 ON N3.StateProvinceID = N4.StateProvinceID
-WHERE N4.[Name] = 'California' AND DATEPART (YEAR, DATEADD (MONTH, 6, N1.OrderDate)) = 2008
+WHERE N4.[Name] = 'California' AND DATEPART (YEAR, DATEADD (MONTH, 6, N1.OrderDate)) = 2012
 
 SELECT *
 FROM #data
