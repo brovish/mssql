@@ -15,7 +15,7 @@ USE AdventureWorks2012
 
 -- Part I
 
---DROP TABLE #data
+DROP TABLE #data
 
 SELECT
 	N1.CreditCardID

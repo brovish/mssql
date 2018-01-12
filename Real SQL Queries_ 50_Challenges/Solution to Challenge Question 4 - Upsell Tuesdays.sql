@@ -18,7 +18,7 @@ SELECT
 	,Orders =			COUNT (*)
 	,RevenuePerOrder =	SUM (Subtotal) / COUNT (*)
 FROM Sales.SalesOrderHeader
-WHERE YEAR (OrderDate) = 2008 AND OnlineOrderFlag = 0
+WHERE YEAR (OrderDate) = 2011 AND OnlineOrderFlag = 0
 GROUP BY DATENAME (WEEKDAY, OrderDate)
 ORDER BY RevenuePerOrder DESC
 
