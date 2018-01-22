@@ -1,4 +1,4 @@
-
+USE AdventureWorks2012;
 --Solution to Challenge Question 17: Long Time No Sale
 
 
@@ -9,7 +9,7 @@ WITH Stores AS
 	,N2.StoreID 
 	,StoreName =			N3.Name
 	,LastOrderDate =		MAX (N1.OrderDate)
-	,MonthsSinceLastOrder =	DATEDIFF (MONTH, MAX (N1.OrderDate), '2008-10-07')
+	,MonthsSinceLastOrder =	DATEDIFF (MONTH, MAX (N1.OrderDate), '2012-10-07')
 FROM Sales.SalesOrderHeader N1
 INNER JOIN Sales.Customer N2 ON N1.CustomerID = N2.CustomerID
 INNER JOIN Sales.Store N3 ON N2.StoreID = N3.BusinessEntityID

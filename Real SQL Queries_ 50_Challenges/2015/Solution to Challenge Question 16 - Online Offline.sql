@@ -1,6 +1,7 @@
-
+USE AdventureWorks2012;
 --Solution to Challenge Question 16: Online/Offline
 
+SET STATISTICS IO ON;
 
 SELECT
 	TerritoryID
