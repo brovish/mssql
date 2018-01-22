@@ -1,3 +1,4 @@
+USE AdventureWorks2012;
 -- Solution to Challenge Question 12: Product Inventory Updates
 
 --DROP VIEW Production.Vw_Product_Inventory

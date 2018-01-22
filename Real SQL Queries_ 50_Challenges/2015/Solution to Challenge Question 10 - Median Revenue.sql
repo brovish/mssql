@@ -1,3 +1,4 @@
+USE AdventureWorks2012;
 --Solution to Challenge Question 10: Median Revenue
 
 --DROP TABLE #Sales
