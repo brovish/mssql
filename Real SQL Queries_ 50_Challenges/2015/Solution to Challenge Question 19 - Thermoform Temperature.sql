@@ -1,3 +1,4 @@
+USE AdventureWorks2012;
 
 -- Solution to Challenge Question 19: Thermoform Temperature 
 
