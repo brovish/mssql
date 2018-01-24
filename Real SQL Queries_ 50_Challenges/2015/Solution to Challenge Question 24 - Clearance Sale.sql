@@ -1,4 +1,4 @@
-
+USE AdventureWorks2012;
 --Solution to Challenge Question 24: Clearance Sale
 
 WITH Email AS

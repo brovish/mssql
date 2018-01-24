@@ -1,0 +1,7 @@
+USE AdventureWorks2012;
+
+SELECT CASE WHEN PR.EmailPromotion =0 THEN 'NO EMAIL PROMOS' WHEN PR.EmailPromotion = 1 THEN 'EMAIL PROMOS FROM AW' WHEN PR.EmailPromotion = 2 THEN 'EMAIL PROMOS FROM AW AND PRTS' END
+ ,COUNT(*)
+FROM Person.Person AS PR 
+WHERE PR.PersonType = 'IN'
+GROUP BY PR.EmailPromotion
