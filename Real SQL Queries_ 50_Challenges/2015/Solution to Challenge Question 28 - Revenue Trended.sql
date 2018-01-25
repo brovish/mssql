@@ -1,3 +1,4 @@
+USE AdventureWorks2012;
 
 --Solution for Challenge Question 28: Revenue Trended
 

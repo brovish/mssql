@@ -1,4 +1,4 @@
-
+USE AdventureWorks2012;
 -- Solution to Challenge Question 26: Commission Percentages
 
 

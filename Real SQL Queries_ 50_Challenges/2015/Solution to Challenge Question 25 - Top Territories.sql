@@ -1,3 +1,4 @@
+USE AdventureWorks2012;
 
 --	Solution to Challenge Question 25: Top Territories
 
@@ -16,7 +17,7 @@ GROUP BY YEAR (DATEADD (MONTH, 6, N1.OrderDate)), N2.Name)
 
 SELECT * 
 FROM TerritoryRank 
-WHERE FY IN (2006, 2007) AND Territory$Rank IN (1, 2) 
+WHERE FY IN (2011, 2012) AND Territory$Rank IN (1, 2) 
 ORDER BY FY, Territory$Rank
 
 
