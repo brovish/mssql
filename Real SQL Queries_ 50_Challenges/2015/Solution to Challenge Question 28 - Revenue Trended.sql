@@ -3,8 +3,8 @@ USE AdventureWorks2012;
 --Solution for Challenge Question 28: Revenue Trended
 
 
-DECLARE @StartDate DATE = '2008-05-01'
-DECLARE @EndDate DATE = '2008-05-23'
+DECLARE @StartDate DATE = '2012-05-01'
+DECLARE @EndDate DATE = '2012-05-23'
 
 -- Part I: 
 SELECT
