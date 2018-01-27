@@ -1,11 +1,12 @@
+USE AdventureWorks2012;
 
 --Solution to Challenge Question 35: Two Free Bikes
 
 --DROP VIEW HumanResources.Vw_Employee_Bicycle_Giveaway
 
-CREATE VIEW HumanResources.Vw_Employee_Bicycle_Giveaway
+--CREATE VIEW HumanResources.Vw_Employee_Bicycle_Giveaway
 
-AS
+--AS
 
 SELECT TOP 2
 	N2.FirstName
