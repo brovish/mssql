@@ -31,4 +31,6 @@ FROM #ProductVendor N1
 
 SELECT *
 FROM #ProductVendor
+--WHERE ProductID=433
 ORDER BY PercOverSecondPrice DESC
+
