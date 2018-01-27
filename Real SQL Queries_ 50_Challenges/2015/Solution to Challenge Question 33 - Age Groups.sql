@@ -1,15 +1,15 @@
-
+USE AdventureWorks2012;
 --Solution to Challenge Question 33: Age Groups
  
 SELECT 
 	N1.JobTitle
 
 	,AgeGroup =			CASE 
-							WHEN DATEDIFF (YY, N1.BirthDate, '2008-01-01') < 18 THEN '< 18'
-							WHEN DATEDIFF (YY, N1.BirthDate, '2008-01-01') < 35 THEN '18 - 35'
-				   			WHEN DATEDIFF (YY, N1.BirthDate, '2008-01-01') < 50 THEN '36 - 50'
-							WHEN DATEDIFF (YY, N1.BirthDate, '2008-01-01') < 60 THEN '51 - 60'
-							ELSE '61 +' END
+							WHEN DATEDIFF (YY, N1.BirthDate, SYSDATETIME()) < 18 THEN '<18'
+							WHEN DATEDIFF (YY, N1.BirthDate, SYSDATETIME()) <= 35 THEN '18-35'
+				   			WHEN DATEDIFF (YY, N1.BirthDate, SYSDATETIME()) <= 50 THEN '36-50'
+							WHEN DATEDIFF (YY, N1.BirthDate, SYSDATETIME()) <= 60 THEN '51-60'
+							ELSE '61+' END
 
 		,N2.Rate
 		,Employees =	COUNT (N1.BusinessEntityID)
@@ -25,8 +25,9 @@ GROUP BY
 	JobTitle 
 	,Rate
 	,CASE 
-		WHEN DATEDIFF (YY, N1.BirthDate, '2008-01-01') < 18 THEN '< 18'
-		WHEN DATEDIFF (YY, N1.BirthDate, '2008-01-01') < 35 THEN '18 - 35'
-		WHEN DATEDIFF (YY, N1.BirthDate, '2008-01-01') < 50 THEN '36 - 50'
-		WHEN DATEDIFF (YY, N1.BirthDate, '2008-01-01') < 60 THEN '51 - 60'
-		ELSE '61 +' END
+		WHEN DATEDIFF (YY, N1.BirthDate, SYSDATETIME()) < 18 THEN '<18'
+		WHEN DATEDIFF (YY, N1.BirthDate, SYSDATETIME()) <= 35 THEN '18-35'
+		WHEN DATEDIFF (YY, N1.BirthDate, SYSDATETIME()) <= 50 THEN '36-50'
+		WHEN DATEDIFF (YY, N1.BirthDate, SYSDATETIME()) <= 60 THEN '51-60'
+		ELSE '61+' END
+

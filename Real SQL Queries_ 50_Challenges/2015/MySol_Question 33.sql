@@ -1,0 +1,21 @@
+USE AdventureWorks2012;
+
+;WITH CTE AS
+(
+SELECT EM.JobTitle, CASE WHEN DATEDIFF(YEAR,EM.BirthDate,SYSDATETIME()) <18 THEN '<18'
+						 WHEN DATEDIFF(YEAR,EM.BirthDate,SYSDATETIME()) BETWEEN 18 AND 35 THEN '18-35'
+						 WHEN DATEDIFF(YEAR,EM.BirthDate,SYSDATETIME()) BETWEEN 36 AND 50 THEN '36-50'
+						 WHEN DATEDIFF(YEAR,EM.BirthDate,SYSDATETIME()) BETWEEN 51 AND 60 THEN '51-60'
+						 WHEN DATEDIFF(YEAR,EM.BirthDate,SYSDATETIME()) > 60 THEN '61+'
+					END AS AGEGRP
+		,EH.Rate
+FROM HumanResources.Employee AS EM
+INNER JOIN (SELECT * FROM (SELECT EE.BusinessEntityID, EE.RateChangeDate, EE.Rate,
+								DENSE_RANK() OVER(PARTITION BY EE.BusinessEntityID ORDER BY EE.RateChangeDate DESC) AS RNK
+							FROM HumanResources.EmployeePayHistory AS EE) AS EEM
+				WHERE EEM.RNK =1) 
+				AS EH ON EH.BusinessEntityID = EM.BusinessEntityID
+)
+SELECT C.JobTitle, C.AGEGRP AS AgeGroup, C.Rate, COUNT(*) AS Employees
+FROM CTE AS C
+GROUP BY C.JobTitle, C.AGEGRP, C.Rate
