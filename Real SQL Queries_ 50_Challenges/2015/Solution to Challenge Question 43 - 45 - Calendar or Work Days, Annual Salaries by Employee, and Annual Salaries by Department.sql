@@ -1,4 +1,4 @@
-
+USE AdventureWorks2012;
 -- Solution to Challenge Question 43: Calendar of Work Days
 
 --DROP TABLE HumanResources.Calendar

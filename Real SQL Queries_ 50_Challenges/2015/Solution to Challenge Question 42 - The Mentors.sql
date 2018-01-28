@@ -8,7 +8,7 @@ WITH SalesGrouping AS
 		,SalesRankSubTotalDESC =	ROW_NUMBER () OVER (ORDER BY SUM (Subtotal) DESC)
 		,SalesRankSubTotalASC =		ROW_NUMBER () OVER (ORDER BY SUM (Subtotal))
 	FROM Sales.SalesOrderHeader
-	WHERE YEAR (OrderDate) = 2008 AND SalesPersonID IS NOT NULL
+	WHERE YEAR (OrderDate) = 2012 AND SalesPersonID IS NOT NULL
 	GROUP BY SalesPersonID)
 
 SELECT TOP 5
