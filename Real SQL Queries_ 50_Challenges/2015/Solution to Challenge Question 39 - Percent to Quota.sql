@@ -37,3 +37,9 @@ SELECT
 FROM #SalesQuotaSummary
 GROUP BY BusinessEntityID, YEAR (QuotaDate)
 ORDER BY BusinessEntityID, YEAR (QuotaDate)
+
+
+
+
+
+
