@@ -1,4 +1,4 @@
-
+USE AdventureWorks2012;
 --Solution to Challenge Question 42: The Mentors
 
 WITH SalesGrouping AS
