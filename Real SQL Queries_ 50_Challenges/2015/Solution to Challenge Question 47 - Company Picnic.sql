@@ -15,5 +15,6 @@ INNER JOIN HumanResources.EmployeeDepartmentHistory N3
 			ON N2.MaxStart = N3.StartDate AND N2.BusinessEntityID = N3.BusinessEntityID
 INNER JOIN HumanResources.Department N4 ON N3.DepartmentID = N4.DepartmentID
 WHERE N1.PersonType IN ('SP', 'EM') 
-ORDER BY Dept, FullName
+--ORDER BY Dept, FullName
+ORDER BY BusinessEntityID
 

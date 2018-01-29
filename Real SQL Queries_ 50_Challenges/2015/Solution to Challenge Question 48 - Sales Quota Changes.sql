@@ -1,3 +1,4 @@
+USE AdventureWorks2012;
 
 --Solution to Challenge Question 48: Sales Quota Changes
 
@@ -12,10 +13,10 @@ INNER JOIN Sales.SalesPersonQuotaHistory N2 ON
 	N1.BusinessEntityID = N2.BusinessEntityID 
 	AND N2.QuotaDate = (SELECT MIN (QuotaDate) 
 						FROM Sales.SalesPersonQuotaHistory 
-						WHERE YEAR (QuotaDate) = 2006)
+						WHERE YEAR (QuotaDate) = 2012)
 INNER JOIN Sales.SalesPersonQuotaHistory N3 ON
 	N1.BusinessEntityID = N3.BusinessEntityID
 	AND N3.QuotaDate = (SELECT MAX (QuotaDate) 
 						FROM Sales.SalesPersonQuotaHistory 
-						WHERE YEAR (QuotaDate) = 2007)
+						WHERE YEAR (QuotaDate) = 2013)
 INNER JOIN Person.Person AS N4 ON N1.BusinessEntityID = N4.BusinessEntityID
