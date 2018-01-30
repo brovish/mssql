@@ -4,7 +4,7 @@ USE AdventureWorks2012;
 (SELECT EPH.BusinessEntityID, EPH.Rate, ROW_NUMBER() OVER (PARTITION BY EPH.BusinessEntityID ORDER BY EPH.RATECHANGEDATE DESC) AS RN
 FROM HumanResources.EmployeePayHistory AS EPH
 )
-SELECT EPH.BusinessEntityID, [1] AS 'RATENOW', [2] AS 'PREVRATE'
+SELECT BusinessEntityID, [2] AS 'PREVRATE', [1] AS 'RATENOW', ROUND(100 * ([1] - [2]) / [2], 2, 1) AS PCTCHANGE
 FROM 
 	(SELECT * FROM CTE) AS C
 PIVOT
