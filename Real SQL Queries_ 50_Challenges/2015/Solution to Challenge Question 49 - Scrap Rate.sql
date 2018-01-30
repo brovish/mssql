@@ -1,5 +1,5 @@
 USE AdventureWorks2012;
-
+GO
 --Solution to Challenge Question 49: Scrap Rate
 
 --DROP VIEW Production.Vw_ScrapRates
