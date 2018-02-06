@@ -1,5 +1,49 @@
 USE SQLCookbook;
 
+--6.1
+
+SELECT SUBSTRING('', 1, 1)
+
+--4.16
+--;WITH CTE1 AS 
+--(SELECT *
+--	FROM (VALUES(1,'A',100), (2,'A',200), (3,'B',300)) AS MyEmp(EmpID,DeptName,Salary)
+--)
+--DELETE FROM CTE1
+--WHERE EmpID = 1
+
+--3.10
+SELECT *
+FROM EMP AS E
+WHERE E.COMM < (SELECT COMM FROM EMP AS E1 WHERE E1.ENAME='WARD') OR E.COMM IS NULL
+
+--3.9--emp_bonus table was not in DDL scripts
+;WITH CTE1 AS 
+(SELECT *
+	FROM (VALUES(1,'A',100), (2,'A',200), (3,'B',300)) AS MyEmp(EmpID,DeptName,Salary)
+),
+CTE2 AS 
+(
+SELECT *
+	FROM (VALUES(1,10), (1,20), (2, 30)) AS MyBonus(EmpID, BonusAmount)
+)
+--,CTE3 AS 
+--(
+--SELECT EmpID, DeptName, SUM(Salary) OVER(PARTITION BY DeptName) AS SALARYSUM
+--FROM CTE1 
+--)
+,CTE4 AS 
+(
+SELECT EmpID, SUM(BonusAmount) AS SUMBONUS
+FROM CTE2
+GROUP BY EmpID
+)
+SELECT *
+FROM CTE1
+LEFT OUTER JOIN CTE4 ON CTE1.EmpID = CTE4.EmpID
+
+
+
 SELECT *, CAST(CONCAT(A.A,B.B) AS INT) + 1 AS NUM FROM (VALUES (0),(1),(2),(3),(4),(5),(6),(7),(8),(9)) AS A(A)  
 CROSS JOIN (SELECT * FROM (VALUES (0),(1),(2),(3),(4),(5),(6),(7),(8),(9)) AS CP(A)) AS B(B)
 
