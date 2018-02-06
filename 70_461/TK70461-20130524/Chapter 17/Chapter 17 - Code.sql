@@ -44,7 +44,7 @@ GO
 -- Covering nonclustered index seek, partial scan, data ordered
 SELECT orderid, productid
 FROM Sales.OrderDetails
-WHERE productid BETW																																			EEN 10 AND 30
+WHERE productid BETWEEN 10 AND 30
 ORDER BY productid;	
 GO
 
