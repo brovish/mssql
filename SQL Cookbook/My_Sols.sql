@@ -1,17 +1,151 @@
 USE SQLCookbook;
 
+
+--6.15
+--parse IP addresses 100
+;with base as
+(
+select * 
+from (values('10.12.32.2'), ('33.41.432.1')) as b(s)
+),
+splits as
+(
+select *, SUBSTRING(base.s, n , CHARINDEX('.', base.s + '.', n+1) -n) as element, ROW_NUMBER() over (partition by base.s order by n) as rn
+from base
+cross apply (select * from GetNums(1, len(base.s)) as gn 
+				where gn.n = CHARINDEX('.', '.' + base.s , n)) as num(n)
+)
+select [1] as a, [2] as b, [3] as c, [4] as d
+from (select s,element,rn from splits) as base
+pivot(min(element) for rn in([1],[2],[3],[4])) as pvt
+
+--6.14
+
+--get the third delimited string
+;with base as
+(
+select * 
+from (values('rost,post'), ('gajer,hornak,were')) as b(s)
+),
+splits as
+(
+select *, SUBSTRING(base.s, n , CHARINDEX(',', base.s + ',', n+1) -n) as element, ROW_NUMBER() over (partition by base.s order by n) as rn
+from base
+cross apply (select * from GetNums(1, len(base.s)) as gn 
+				where gn.n = CHARINDEX(',', ',' + base.s , n)) as num(n)
+)
+select * 
+from splits
+where rn = 3
+
+--6.13
+
+--xml trick to concatenate
+;with base as
+(
+select * 
+from (values('adams10'), ('1010'), ('asan')) as b(s)
+)
+,splits as
+(
+select *, SUBSTRING(base.s, n, 1) as element
+from base
+cross apply GetNums(1, len(base.s)) as gn
+)
+--concatenate the split back, this time filtering only numerics
+SELECT (SELECT '' + B.element FROM splits AS B WHERE B.s = A.s and b.element like '[0-9]' FOR XML PATH ('')) as concatstr
+FROM splits AS A
+GROUP BY a.s
+having (SELECT '' + B.element FROM splits AS B WHERE B.s = A.s and b.element like '[0-9]' FOR XML PATH ('')) is not null
+
+--string_agg(sqlserver 2017) to concatenate
+;with base as
+(
+select * 
+from (values('adams10'), ('1010'), ('asan')) as b(s)
+)
+,splits as
+(
+select *, SUBSTRING(base.s, n, 1) as element
+from base
+cross apply GetNums(1, len(base.s)) as gn
+)
+--concatenate ;the split back, this time filtering only numerics
+SELECT STRING_AGG(element,'') within group (order by getdate()) as concatstr
+FROM splits AS A
+where a.element like '[0-9]'
+GROUP BY a.s
+
+--6.12 
+;with base as
+(
+select * 
+from (values('adams'), ('allen')) as b(s)
+),
+splits as
+(select *, SUBSTRING(base.s, n, 1) as element
+from base
+cross apply GetNums(1,len(base.s)) as gn
+)--now concat the sorted strings
+SELECT  (SELECT '' + B.element FROM splits AS B WHERE B.s = A.s ORDER BY b.element FOR XML PATH ('')) as concatstr
+FROM splits AS A
+GROUP BY a.s
+
+
+;with base as
+(
+select * 
+from (values('adams'), ('allen')) as b(s)
+),
+splits as
+(select *, SUBSTRING(base.s, n, 1) as element
+from base
+cross apply GetNums(1,len(base.s)) as gn
+)--concat sorted string with inbuilt func
+select STRING_AGG(element,'') within group (order by element asc)
+from splits
+group by s
+
+--6.11 string split to individual entries 
+
+--using cross apply (atleast sql server 2005)
+select id, arr, n as indexpos, SUBSTRING(arr, n, CHARINDEX(',', arr + ',', n) - n) as element
+from (values('a','6,55,2'), ('b','5,44,6'), ('c','21')) as base(id,arr)
+cross apply (select n from GetNums(1,len(base.arr)) as num where num.n = CHARINDEX(',', ',' + base.arr, num.n)  ) as a
+
+--generic string split function using cross apply(to be used before sql2016)
+go
+drop function if exists my_string_split
+go
+create function my_string_split(@str as varchar(max), @sep as char(1)) 
+returns table
+as
+return
+	select SUBSTRING(@str, n, CHARINDEX(@sep, @str + @sep, n) - n) as element
+	from (select n from GetNums(1,len(@str)) as num where num.n = CHARINDEX(@sep, @sep + @str, num.n)  ) as a
+go
+
+select id, arr, sp.element
+from (values('a','6,55,2'), ('b','5,44,6'), ('c','21')) as base(id,arr)
+cross apply my_string_split(base.arr, ',') as sp
+	
+--string_split in sql2016
+select *
+from (values(1), (3), (4)) as b(n)
+where b.n in (select * from string_split('1,2,3', ','))
+
 --GET A COMMA SEPARATED LIST OF VALUES IN A COLUMN. CANT USE PIVOT. POSSIBLE SOLUTIONS INCLUDE USE OF CURSOR, 'FOR XML PATH('')', RECURSIVE CTE(WOULD GET VERY SLOW AS DEPTH INCREASES), (CAN YOU DO THIS USING CROSS APPLY?) 
 --AND IN SQL SERVER 2017 USE STRING_AGG
 
 --REQUIRES SQL SERVER 2017
-;WITH CTE AS
-(
-SELECT * 
-FROM (VALUES('LAPTOP', 'DELL<'), ('LAPTOP', 'HP'), ('LAPTOP', 'COMPAQ'), ('MAC', 'APPLE')) AS P(PR, SUPP)
-)
-SELECT A.PR, STRING_AGG(SUPP, ',') WITHIN GROUP (ORDER BY Name ASC) AS Departments
-FROM CTE AS A
-GROUP BY PR; 
+--;WITH CTE AS
+--(
+--SELECT * 
+--FROM (VALUES('LAPTOP', 'DELL<'), ('LAPTOP', 'HP'), ('LAPTOP', 'COMPAQ'), ('MAC', 'APPLE')) AS P(PR, SUPP)
+--)
+--SELECT A.PR, STRING_AGG(SUPP, ',') WITHIN GROUP (ORDER BY Name ASC) AS Departments
+--FROM CTE AS A
+--GROUP BY PR; 
 
 
 ;WITH CTE AS
