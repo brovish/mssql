@@ -1,5 +1,32 @@
 USE SQLCookbook;
 
+--7.7
+--running total with window function
+select 
+e.ENAME, sum(SAL) over(order by sal, empno) as runningtotal
+from emp as e
+
+--running total with scalar sub query
+select 
+e.ENAME, (select SUM(sal) from emp as e1 where e1.EMPNO <= e.EMPNO) as runningtotal
+from emp as e
+
+--running total with scalar inner join
+select 
+e.ENAME, sum(e1.SAL) as runningtotal
+from emp as e
+inner join emp as e1 on e1.EMPNO<=e.EMPNO
+group by e.EMPNO, e.ENAME
+order by e.EMPNO
+
+
+--7.1
+select AVG(sal), ROW_NUMBER() over(partition by deptno order by sum(sal)) as rn
+		--,ROW_NUMBER() over(partition by deptno order by sal) as rn1 --can't do 
+		--, lag(sal) over(partition by deptno order by sum(sal)) as previousRow --can't do this
+from emp
+group by DEPTNO, JOB
+
 
 --6.15
 --parse IP addresses 100
