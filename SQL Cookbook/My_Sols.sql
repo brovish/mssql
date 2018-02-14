@@ -1,9 +1,9 @@
 USE SQLCookbook;
 
---7.7
+--7.6
 --running total with window function
 select 
-e.ENAME, sum(SAL) over(order by sal, empno) as runningtotal
+e.ENAME, sum(SAL) over(order by  empno) as runningtotal
 from emp as e
 
 --running total with scalar sub query
