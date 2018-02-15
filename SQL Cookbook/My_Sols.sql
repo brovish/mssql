@@ -1,5 +1,53 @@
 USE SQLCookbook;
 
+select *, ROW_NUMBER() over(order by (select null)) as rn
+from EMP
+
+--assume a unique column is present. What if not unique column is present to give row number without unique ordering
+--(like we specify SELECT NULL in ORDER by for ROW_NUmber).
+select *, (select count(*)+1 from emp as e1 where e.EMPNO > e1.EMPNO)
+from EMP as e
+
+--assumes unique column present to provide ordering.
+select e.*, COUNT(e1.EMPNO) + 1
+from EMP as e
+left outer join emp as e1 on e.EMPNO>e1.EMPNO
+group by e.EMPNO, e.ENAME, e.JOB, e.MGR, e.HIREDATE, e.SAL, e.COMM, e.DEPTNO
+
+--if no unique column is present. then does not work as shown below
+select *, (select count(*)+1 from emp as e1 where e.DEPTNO > e1.DEPTNO)
+from EMP as e
+
+
+--newid() does not seem to work with row_number to give a random ordering for each execution
+select *, ROW_NUMBER() over(order by (select null)) as rn
+from EMP
+
+select *, ROW_NUMBER() over(order by (select 1)) as rn
+from EMP
+
+select *, ROW_NUMBER() over(order by (select sysdatetime())) as rn
+from EMP
+
+select *, ROW_NUMBER() over(order by (select newid())) as rn
+from EMP
+
+select TOP(3) *
+from EMP
+order by (select null)
+
+select TOP(3) *
+from EMP
+order by (select 1)
+
+select TOP(3) *
+from EMP
+order by (select sysdatetime())
+
+select TOP(3) *
+from EMP
+order by (select newid())
+
 --new column
 
 --8.7
