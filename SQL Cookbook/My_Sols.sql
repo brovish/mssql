@@ -1,5 +1,80 @@
 USE SQLCookbook;
 
+--new column
+
+--8.7
+select e.HIREDATE as currEmpHireDate, Prev.hiredate
+from EMP as e
+outer apply (select max(e1.HIREDATE) as prevEmpHireDate from emp as e1 where e.HIREDATE> e1.HIREDATE) as Prev(hiredate)
+
+select e.HIREDATE as currEmpHireDate, Max(e1.HIREDATE)
+from EMP as e
+left outer join EMP as e1 on e.HIREDATE > e1.HIREDATE
+group by e.EMPNO, e.HIREDATE
+
+--8.3
+declare @date1 as datetime = '19900101'
+declare @date2 as datetime = '19900120'
+
+--currentDate is a date value between start and finish
+select  sum(case when DATENAME(DW,currentDate) not in ('Saturday', 'Sunday') then 1 else 0 end) as noOfWorkDays
+from dbo.GetNums(0,DATEDIFF(day,@date1, @date2)-1) as Num
+cross apply (select DATEADD(day,n,@date1)) as Dates(currentDate)
+
+--create index idx_median on dbo.Transactions(actid,val);
+
+SELECT  distinct actid, 
+		PERCENTILE_DISC(0.5) WITHIN GROUP (ORDER BY val) OVER (PARTITION BY actid) AS MEDIAN
+FROM dbo.Transactions as t
+order by actid
+
+;with c as
+(
+SELECT actid, COUNT(VAL) AS cnt, (COUNT(*)-1)/2 AS ov, 2-count(*)%2 as fv
+FROM Transactions AS T
+GROUP BY actid
+)
+select c.actid, avg(1. * a.val) as median
+from c
+cross apply(select * from dbo.Transactions as t 
+			where t.actid = c.actid
+			order by val
+			offset c.ov rows fetch next c.fv rows only) as a
+group by c.actid
+order by actid
+
+--running total with window function
+select empid, ordermonth, qty, SUM(qty) over(partition by empid order by ordermonth rows between unbounded preceding and current row) as runqty
+from dbo.EmpOrders
+
+--running total with scalar sub query
+select empid, ordermonth, qty, (select sum(qty) from dbo.EmpOrders as e1 where e1.empid=e.empid and e1.ordermonth <= e.ordermonth) as runqty
+from dbo.EmpOrders as e
+
+--running total with scalar inner join
+select e.empid, e.ordermonth, e.qty, sum(e1.qty) as runqty
+from dbo.EmpOrders as e
+inner join dbo.EmpOrders as e1 on e1.empid=e.empid and e1.ordermonth <= e.ordermonth
+group by e.empid, e.ordermonth, e.qty
+order by e.empid, e.ordermonth
+
+
+--running total with window function
+select actid, tranid, val, SUM(val) over(partition by actid order by tranid rows between unbounded preceding and current row) as balance
+from dbo.Transactions
+
+--running total with scalar sub query
+select actid, tranid, val, (select SUM(val) from dbo.Transactions as t1 where t1.actid =t.actid and t1.tranid<=t.tranid) as balance
+from dbo.Transactions as t
+
+--running total with scalar inner join
+select t.actid, t.tranid, t.val, sum(t1.val) as balance
+from dbo.Transactions as t
+inner join dbo.Transactions as t1 on t1.actid =t.actid and t1.tranid<=t.tranid
+group by t.actid, t.tranid, t.val
+--order by e.empid, e.ordermonth
+
+
 --7.6
 --running total with window function
 select 
