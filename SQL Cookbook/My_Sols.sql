@@ -1,5 +1,44 @@
 USE SQLCookbook;
 
+--9.4
+select dt
+from (values(SYSDATETIME())) as v(dt);
+
+--9.3
+select dt, m, y, startMon, nextMOn, lastDayOfPrevMonth, startDay, endDay
+from (values(SYSDATETIME())) as v(dt)
+cross apply (values(month(dt))) as a1(m)
+cross apply (values(year(dt))) as a2(y)
+cross apply (values(DATEFROMPARTS(y,m,1))) as a3(startMon)
+cross apply (values(DATEADD(month,1,startMon))) as a4(nextMOn)
+cross apply (values(DATEADD(DAY,-1,nextMOn))) as a5(lastDayOfPrevMonth)
+cross apply (values(datename(DW,startMon))) as a6(startDay)
+cross apply (values(datename(DW,lastDayOfPrevMonth))) as a7(endDay)
+
+--9.2
+--using built in functions
+select dt, isod, y, m, d, h, mint, sec
+from (values(SYSDATETIME())) as v(dt)
+cross apply (values(CONVERT(datetime2,dt,112))) as a1(isod)
+cross apply (values(year(isod))) as a2(y)
+cross apply (values(month(isod))) as a3(m)
+cross apply (values(day(isod))) as a4(d)
+cross apply (values(datepart(hour,isod))) as a5(h)
+cross apply (values(datepart(minute,isod))) as a6(mint)
+cross apply (values(datepart(SECOND,isod))) as a7(sec)
+
+select dt, isod, SUBSTRING(isodChar,1,4) as y, SUBSTRING(isodChar,6,2) as m, SUBSTRING(isodChar,9,2) as d --and so on
+from (values(SYSDATETIME())) as v(dt)
+cross apply (values(CONVERT(datetime2,dt,126))) as a1(isod)
+cross apply (values(cast(isod as varchar))) as a2(isodChar)
+
+--9.1
+select d, a1.yearStart, a2.nextYear, a3.numOfDays, case when numOfDays=366 then 'leap' else 'nonleap' end as 'isLeapOrNot'
+from (values(SYSDATETIME())) as v(d)
+cross apply (values(datefromparts(YEAR(d),1,1))) as a1(yearStart) 
+cross apply (values(dateadd(year, 1, yearStart))) as a2(nextYear) 
+cross apply (values(datediff(Day, a1.yearStart, a2.nextYear ))) as a3(numOfDays)
+
 select *, ROW_NUMBER() over(order by (select null)) as rn
 from EMP
 
