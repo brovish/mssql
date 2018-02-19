@@ -1,8 +1,63 @@
 USE SQLCookbook;
 
+--9.6
+--use pivot to display calendar
+select week, [Monday], [Tuesday], [Wednesday], [Thursday], [Friday], [Saturday], [Sunday]
+from 
+(select week, currentDate, weekdayName
+	from (values(SYSDATETIME())) as v(today)
+	cross apply (values(DATEFROMPARTS(YEAR(today),month(today),1))) as a1(startOfMonth)
+	cross apply (values(DATEADD(month,1,startOfMonth))) as a2(startOfNextMonth)
+	cross apply (select * from GetNums(0,DATEDIFF(day,startOfMonth,startOfNextMonth))) as gn(n)
+	cross apply (values(DATEADD(day,gn.n,startOfMonth))) as a3(currentDate)
+	cross apply (values(DATENAME(dw,currentDate))) as a4(weekdayName)
+	cross apply (values(DATENAME(ISO_WEEK,currentDate))) as a5(week)
+) as base
+pivot(max(currentDate) for weekdayName in ([Monday], [Tuesday], [Wednesday], [Thursday], [Friday], [Saturday], [Sunday])) as pvt
+
+--use CASE with GROUP BY to display calendar
+select a5.week,
+		max(case when weekdayName='Monday' then currentDate end) as 'Monday',
+		max(case when weekdayName='Tuesday' then currentDate end) as 'Tuesday',
+		max(case when weekdayName='Wednesday' then currentDate end) as 'Wednesday',
+		max(case when weekdayName='Thursday' then currentDate end) as 'Thursday',
+		max(case when weekdayName='Friday' then currentDate end) as 'Friday',
+		max(case when weekdayName='Saturday' then currentDate end) as 'Saturday',
+		max(case when weekdayName='Sunday' then currentDate end) as 'Sunday'
+from (values(SYSDATETIME())) as v(today)
+cross apply (values(DATEFROMPARTS(YEAR(today),month(today),1))) as a1(startOfMonth)
+cross apply (values(DATEADD(month,1,startOfMonth))) as a2(startOfNextMonth)
+cross apply (select * from GetNums(0,DATEDIFF(day,startOfMonth,startOfNextMonth))) as gn(n)
+cross apply (values(DATEADD(day,gn.n,startOfMonth))) as a3(currentDate)
+cross apply (values(DATENAME(dw,currentDate))) as a4(weekdayName)
+cross apply (values(DATENAME(ISO_WEEK,currentDate))) as a5(week)
+group by a5.week
+--cross apply (values(case when weekdayName='Monday' then currentDate end)) as a5(Monday)
+
+
+--9.5
+--first and last friday in every month of a eyar
+select y, nameOfMonth, nameOfDay,  min(currentDt) as firstFriday, max(currentDt) as lastFriday
+from (values(2007)) as v(y)
+cross apply (values('Friday')) as a1(dName)
+cross apply (values(DATEFROMPARTS(y,1,1))) as a2(yearStart)
+cross apply (values(DATEADD(year,1,yearStart))) as a3(nextYear)
+cross apply (values(datediff(day,yearStart, nextYear))) as a4(noOfDays)
+cross apply (select * from GetNums(1,noOfDays) as gn) as a5(n)
+cross apply (values(dateadd(day,a5.n,yearStart))) as a6(currentDt)
+cross apply (values(DATENAME(DW,currentDt))) as a7(nameOfDay)
+cross apply (values(DATENAME(month,currentDt))) as a8(nameOfMonth)
+where a7.nameOfDay = 'Friday'
+group by y, nameOfMonth, nameOfDay
+
 --9.4
-select dt
-from (values(SYSDATETIME())) as v(dt);
+select y, dateadd(day,a5.n,yearStart), datename(dw,dateadd(day,a5.n,yearStart)) 
+from (values(2007)) as v(y)
+cross apply (values('Friday')) as a1(dName)
+cross apply (values(DATEFROMPARTS(y,1,1))) as a2(yearStart)
+cross apply (values(DATEADD(year,1,yearStart))) as a3(nextYear)
+cross apply (values(datediff(day,yearStart, nextYear))) as a4(noOfDays)
+cross apply (select * from GetNums(1,noOfDays) as gn where datename(dw,dateadd(day,gn.n,yearStart)) = 'Friday') as a5(n)
 
 --9.3
 select dt, m, y, startMon, nextMOn, lastDayOfPrevMonth, startDay, endDay
