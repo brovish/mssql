@@ -1,6 +1,61 @@
 USE SQLCookbook;
 
---9.6
+--9.13
+select *
+from em
+
+--9.12
+;with CTE as
+(select *
+from emp as e
+cross apply (values(MONTH(e.HIREDATE))) as a1(m)
+cross apply (values(datename(DW,e.HIREDATE))) as a2(d)
+)
+select c1.ENAME, c2.ENAME
+from CTE as c1
+inner join  CTE as c2 on c2.EMPNO> c1.EMPNO and c2.d = c1.d and c2.m = c1.m
+
+--where cnt>1
+
+--9.10
+select currentMonth, count(a2.EMPNO)
+from (values(DATEFROMPARTS(1980,1,1))) as val1(startDate)
+cross apply (values(DATEFROMPARTS(1983,02,1))) as val2(endDate)
+cross apply GetNums(0,datediff(MONTH,startDate,endDate)) as gn
+cross apply (values(DATEADD(MONTH,n,startDate))) as a1(currentMonth)
+outer apply (select * from EMP as e where e.HIREDATE >= currentMonth and e.HIREDATE<DATEADD(MONTH,1,currentMonth)) as a2
+group by currentMonth
+
+--9.9
+select m, qtr, qtrStart, qtrEnd
+from (values(sysdatetime())) as val1(dt)
+cross apply (values(year(dt))) as a0(y)
+cross apply (values(month(dt))) as a1(m)
+cross apply (values(m/3 + 1 )) as a2(qtr)
+cross apply (values(DATEFROMPARTS(y,qtr,1))) as a3(qtrStart)
+cross apply (values(dateadd(DAY,-1,dateadd(month,3,qtrStart)))) as a4(qtrEnd)
+
+--9.8
+select startValForEveryQtr, startQtr, endQtr--qrtStart, qrtEnd
+from (values(sysdatetime())) as val1(dt)
+cross apply (values(year(dt))) as val2(y)
+cross apply (values(DATEFROMPARTS(y,1,1))) as a0(startVal)
+cross apply GetNums(1,4) as gn
+cross apply (values(dateadd(month,n*3,startVal))) as a1(startValForEveryQtr)
+cross apply (values(dateadd(month,-3,startValForEveryQtr))) as a2(startQtr)
+cross apply (values(dateadd(DAY,-1,startValForEveryQtr))) as a3(endQtr)
+
+
+select qrtStart, qrtEnd
+from (values(sysdatetime())) as val1(dt)
+cross apply (values(year(dt))) as val2(y)
+cross apply (values(DATEFROMPARTS(y,1,1))) as a0(temp)
+cross apply GetNums(1,4) as gn
+cross apply (values(dateadd(month,n*4,temp))) as a1(temp1)
+cross apply (values(dateadd(month,-4,temp1))) as a2(qrtStart)
+cross apply (values(DATEADD(day,-1,temp1))) as a3(qrtEnd)
+
+--9.7
 --use pivot to display calendar
 select week, [Monday], [Tuesday], [Wednesday], [Thursday], [Friday], [Saturday], [Sunday]
 from 
