@@ -1,8 +1,113 @@
 USE SQLCookbook;
 
---9.13
-select *
-from em
+--10.2
+select DEPTNO, ENAME, SAL, HIREDATE, case when lead(sal) over(partition by deptno order by hiredate) is null then 'N/A' 
+										else cast(sal - lead(sal) over(partition by deptno order by hiredate) as varchar(20))
+									 end
+from EMP
+
+
+select DEPTNO, ENAME, SAL, HIREDATE, sal - (select min(*) from emp as e2 where e2.DEPTNO =  e2.HIREDATE = (select min(e1.HIREDATE) from emp as e1 where e.deptno = e1.DEPTNO and e1.HIREDATE > e.HIREDATE)
+from EMP as e
+order by DEPTNO
+
+--10.1
+--drop table t1
+--CREATE TABLE dbo.T1(startDate date, endDate date);
+--GO
+--INSERT INTO dbo.T1(startDate, endDate) VALUES('20070101','20070103'),('20070103','20070104'),('20070106','20070107'),('20070109','20070109');
+--drop table t1; delete from t1
+--CREATE TABLE dbo.T1(projID int,startDate date, endDate date);
+--INSERT INTO dbo.T1(projID, startDate, endDate)
+			  --VALUES(1,'20070101','20070103')
+				 --  ,(2,'20070103','20070104')
+				 --  ,(3,'20070106','20070107')
+				 --  ,(4,'20070109','20070109')
+				 --  ,(5,'20070109','20070110');
+
+				 --select cast('20070109'  as int)
+
+--gaps..date ranges between consecutive projects
+
+;with cte as
+(SELECT t1.* 
+FROM T1
+inner JOIN T1 AS T2 ON T1.projID != T2.projID and (T1.endDate = T2.startDate or T1.startDate = T2.endDate) 
+)
+select *, lead(startDate) over(order by endDate)
+from cte
+order by endDate
+
+--these are the projects which are not part of any 'consecutive project dates' islands
+SELECT t1.*
+FROM T1
+where not exists (select * from T1 AS T2 where T1.projID != T2.projID and (T1.endDate = T2.startDate or T1.startDate = T2.endDate)) 
+
+--islands...range of consecutive projects
+SELECT t1.*
+FROM T1
+inner JOIN T1 AS T2 ON T1.projID != T2.projID and (T1.endDate = T2.startDate or T1.startDate = T2.endDate) 
+
+
+
+--drop table t1
+--CREATE TABLE dbo.T1(shipdate date);
+--GO
+--INSERT INTO dbo.T1(shipDate) VALUES('20070101'),('20070102'),('20070102'),('20070103'),('20070106'),('20070107'),('20070109'),('20070109');
+
+--gaps
+;with cte as
+(
+select shipDate as curr, lead(shipDate) over(order by shipDate) as nxt
+from t1
+)
+select dateadd(day,1,curr) as rangeFrom, dateadd(day, -1, nxt) as rangeTo
+from cte
+where datediff(day, curr, nxt) > 1
+
+--islands..note did not use row_number/rank as col1 might not be unique
+;with cte as
+(
+select shipDate as curr, dateadd(day, -1 * dense_rank() over(order by shipDate) , shipDate )as grp
+from t1
+)
+select MIN(curr) as rangeFrom, max(curr) as rangeTo
+from cte
+group by grp
+
+
+--SET NOCOUNT ON;
+--USE tempdb;
+--drop table t1
+--IF OBJECT_ID('dbo.T1', 'U') IS NOT NULL DROP TABLE dbo.T1;
+
+--CREATE TABLE dbo.T1(col1 INT NOT NULL CONSTRAINT PK_T1 PRIMARY KEY);
+--GO
+--INSERT INTO dbo.T1(col1) VALUES(1),(2),(3),(7),(8),(9),(11),(15),(16),(17),(28);
+
+
+--gaps
+;with cte as
+(
+select col1 as curr, lead(col1) over(order by col1) as nxt
+from t1
+)
+select curr +1 as rangeFrom, nxt -1 as rangeTo
+from cte
+where nxt - curr > 1
+
+--islands..note did not use row_number/rank as col1 might not be unique
+;with cte as
+(
+select col1 as curr, col1 - dense_rank() over(order by col1) as grp
+from t1
+)
+select MIN(curr) as rangeFrom, max(curr) as rangeTo
+from cte
+group by grp
+
+
+
 
 --9.12
 ;with CTE as
