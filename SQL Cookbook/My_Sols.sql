@@ -1,13 +1,67 @@
 USE SQLCookbook;
 
+--10.3
+--drop table t1; --delete from t1
+--CREATE TABLE dbo.T1(projID int,startDate date, endDate date);
+--INSERT INTO dbo.T1(projID, startDate, endDate)
+--			  VALUES(1,'20070101','20070103')
+--				   ,(2,'20070103','20070104')
+--				   ,(3,'20070106','20070107')
+--				   ,(4,'20070109','20070109')
+--				   ,(5,'20070109','20070110');
+
+--islands but now you want to have stand alone rows as well as infact that is also an island
+;with base as
+(
+select *, row_number() over(order by endDate) as sortColumn
+from T1
+),
+cte as
+(
+SELECT t1.projID, t1.startDate, t1.endDate, t1.sortColumn
+	,case when lag(T1.endDate) over (order by T1.sortColumn) = T1.startDate then 0 else 1 end as flag
+FROM base as T1
+),
+cte2 as
+(
+select c.projID, c.startDate, c.endDate, sum(c.flag) over(order by sortColumn) as grp
+from cte as c
+)
+select MIN(startDate) as rangeFrom, max(endDate) as rangeTo
+from cte2
+group by grp
+
+
+--islands but now you want to have stand alone rows as well as infact that is also an island
+;with base as
+(
+select *, row_number() over(order by endDate) as sortColumn
+from T1
+),
+cte as
+(
+SELECT t1.projID, t1.startDate, t1.endDate, t1.sortColumn, case when T2.projID is null then 1 else 0 end as flag
+FROM base as T1--left outer join could also be moved to scalar subquery or cross apply
+LEFT OUTER JOIN base AS T2 ON  (T1.startDate = T2.endDate) AND T1.startDate<T1.endDate
+),
+cte2 as
+(
+select c.projID, c.startDate, c.endDate, (select sum(b.flag) from cte as b where b.sortColumn <= c.sortColumn) as grp
+--select shipDate as curr, dateadd(day, -1 * dense_rank() over(order by shipDate) , shipDate )as grp
+from cte as c
+)
+select MIN(startDate) as rangeFrom, max(endDate) as rangeTo
+from cte2
+group by grp
+
+
 --10.2
 select DEPTNO, ENAME, SAL, HIREDATE, case when lead(sal) over(partition by deptno order by hiredate) is null then 'N/A' 
 										else cast(sal - lead(sal) over(partition by deptno order by hiredate) as varchar(20))
 									 end
 from EMP
 
-
-select DEPTNO, ENAME, SAL, HIREDATE, sal - (select min(*) from emp as e2 where e2.DEPTNO =  e2.HIREDATE = (select min(e1.HIREDATE) from emp as e1 where e.deptno = e1.DEPTNO and e1.HIREDATE > e.HIREDATE)
+select DEPTNO, ENAME, SAL, HIREDATE, sal - (select min(e2.SAL) from emp as e2 where e2.DEPTNO = e.DEPTNO and  e2.HIREDATE = (select min(e1.HIREDATE) from emp as e1 where e.deptno = e1.DEPTNO and e1.HIREDATE > e.HIREDATE))
 from EMP as e
 order by DEPTNO
 
