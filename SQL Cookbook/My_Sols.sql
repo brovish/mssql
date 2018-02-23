@@ -1,5 +1,84 @@
 USE SQLCookbook;
 
+--11.4
+;with v as 
+(select * 
+from (values(10,20), (20,10), (30,40), (80,130), (130,80)) as b(a,b)
+)
+select v1.* 
+from v as v1
+inner join v as v2 on v1.a=v2.b and v2.a=v1.b
+
+--11.3
+;with b1
+as
+(select d.DNAME, d.LOC, d.DEPTNO from DEPT as d where d.DEPTNO in (30,40)
+),
+b2 as
+(select e.ENAME, e.DEPTNO, d1.DNAME, d1.LOC
+	from EMP as e
+	inner join dept as d1 on d1.DEPTNO = e.DEPTNO
+	where e.DEPTNO in (10,20)) 
+select b2.ENAME, isnull(b2.DEPTNO,b1.DEPTNO), isnull(b1.DNAME, b2.DNAME), isnull(b1.LOC, b2.LOC)
+from b1 full outer join  b2 on 1=0
+
+--11.2
+select *, (select COUNT(*) from emp as e1 where e1.JOB<=e.JOB) as rn
+from emp as e
+order by rn
+
+--11.1
+;with cte as
+(select *, ROW_NUMBER() over (order by (select null)) as rn
+from EMP
+)
+select * from cte
+where cte.rn % 2 = 0
+
+;with cte as
+(select *, ROW_NUMBER() over (order by (select null)) as rn
+from EMP
+)
+select * from cte
+where cte.rn % 2 = 0
+
+--10.5
+;with cte as
+(select *, ROW_NUMBER() over(order by sal) as rn
+from emp
+)
+select *
+from cte
+order by rn
+offset 0 rows fetch next 5 rows only;
+
+;with cte as
+(select *, ROW_NUMBER() over(order by sal) as rn
+from emp
+)
+select top(5) *
+from cte
+order by rn
+
+;with cte as
+(select *, ROW_NUMBER() over(order by sal) as rn
+from emp
+)
+select *
+from cte
+where rn between 1 and 5
+
+--10.4
+select gn.n as year, a1.cnt
+from GetNums(1980,1989) as gn
+outer apply (select count(EMPNO), year(HIREDATE) 
+				from EMP where year(HIREDATE) = gn.n group by year(HIREDATE)) as  a1(cnt,year)
+
+select gn.n as year, a1.cnt
+from GetNums(1980,1989) as gn
+outer apply (select count(EMPNO), year(HIREDATE) 
+				from EMP where year(HIREDATE) = gn.n group by year(HIREDATE)) as  a1(cnt,year)
+
 --10.3
 --drop table t1; --delete from t1
 --CREATE TABLE dbo.T1(projID int,startDate date, endDate date);
