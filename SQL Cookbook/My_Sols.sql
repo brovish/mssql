@@ -1,13 +1,35 @@
 USE SQLCookbook;
 
+--11.7
+with cte as
+(select *, LEAD(sal) over(order by hiredate) as nxtSal
+from emp
+)
+select * 
+from cte 
+where sal<nxtSal
+
+;with cte as 
+(select *, (select min(sal) from emp as e2 where e2.HIREDATE  = (select MIN(e1.HIREDATE) from EMP as e1 where e1.HIREDATE> e.HIREDATE)) as nxtSal
+from emp as e
+)
+select * 
+from cte 
+where sal<nxtSal
+
+--11.6
+select *
+from emp as e
+where e.SAL in (select MIN(sal) from emp union select MAX(sal) from emp)
+
 --11.4
 ;with v as 
 (select * 
-from (values(10,20), (20,10), (30,40), (80,130), (130,80)) as b(a,b)
+from (values(10,20), (20,10), (30,40), (80,130), (130,80), (5,5), (5,5)) as b(a,b)
 )
-select v1.* 
+select distinct v1.* 
 from v as v1
-inner join v as v2 on v1.a=v2.b and v2.a=v1.b
+inner join v as v2 on (v1.a=v2.b and v2.a=v1.b ) and v1.a <= v1.b
 
 --11.3
 ;with b1
