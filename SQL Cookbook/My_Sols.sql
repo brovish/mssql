@@ -1,5 +1,76 @@
 USE SQLCookbook;
 
+--12.2
+
+--you have 2 columns and have more than one data value for a category column(either unique or non-unique values)
+--then you have to add differentiating 'for' column. Add row_number 
+select *
+into #base
+from (values('clerk','david'), ('clerk', 'david'), ('manager', 'david'), ('manager', 'bai'), ('manager', 'tom')) as v(job,ename)
+
+--won't work
+select [clerk], [manager] 
+from #base
+pivot(max(ename) for job in ([clerk], [manager])) as pvt
+
+select *, ROW_NUMBER() over (partition by job order by (select null)) as rn
+into #base1
+from (values('clerk','david'), ('clerk', 'david'), ('manager', 'david'), ('manager', 'bai'), ('manager', 'tom')) as v(job,ename)
+
+select [clerk], [manager] 
+from #base1
+pivot(max(ename) for job in ([clerk], [manager])) as pvt
+
+select max(case when job='clerk' then ename end) as [clerk], max(case when job='manager' then ename end) as [manager]
+from #base1
+
+--12.1
+--we only need the categorical column and the values to spread column. So only 2 columns are needed for pivoting
+select *
+into #base
+from (values(10,3), (20,5), (30,6)) as v(value,cnt)
+
+select [3] as [cnt3], [5] as [cnt5], [6] as [cnt6]
+from #base
+pivot(max(value) for cnt in ([3], [5], [6])) as pvt
+
+select max(case when cnt=3 then value end) as cnt3, max(case when cnt=5 then value end) as cnt5, max(case when cnt=6 then value end) as cnt6
+from #base
+
+--11.12
+select v.*, n, [verifiedDate], [shipped], nn
+from (values(1,'19890101','19890103'), (2,'19890102','19890104'), (3,'19890103','19890105')) as v(id,ordDate,prcDate)
+cross apply GetNums(1,3) as gn
+outer apply (select dateadd(day,1,prcDate) as [verifiedDate] where n=2 or n=3) as a1([verifiedDate])
+outer apply (select dateadd(day,1,[verifiedDate]) as [shipped] where n=3) as a2([shipped])
+outer apply (values(case when n=2  then 22 end)) as a3(nn)
+order by v.id, n
+
+--11.11
+select e.DEPTNO, e.ENAME, e.SAL, e.HIREDATE, first_VALUE(SAL) over(partition by deptno order by hiredate desc ) as latVal
+	, last_VALUE(SAL) over(partition by deptno order by hiredate  ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING ) as latVal1
+from emp as e
+order by DEPTNO
+
+--11.10
+select distinct e.JOB
+from EMP as e
+
+select e.JOB
+from EMP as e
+group by e.JOB
+
+--11.8
+;with cte as
+(
+select *, LEAD(sal) over(order by sal) as nxtSal,  lag(sal) over(order by sal) as prvSal
+from EMP
+)
+select c.ENAME, c.SAL
+		, case when nxtSal is null then min(sal) over() else nxtSal end as forward
+		, case when prvSal is null then MAX(sal) over() else prvsal end as rewind
+from cte as c
+
 --11.7
 with cte as
 (select *, LEAD(sal) over(order by hiredate) as nxtSal
