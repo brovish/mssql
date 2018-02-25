@@ -1,8 +1,17 @@
 USE SQLCookbook;
 
 --12.10
+--vertical historgrams
+select case when [10] is not null then '*' end, case when [20] is not null then '*' end, case when [30] is not null then '*' end
+from
+(select DEPTNO, ENAME, ROW_NUMBER() over(partition by DEPTNO order by(select null)) as rn
+from EMP
+)as base
+pivot(max(ENAME) for deptno in ([10],[20],[30])) as pvt
+order by 1 ,2,3
 
 --12.9
+--horizontal historgrams
 ;with cte as
 (
 select DEPTNO, COUNT(empno) as cnt
