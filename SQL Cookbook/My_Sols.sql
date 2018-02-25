@@ -1,5 +1,26 @@
 USE SQLCookbook;
 
+--12.12
+select case when job is null then 'total' else job end, sum(sal)
+from EMP as e
+group by
+GROUPING sets((job), ());
+
+--12.11
+;with cte as
+(select DEPTNO, ENAME,  job, max(sal) as sal
+from emp as e
+group by DEPTNO, e.ENAME, e.EMPNO, JOB
+)
+select *
+from cte as c
+outer apply (select max(sal), min(sal) from emp where DEPTNO = c.DEPTNO) as a1(maxd,mind)
+outer apply (select max(sal), min(sal) from emp where JOB = c.JOB) as a2(maxj,minj)
+outer apply (values(case when c.sal = maxd then 'top sal in dept' when c.sal = mind then 'low sal in dept' end)) as a3(dept_status)
+outer apply (values(case when c.sal = maxj then 'top sal in job' when c.sal = minj then 'low sal in job' end)) as a4(job_status)
+order by DEPTNO, sal
+
+
 --12.10
 --vertical historgrams
 select case when [10] is not null then '*' end, case when [20] is not null then '*' end, case when [30] is not null then '*' end
