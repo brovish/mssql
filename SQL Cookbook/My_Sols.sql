@@ -1,7 +1,67 @@
 USE SQLCookbook;
 
---12.2
+--12.10
 
+--12.9
+;with cte as
+(
+select DEPTNO, COUNT(empno) as cnt
+from EMP
+group by DEPTNO
+)
+select * 
+from cte as c
+cross apply (select REPLICATE('*', cnt)) as a1(hist)
+
+--12.8
+--create 5 buckets with n rows 
+select *, ntile(5) over(order by empno)
+from emp as e
+
+--create 5 buckets with n rows but the division of rows into the buckets is different and imo, wrong.
+--find a better solution
+select *, (ROW_NUMBER() over(order by empno)% 5) + 1 AS NTILE
+from emp as e
+ORDER BY empno
+
+--12.7
+--creates buckets with 5 rows each...the number of buckets could be 
+select *,  CEILING(ROW_NUMBER() over (order by empno)/ 5.0)
+from EMP as e
+
+--12.6
+select *, [20] - [10] 
+from
+(
+select DEPTNO, sum(sal) as sal--, ROW_NUMBER() over(order by (select null)) as rn
+from emp as e
+group by DEPTNO ) base
+pivot(max(sal) for deptno in([10],[20],[30])) as pvt;
+
+--12.5
+;with cte as
+(
+select *, row_number() over(partition by deptno order by ename) as rn
+from EMP
+)
+select case when rn=1 then cte.DEPTNO  end, cte.ENAME
+from cte
+group by  cte.DEPTNO, cte.ENAME, rn	
+
+--12.4
+select a1.*
+from emp as e
+cross apply (values(e.ENAME),(JOB),(cast(EMPNO as varchar(max))),(' ')) as a1(emps)
+where DEPTNO = 10
+
+--12.3
+
+select a1.*
+from (values(10, 20, 30)) as v(cnt3, cnt5, cnt6)
+cross apply (values(3,v.cnt3), (5,v.cnt5), (6,v.cnt6)) as a1(deptno, empCnt)
+
+
+--12.2
 --you have 2 columns and have more than one data value for a category column(either unique or non-unique values)
 --then you have to add differentiating 'for' column. Add row_number 
 select *
@@ -23,9 +83,11 @@ pivot(max(ename) for job in ([clerk], [manager])) as pvt
 
 select max(case when job='clerk' then ename end) as [clerk], max(case when job='manager' then ename end) as [manager]
 from #base1
+group by rn
 
 --12.1
 --we only need the categorical column and the values to spread column. So only 2 columns are needed for pivoting
+--drop table #base
 select *
 into #base
 from (values(10,3), (20,5), (30,6)) as v(value,cnt)
