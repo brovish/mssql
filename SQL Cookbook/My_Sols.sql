@@ -1,10 +1,21 @@
 USE SQLCookbook;
 
+--12.13
+select DEPTNO, JOB, sum(SAL)
+from EMP as e
+group by DEPTNO, JOB
+
 --12.12
-select case when job is null then 'total' else job end, sum(sal)
+select case when job is null then 'total' else job end, sum(sal), GROUPING(job)
 from EMP as e
 group by
 GROUPING sets((job), ());
+
+select case when job is null then 'total' else job end, sum(sal), GROUPING(job)
+from EMP as e
+group by
+rollup(job);
+
 
 --12.11
 ;with cte as
