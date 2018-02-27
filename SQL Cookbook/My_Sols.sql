@@ -1,9 +1,29 @@
 USE SQLCookbook;
 
+--12.16
+
 --12.13
-select DEPTNO, JOB, sum(SAL)
+select DEPTNO, JOB, sum(SAL), GROUPING_ID(DEPTNO, JOB), GROUPING(DEPTNO), GROUPING(JOB)
+, case 
+	   when GROUPING_ID(DEPTNO, JOB) = 0 then 'Total by dept + job' 
+	   when GROUPING_ID(DEPTNO, JOB) = 1 then 'Total by dept' 
+	   when GROUPING_ID(DEPTNO, JOB) = 2 then 'Total by job' 	   
+	   when GROUPING_ID(DEPTNO, JOB) = 3 then 'grand Total' 
+   end
 from EMP as e
-group by DEPTNO, JOB
+group by cube(DEPTNO, JOB)
+order by GROUPING_ID(DEPTNO), GROUPING_ID(JOB) --DEPTNO, JOB
+
+select DEPTNO, JOB, sum(SAL), GROUPING_ID(DEPTNO, JOB)
+, case 
+	   when GROUPING_ID(DEPTNO, JOB) = 0 then 'Total by dept + job' 
+	   when GROUPING_ID(DEPTNO, JOB) = 1 then 'Total by dept' 
+	   when GROUPING_ID(DEPTNO, JOB) = 2 then 'Total by job' 	   
+	   when GROUPING_ID(DEPTNO, JOB) = 3 then 'grand Total' 
+   end
+from EMP as e
+group by rollup(DEPTNO, JOB)
+order by DEPTNO, JOB
 
 --12.12
 select case when job is null then 'total' else job end, sum(sal), GROUPING(job)
