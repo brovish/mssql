@@ -1,6 +1,24 @@
 USE SQLCookbook;
 
---12.16
+--12.20
+select *
+from(
+	select case when DEPTNO is null then 'Total' else cast(DEPTNO as varchar(max)) end as DEPTNO , MGR, sum(sal) as sal
+	from emp as e
+	where MGR is not null
+	group by grouping sets((DEPTNO, MGR), (DEPTNO), ())) as base
+pivot(sum(sal) for deptno in ([10],[20],[30], [Total])) as pvt;
+
+--12.19
+--wrong solution
+select HIREDATE, SAL, sum(sal) over(order by hiredate rows between 90 preceding and current row)
+from emp
+order by HIREDATE
+
+--12.18
+select ENAME, DEPTNO, count(ename) over(partition by deptno), JOB, COUNT(ename) over(partition by job), count(*) over(order by (select null))
+from EMP
+order by DEPTNO
 
 --12.13
 select DEPTNO, JOB, sum(SAL), GROUPING_ID(DEPTNO, JOB), GROUPING(DEPTNO), GROUPING(JOB)
