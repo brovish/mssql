@@ -1,5 +1,53 @@
 USE SQLCookbook;
 
+--13.5
+--good question. It confused me to think it has to be solved using recursive CTE but actually there is no need
+--for that. 
+
+--13.4
+;with cte as
+(
+select e.EMPNO, e.ENAME
+from EMP as e
+where e.ENAME = 'jones'
+union all
+select e1.EMPNO, e1.ENAME
+from emp as e1 
+inner join cte as c1 on  e1.MGR = c1.EMPNO
+)
+select ENAME
+from cte
+
+
+--13.2
+;with cte as
+(
+select e.EMPNO, e.MGR, cast(ENAME as varchar(max)) as concatStr, 0 as depth
+from EMP as e
+union all
+select e1.EMPNO, e1.MGR, e1.ENAME + '-->' + concatStr, depth + 1
+from emp as e1 
+inner join cte as c1 on  e1.EMPNO = c1.MGR
+)
+select distinct *
+from cte
+where MGR is null
+
+;with cte as
+(
+select e.EMPNO, e.ENAME, e.MGR, cast(ENAME as varchar(max)) as concatStr, 0 as depth
+from EMP as e
+where ename in ('miller')
+union all
+select e1.EMPNO, e1.ENAME, e1.MGR, concatStr + '-->' + e1.ENAME, depth + 1
+from emp as e1 
+inner join cte as c1 on  e1.EMPNO = c1.MGR
+where e1.EMPNO is not null
+)
+select top (1) *
+from cte
+order by depth desc
+
 --12.20
 select *
 from(
