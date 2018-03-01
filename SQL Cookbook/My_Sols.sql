@@ -1,5 +1,26 @@
 USE SQLCookbook;
 
+--14.8
+
+with cte1 as 
+(select concat(ENAME,'(', cast(sal as varchar), ')') as name, DENSE_RANK() over(order by sal desc) as dr
+	,row_number() over(order by sal desc) as rn
+from EMP
+),
+cte2 as 
+(select *, case when dr<=3 then 1  when dr>3 and dr<=6 then 2  else 3 end as groupId
+from cte1
+)
+select case when dr = 1 then max(name) end as [1], case when dr = 2 then max(name) end as [2], case when dr = 3 then max(name) end as [3] --[1], [2], [3]
+from cte2
+group by  dr, rn
+
+--select max([1]), max([2]), max([3]) --[1], [2], [3]
+--from cte2
+--pivot (max(name) for groupid in ([1],[2],[3])) as pvt
+
+
+
 --13.5
 --good question. It confused me to think it has to be solved using recursive CTE but actually there is no need
 --for that. 
