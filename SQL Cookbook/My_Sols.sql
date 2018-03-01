@@ -1,5 +1,25 @@
 USE SQLCookbook;
 
+--14.13
+select distinct job, COUNT(EMPNO) over(partition by job) as numemps, cast(100.0 * sum(SAL) over(partition by job)/sum(SAL) over(order by (select null)) as int) as pctofsal 
+from EMP
+--group by JOB, numemps, pctofsal
+
+--14.11
+;with cte1 as
+(select 'ent:str:gomez:yahoo' as ser
+union all
+select 'ent::rope:west' as ser
+),
+cte2 as 
+(select *, ROW_NUMBER() over (partition by ser order by (select null)) as category 
+from cte1 as c
+cross apply string_split(c.ser,':') 
+)
+select *
+from cte2
+pivot(max(value) for category in ([1],[2],[3])) as pvt
+
 --14.8
 --DROP TABLE #BASE;
 --with cte1 as 
@@ -20,7 +40,7 @@ USE SQLCookbook;
 --from cte3
 
 select MAX(case when groupid = 1 then name end) as [1], MAX(case when groupid = 2 then name end) as [2]
-		, MAX(case when groupid = 3 then name end) as [3] --[1], [2], [3]
+		, MAX(case when groupid = 3 then name end) as [3]
 from #base
 group by rn
 
