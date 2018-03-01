@@ -1,24 +1,32 @@
 USE SQLCookbook;
 
 --14.8
+--DROP TABLE #BASE;
+--with cte1 as 
+--(select *, concat(ENAME,'(', cast(sal as varchar), ')') as name
+--	, DENSE_RANK() over(order by sal desc) as dr
+--from EMP
+--),
+--cte2 as 
+--(select *, case when dr<=3 then 1  when dr>3 and dr<=6 then 2  else 3 end as groupId
+--from cte1
+--),
+--cte3 as
+--(
+--select *, row_number() over(PARTITION BY groupId order by sal desc) as rn from cte2
+--)
+--select * 
+--into #base
+--from cte3
 
-with cte1 as 
-(select concat(ENAME,'(', cast(sal as varchar), ')') as name, DENSE_RANK() over(order by sal desc) as dr
-	,row_number() over(order by sal desc) as rn
-from EMP
-),
-cte2 as 
-(select *, case when dr<=3 then 1  when dr>3 and dr<=6 then 2  else 3 end as groupId
-from cte1
-)
-select case when dr = 1 then max(name) end as [1], case when dr = 2 then max(name) end as [2], case when dr = 3 then max(name) end as [3] --[1], [2], [3]
-from cte2
-group by  dr, rn
+select MAX(case when groupid = 1 then name end) as [1], MAX(case when groupid = 2 then name end) as [2]
+		, MAX(case when groupid = 3 then name end) as [3] --[1], [2], [3]
+from #base
+group by rn
 
---select max([1]), max([2]), max([3]) --[1], [2], [3]
---from cte2
---pivot (max(name) for groupid in ([1],[2],[3])) as pvt
-
+select [1], [2], [3]
+from (select b.name, b.rn, b.groupId from #base as b) AS B
+pivot (max(name) for groupid in ([1],[2],[3])) as pvt
 
 
 --13.5
