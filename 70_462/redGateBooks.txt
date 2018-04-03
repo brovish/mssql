@@ -1,1 +1,2 @@
+http://assets.red-gate.com/community/books/sql-server-storage-internals-101.pdf
 http://assets.red-gate.com/community/books/sql-server-hardware-ebook.pdf
