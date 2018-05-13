@@ -12,9 +12,11 @@ for the correct chapter first.*/
 --Chapter 2
 
 SELECT  dopc.cntr_value,
-        dopc.cntr_type
+        dopc.cntr_type,
+		*
 FROM    sys.dm_os_performance_counters AS dopc
-WHERE   dopc.object_name = 'MSSQL$RANDORI:General Statistics'
+WHERE   dopc.object_name = 'MSSQL$SQLSERVER2017:General Statistics'
+--WHERE   dopc.object_name = 'MSSQL$RANDORI:General Statistics'
         AND dopc.counter_name = 'Logins/sec' ;
 
 
@@ -42,8 +44,6 @@ EXEC sp_configure
     'max server memory' ;
 
 
-
-
 USE master ;
 EXEC sp_configure 
     'show advanced option',
@@ -57,6 +57,14 @@ EXEC sp_configure
     200 ;
 RECONFIGURE WITH OVERRIDE ;
 
+
+--set up perfmon
+
+DBCC MEMORYSTATUS
+select * from sys.dm_os_memory_brokers
+select * from sys.dm_os_memory_broker_clerks
+select * from sys.dm_os_ring_buffers
+select * from sys.dm_exec_query_memory_grants
 
 
 --File Group
