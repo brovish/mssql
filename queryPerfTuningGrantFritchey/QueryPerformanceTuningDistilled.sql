@@ -65,6 +65,11 @@ select * from sys.dm_os_memory_brokers
 select * from sys.dm_os_memory_broker_clerks
 select * from sys.dm_os_ring_buffers
 select * from sys.dm_exec_query_memory_grants
+select * from sys.dm_io_virtual_file_stats(DB_ID('AdventureWorks2012'),2);
+select * from sys.dm_os_wait_stats
+where wait_type like '%pageiolatch%';
+
+
 
 
 --File Group
