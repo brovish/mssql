@@ -64,3 +64,68 @@ dbcc page(tpc_e,1,511232,3)
 
 dbcc page(tpc_e,1,511233,3)
 
+
+create database allocationuntis
+go
+
+use allocationuntis
+go
+
+create table t
+(
+firstname char(50),
+lastname char(50),
+address char(100),
+dob date
+)
+go
+
+select *
+from sys.tables
+
+select *
+from sys.all_columns as i
+where i.object_id = object_id('t')
+
+select *
+from sys.indexes as i
+where i.object_id = object_id('t')
+
+--sql server always creates  1 partition for your table
+select *
+from sys.partitions as p
+where p.object_id = object_id('t')
+
+--only contains 'in_row_data'
+select a.*
+from sys.allocation_units as a
+inner join sys.partitions as p on a.container_id = p.partition_id
+where p.object_id = object_id('t')
+
+--add a varchar col which tips the total column size over the payload limit of page. that will cause 'ROW_OVERFLOW_DATA' allocation unit to be added 
+--to the table. adding a varchar of, say, size 100 would not tip the scale and thus not cause addtition of 'ROW_OVERFLOW_DATA' allocation unit.
+alter table t
+	add id4 varchar(7800);
+
+--contains 'in_row_data' and 'ROW_OVERFLOW_DATA' allocation unit
+select a.*
+from sys.allocation_units as a
+inner join sys.partitions as p on a.container_id = p.partition_id
+where p.object_id = object_id('t')
+
+--add a varbinary col which tips the total column size over the payload limit of page. that will cause 'LOB_DATA' allocation unit to be added 
+--to the table. but the thing it is adding both 'LOB_DATA' and 'ROW_OVERFLOW_DATA' allocation unit!!
+alter table t
+	add id5 varbinary(max);
+
+--contains 'in_row_data', 'ROW_OVERFLOW_DATA' and 'LOB_DATA' allocation unit
+select a.*
+from sys.allocation_units as a
+inner join sys.partitions as p on a.container_id = p.partition_id
+where p.object_id = object_id('t')
+
+insert into t values
+(
+
+)
+
