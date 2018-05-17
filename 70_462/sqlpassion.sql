@@ -87,11 +87,12 @@ select *
 from sys.all_columns as i
 where i.object_id = object_id('t')
 
+--metadata about a heap as well is stored in a table called index. But its type would be marked as heap
 select *
 from sys.indexes as i
 where i.object_id = object_id('t')
 
---sql server always creates  1 partition for your table
+--sql server always creates  1 partition for your table. note that we did not specify a partition to be created
 select *
 from sys.partitions as p
 where p.object_id = object_id('t')
@@ -105,8 +106,8 @@ where p.object_id = object_id('t')
 --add a varchar col which tips the total column size over the payload limit of page. that will cause 'ROW_OVERFLOW_DATA' allocation unit to be added 
 --to the table. adding a varchar of, say, size 100 would not tip the scale and thus not cause addtition of 'ROW_OVERFLOW_DATA' allocation unit.
 alter table t
-	add id4 varchar(7800);
-
+	add id4 varchar(7900);--7900 is tipping the total size of the data cols(7900+200) to be greater than payload size of page
+go 
 --contains 'in_row_data' and 'ROW_OVERFLOW_DATA' allocation unit
 select a.*
 from sys.allocation_units as a
@@ -114,18 +115,78 @@ inner join sys.partitions as p on a.container_id = p.partition_id
 where p.object_id = object_id('t')
 
 --add a varbinary col which tips the total column size over the payload limit of page. that will cause 'LOB_DATA' allocation unit to be added 
---to the table. but the thing it is adding both 'LOB_DATA' and 'ROW_OVERFLOW_DATA' allocation unit!!
+--to the table. but the thing it is adding both 'LOB_DATA' and 'ROW_OVERFLOW_DATA' allocation unit(to verify create the table t but do not add 
+--id4 column that should have created a 'ROW_OVERFLOW_DATA' alloc unit)!!
 alter table t
 	add id5 varbinary(max);
 
 --contains 'in_row_data', 'ROW_OVERFLOW_DATA' and 'LOB_DATA' allocation unit
+--note that till now we do not have any pages associated with table as we have not inserted any data
 select a.*
 from sys.allocation_units as a
 inner join sys.partitions as p on a.container_id = p.partition_id
 where p.object_id = object_id('t')
+go
 
+--insert some data that fits in payload of a page.
 insert into t values
 (
-
+'ramneek',
+'singh',
+'asdasdfd sdfds we3423, dsf, 3223',
+'2013/01/01',
+'asdadasdaaa sdfsdfs w wewerewr wqweqweqweqwe',
+cast('simple things...' as varbinary(max))
 )
+
+--as we were able to fit the data on the page, we only used 'IN_ROW_DATA' allocation unit and only used 1 data page. the other used page is the
+--IAM(index allocation map page). Why is the total_pages 9. it seems to suggest that a uniform extent was used but why? New versions allocate 
+--uniform extent straight away. Verified it on SQL server 2012 where total_pages was 2 as it for the data page it used a mixed extent.
+select a.*
+from sys.allocation_units as a
+inner join sys.partitions as p on a.container_id = p.partition_id
+where p.object_id = object_id('t')
+go
+
+--now insert data to overflow in id 4 column. we could have updated the previously added row as well to 'overflow'
+insert into t values
+(
+'ramneek',
+'singh',
+'asdasdfd sdfds we3423, dsf, 3223',
+'2013/01/01',
+REPLICATE('a',7900),
+cast('simple things...' as varbinary(max))
+)
+go
+
+-- used_pages is 2(1 page for IAM and 1 page for overlfow column data).  But the data_pages is 0(shouldn't the overlfow column data page be counted
+--as a data page?). total_pages is 9(uniform extent was used + IAM page)
+select a.*
+from sys.allocation_units as a
+inner join sys.partitions as p on a.container_id = p.partition_id
+where p.object_id = object_id('t')
+go
+
+--now insert data to overflow in id 4 column. we could have updated the previously added row as well to 'overflow'
+insert into t values
+(
+'ramneek',
+'singh',
+'asdasdfd sdfds we3423, dsf, 3223',
+'2013/01/01',
+'asd dsdsfs sdds',
+cast(REPLICATE('a',70000) as varbinary(max))
+)
+go
+
+-- used_pages is 2(1 page for IAM and 1 page for LOB_DATA column data).  But the data_pages is 0(shouldn't the overlfow column data page be counted
+--as a data page?). total_pages is 9(uniform extent was used + IAM page)
+--LOB_DATA column data page does not seem like a normal data page as we inserted 70kb of data and still we had 1 used_page. whereas considering the 
+--size of data page payload, we should have used around 9 data_pages
+select a.*
+from sys.allocation_units as a
+inner join sys.partitions as p on a.container_id = p.partition_id
+where p.object_id = object_id('t')
+go
 
