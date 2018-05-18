@@ -190,3 +190,57 @@ inner join sys.partitions as p on a.container_id = p.partition_id
 where p.object_id = object_id('t')
 go
 
+--now for each allocation unit, an IAM page is created. IAM page tells which pages(in case of mixed extents) and which extents belong to the table 
+--and which not. like GAM and SGAM pages, it too maps 4 GB of database file(it is also a bitmap). All IAM pages have 8 page pointer slots and then a set of bits that map 
+--a range of extents onto a file. The 8 page pointer slots are filled only for the 1rst IAM page for an object. if the mapping bit for a particular 
+--extent is set, then that belongs to the table associated with the IAM and if 0 then not.
+
+create database iampages;
+go
+
+use iampages
+go
+
+create table t
+(
+col1 char(2000),
+col2 char(2000),
+col3 char(2000),
+col4 char(2000)
+)
+go
+
+insert into t values
+(
+	'c1','c2','c3','c4'
+)
+go
+
+dbcc traceon(3604)
+go
+
+--this will return 2 pages: IAM page with pagetype 10 and data page with pagetype 1. get the first data page for the table
+dbcc ind(iampages, t, -1)
+go
+
+--get the iam page for table t
+--on prior versions(2012 and 2014?), 1 page in a mixed extent would be used. On newer versions, 1 page in uniform extent would be used.
+--the allocated page ids returned by the IAM page would be the same as retruned by dbcc ind
+dbcc page(iampages,1,320,3)
+go
+
+insert into t values
+(
+	'c1','c2','c3','c4'
+)
+go 8
+
+--this will return 2 pages: IAM page with pagetype 10 and data page with pagetype 1. get the first data page for the table
+dbcc ind(iampages, t, -1)
+go
+
+--get the iam page for table t
+--on prior versions(2012 and 2014?), 1 page in a mixed extent would be used. On newer versions, 1 page in uniform extent would be used.
+--the allocated page ids returned by the IAM page would be the same as retruned by dbcc ind
+dbcc page(iampages,1,320,3)
+go
