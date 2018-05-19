@@ -298,3 +298,85 @@ begin
 	select * from deadlock with (index(idx_col3))
 	where col3 =1
 end
+
+
+--thread pool starvation. By default x64 bit SQL Server instance will have 512 threads if core count is <=4 and 576 if core count is <8 
+--and so on. All the databases on the SQL server instance will share the same thread pool. You can modify the default thread pool size.
+--When a thread running a query is in signal wait state or resource wait state, that thread is not available to do other tasks. Imagine 
+--a scenario when a transaction updates a row in a table taking a exclusive(X) table lock on it. We do not commit the transaction. Now 
+--we run, say 600, SELECT queries against that table. The queries would want a shared(S) lock but that is not compatible with X lock.
+--So the threads would move to the resource wait queue with 512 threads showing wait_type of 'LCK_M_IS' and the rest showing a wait_type 
+--of 'threadpool'.
+
+
+create database threadpoolwaits
+go
+
+use threadpoolwaits;
+go
+
+create table t
+(
+col1 int not null identity(1,1) primary key,
+col2 int
+)
+go
+
+insert into t values(1);
+go
+
+create procedure readworkload
+as
+begin 
+select * from t;
+end
+
+--config value and run value is 0. means the default setting is being used
+sp_configure 'max worker threads'
+
+--number of worker threads avaiable. My system having <=4 cores, i get 512 max thread count.
+select max_workers_count from sys.dm_os_sys_info
+
+--start a transaction but do not commit it
+begin tran
+update t with (tablockx)
+set col2=24
+--commit tran
+
+--run the proc from a different session..it would be blocked and be moved to resourse wait queue with a wait_type of 'LCK_M_IS' signifying
+--that intends to get a shared lock(IS).
+exec readworkload
+select * from sys.dm_os_waiting_tasks where session_id=54--session 54 is the one running proc(different from current session)
+
+
+-- stress test using ostress.exe part of RM utils from Microsoft. running it would ultimately cause SQL server to become unresponsive as
+--it does have worked threads to process new requests. A special thread is reserved for DAC and DAC can be used either using sqlcmd
+--or in ssms. For ssms, provide the server name as: admin:XPSDEGRAAFF\SQLSERVER2017
+--C:\Program Files\Microsoft Corporation\RMLUtils>ostress.exe -SXPSDEGRAAFF\SQLSERVER2017 -Q"EXEC threadpoolwaits.dbo.readworkload" -n600
+select * from sys.dm_os_waiting_tasks where wait_type ='LCK_M_IS'
+select * from sys.dm_os_waiting_tasks where wait_type ='threadpool'
+
+--C:\Users\ramneekm>sqlcmd.exe -S XPSDEGRAAFF\SQLSERVER2017  -d threadpoolwaits -A
+--analyze all current requests executing waiting for a free worker thread. they won't have any session_id
+--1> select * from sys.dm_os_waiting_tasks where wait_type ='threadpool'
+--1> go
+--analyze all current executing waiting for a free worker thread. they won't have any session_id
+--1> select * from sys.dm_os_waiting_tasks where wait_type ='LCK_M_IS'
+--1> go
+--analyze all current executing requests in sql server
+--1> select r.command, r.plan_handle, r.wait_type, r.wait_resource, r.wait_time, r.session_id, r.blocking_session_id from sys.dm_exec_requests as r inner join sys.dm_exec_sessions as s on r.session_id = s.session_id where s.is_user_process = 1
+--1> go
+--analyze head blocker session
+--1> select login_time, host_name, program_name, login_name from sys.dm_exec_sessions where session_id = 55
+--1> go
+--analyze head blocker connection
+--1> select connect_time, client_tcp_port, most_recent_sql_handle from sys.dm_exec_connections where session_id = 55
+--1> go
+--retrieve the sql statement that is the culprit
+--1> select [text] from sys.dm_exec_sql_text(0x0200000077E29C32B500E1EF1EB44CD0BEA802CA2E8A52000000000000000000000000000000000000000000)
+--1> go
+-- now u can kill the session(with the open tran)
+--1> kill 55
+--1> go
+--1> exit
+
