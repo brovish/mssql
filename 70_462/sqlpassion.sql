@@ -244,3 +244,57 @@ go
 --the allocated page ids returned by the IAM page would be the same as retruned by dbcc ind
 dbcc page(iampages,1,320,3)
 go
+
+
+--bookmark lookup deadlock occurs when out of 2 concurrent sessions one is reading data from a NCI and has to perform lookups into
+--CI and other one is updating the CI(the key CI key) and thus has to update the NCI bookmark as well.
+--when NCI is waiting to accquire a shared lock on CI to read data while CI has X(exclusive) lock and it is waiting to get a 
+--exclusive(X) lock on NCI. So both are blocking each other and we have a deadlock
+
+create database bookmarklkupdl;
+go
+
+use bookmarklkupdl;
+go
+
+create table deadlock
+(
+col1 int not null primary key,
+col2 int not null ,
+col3 int not null 
+)
+go
+
+create nonclustered index idx_col3 on deadlock(col3);
+go
+
+insert into deadlock values(1,1,1);
+
+select * from deadlock;
+
+--bookmark lookup deadlock is more easily reproduced using repeatable read.
+--repeatable read would hold the shared lock until the end of the transaction. Default isolation level of read committed would
+--also reproduce the deadlock but would need a higher workload. How does read_committed_snapshot changes the scenario?
+set transaction isolation level repeatable read
+--set transaction isolation level  read committed
+go
+
+--execute in session 1
+while(1=1)
+begin
+	update deadlock
+	set col1 = col1 + 1
+	where col3 =1;
+end
+
+
+--execute in session 2
+set transaction isolation level repeatable read
+--set transaction isolation level  read committed
+go
+
+while(1=1)
+begin
+	select * from deadlock with (index(idx_col3))
+	where col3 =1
+end
