@@ -357,10 +357,10 @@ select * from sys.dm_os_waiting_tasks where wait_type ='LCK_M_IS'
 select * from sys.dm_os_waiting_tasks where wait_type ='threadpool'
 
 --C:\Users\ramneekm>sqlcmd.exe -S XPSDEGRAAFF\SQLSERVER2017  -d threadpoolwaits -A
---analyze all current requests executing waiting for a free worker thread. they won't have any session_id
+--analyze all requests waiting for a free worker thread. they won't have any session_id
 --1> select * from sys.dm_os_waiting_tasks where wait_type ='threadpool'
 --1> go
---analyze all current executing waiting for a free worker thread. they won't have any session_id
+--analyze all current executing requests waiting for shared lock.
 --1> select * from sys.dm_os_waiting_tasks where wait_type ='LCK_M_IS'
 --1> go
 --analyze all current executing requests in sql server
@@ -380,3 +380,4 @@ select * from sys.dm_os_waiting_tasks where wait_type ='threadpool'
 --1> go
 --1> exit
 
+--always close the DAC connection, either in ssms or sqlcmd!!
