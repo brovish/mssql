@@ -564,7 +564,7 @@ SELECT  i.Name,
         ddips.record_count,
         ddips.index_level
 FROM    sys.indexes i
-JOIN    sys.dm_db_index_physical_stats(DB_ID(N'AdventureWorks2008R2'),
+JOIN    sys.dm_db_index_physical_stats(DB_ID(N'AdventureWorks2012'),
                                        OBJECT_ID(N'dbo.Test1'), NULL, NULL,
                                        'DETAILED') AS ddips
         ON i.index_id = ddips.index_id
@@ -578,10 +578,7 @@ ALTER TABLE dbo.Test1 ALTER COLUMN C1 CHAR(500) ;
 CREATE INDEX iTest ON dbo.Test1(C1) ;
 
 
-
-
-
-DROP TABLE dbo.t1Test1 ;
+DROP TABLE dbo.Test1 ;
 
 
 
