@@ -381,3 +381,107 @@ select * from sys.dm_os_waiting_tasks where wait_type ='threadpool'
 --1> exit
 
 --always close the DAC connection, either in ssms or sqlcmd!!
+
+
+create database latchcontentiondemo
+go
+
+use latchcontentiondemo
+go
+
+--clear wait stats
+dbcc sqlperf('sys.dm_os_wait_stats', 'clear');
+go
+
+create procedure populatetemptable
+as
+begin
+
+create table #tempt
+(
+col1 int identity(1,1),
+col2 char(4000),
+col3 char(4000)
+);
+
+create unique clustered index id_c1 on #tempt(col1);
+
+--insert 10 records
+declare @i as int = 1;
+while(@i<10)
+	begin
+		insert into #tempt values('ramneek', 'singh')
+		set @i = @i +1
+	end
+
+end
+go
+
+--proc executes the 'populatetemptable' 
+create proc looppopulatetemptable
+as
+begin
+declare @i as int = 0;
+while(@i<100)
+	begin
+		exec populatetemptable;
+		set @i += 1;
+	end
+end
+go
+
+exec looppopulatetemptable;
+go
+
+--stress test with ostress.exe 
+--C:\Program Files\Microsoft Corporation\RMLUtils>ostress.exe -SXPSDEGRAAFF\SQLSERVER2017 -Q"EXEC latchcontentiondemo.dbo.looppopulatetemptable" -n100
+
+--now u can see there are currently a lot of threads waiting because of pagelatch_up wait_type. Notice that sessions_id is not null, so these 
+--are executing requests who have been allocated a thread(unlike for wait_type='threadpool')
+select * from sys.dm_os_waiting_tasks 
+where wait_type='PAGELATCH_EX'
+--wait_type='PAGELATCH_UP' or resource_description = '2.1.1'
+--or resource_description = '2.1.2'
+--or resource_description = '2.1.3'
+
+--the wait_type='PAGELATCH_EX' is up near the top
+select * from sys.dm_os_wait_stats 
+where wait_type like '%PAGELATCH%' 
+order by wait_time_ms desc
+
+--ostress took 00:01:08 for completion
+--total tasks waiting is 636,862
+--total time waiting is 6,549,256
+
+--clear wait stats
+dbcc sqlperf('sys.dm_os_wait_stats', 'clear');
+
+--increase the size of the tempdb file and add a datafile to tempdb with the same size so that 
+--we have 2 tempdb data files.
+alter database tempdb
+modify file 
+(
+	name='tempdev',
+	size=512mb
+)
+go
+
+alter database tempdb
+add file 
+(
+	name='tempdev2',
+	size=512mb,
+	filename='C:\Program Files\Microsoft SQL Server\MSSQL14.SQLSERVER2017\MSSQL\DATA\tempdev2.ndf'
+)
+go
+
+--the wait_type='PAGELATCH_EX' is up near the top
+select * from sys.dm_os_wait_stats 
+where wait_type like '%PAGELATCH%' 
+order by wait_time_ms desc
+
+--adding a new tempdb file should have taken the contion down. Although the total tasks waiting is down
+--but the ostress time as well as total time spent waiting has gone up :(
+--ostress took 00:01:23 for completion
+--total tasks waiting is 136,047
+--total time waiting is 7,519,606
