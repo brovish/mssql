@@ -261,7 +261,7 @@ WITH    xEvents
     ORDER BY Duration DESC ;
 
 
-USE AdventureWorks2008R2 ;
+USE AdventureWorks2012;
 GO
 
 
