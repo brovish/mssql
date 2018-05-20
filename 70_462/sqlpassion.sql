@@ -485,3 +485,37 @@ order by wait_time_ms desc
 --ostress took 00:01:23 for completion
 --total tasks waiting is 136,047
 --total time waiting is 7,519,606
+
+
+create database hashcollisions
+go
+use hashcollisions
+go
+alter database hashcollisions
+	add filegroup hekatonFG contains memory_optimized_data
+go
+
+alter database hashcollisions
+add file 
+(
+	name='hekatonContainer',
+	filename='C:\Program Files\Microsoft SQL Server\MSSQL14.SQLSERVER2017\MSSQL\DATA\hekatonContainer.ndf'
+)
+to filegroup [hekatonFG]
+go
+
+create table testtable
+(
+col1 int not null primary key nonclustered 
+	hash with (bucket_count=1024),
+col2 int not null,
+col3 int not null 
+)
+with
+(
+memory_optimized = on,
+durability = schema_only
+)
+go
+
+
