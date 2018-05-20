@@ -417,6 +417,9 @@ while(@i<10)
 end
 go
 
+
+--the following sample will demonstrate allocation bitmap contention(GAM, SGAM and PFS pages) in tempdb 
+--under high concurrent workload.
 --proc executes the 'populatetemptable' 
 create proc looppopulatetemptable
 as
