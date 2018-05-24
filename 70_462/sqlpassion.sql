@@ -564,7 +564,7 @@ comments char(189)
 )
 go
 
---insert 80,000 records
+--insert 80,000 records..20 rows fit in one page. So 80,000 would fit in 80000/20 = 4,000 pages as we will see below.
 declare @i int = 1;
 while(@i<=80000)
 begin
@@ -584,5 +584,69 @@ select * from cust
 SELECT * FROM sys.dm_db_index_physical_stats (DB_ID (N'UniqueCIStructure'), OBJECT_ID (N'cust'), -1, 0, 'DETAILED');
 GO
 
-drop database UniqueCIStructure;
+--create helper table to sore output of dbcc ind 
+CREATE TABLE sp_table_pages 
+(
+PageFID tinyint,   
+PagePID int,   
+IAMFID   tinyint,   
+IAMPID  int,   
+ObjectID  int,   
+IndexID  tinyint,   
+PartitionNumber tinyint,   
+PartitionID bigint,   
+iam_chain_type varchar(30),   
+PageType  tinyint,   
+IndexLevel  tinyint,   
+NextPageFID  tinyint,   
+NextPagePID  int,   
+PrevPageFID  tinyint,   
+PrevPagePID int,   
+Primary Key (PageFID, PagePID));
+go
+
+insert into sp_table_pages
+exec('dbcc ind(UniqueCIStructure, cust, 1)')
+
+--retreive all index pages/non-leaf level (pagetype = 2)
+select *
+from sp_table_pages
+where PageType = 2
+order by IndexLevel desc
+go
+
+--retreive all data pages/leaf level (pagetype = 1). 4,000 pages
+select *
+from sp_table_pages
+where PageType = 1
+order by IndexLevel desc
+go
+
+--retreive root index page
+select *
+from sp_table_pages
+where IndexLevel = 2
+order by IndexLevel desc
+go
+
+--now imagine we have to find record with customerid 33333. enable trace flag 3604 for using dbcc page command
+dbcc traceon(3604)
+go
+
+--dump the root index page (found using dbcc ind or by filtering the table containing the dumped output of dbcc ind). returns 269 records as it points to 14 pages in next level
+--the column customerid in the output tells us the smallest id value stored on a particular page in the next level
+dbcc page(UniqueCIStructure, 1, 959, 3)
+
+--dump the intermediate index page. returns 269 records as it points to 269 pages in next level 
+dbcc page(UniqueCIStructure, 1, 2310, 3)
+
+--dump the leaf/data page. the row offset array in the end shows the page storing 20 records. we go through all the 20 rows on the page using row offset array 
+--to find the row we are looking for(the page has laready been read into memory). Compare that with a NCI RID lookup(bookmark lookup for a heap) which takes 
+--directly to the row as it stores the SlotID as well. in this case slot 12 has our row.
+--one question i have is that i thought the CI defined order of rows was reflected by slot array not by the actual order of rows on the page. 
+--so the data should not have been physically ordered on individual pages but should have let the slot indexes define the order. But my testing show the rows are
+--actually being stored physically ordered on the page.
+dbcc page(UniqueCIStructure, 1, 2008, 1)
+
+--drop database UniqueCIStructure;
 
