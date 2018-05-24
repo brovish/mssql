@@ -28,6 +28,17 @@ dbcc page(testdb,1,312,3)
 dbcc page(testdb,1,312,1)
 dbcc page(testdb,1,312,2)
 
+--u can also use the dmf dm_db_index_physical_stats to get similar info
+SELECT
+    [index_depth],
+    [index_level],
+    [page_count],
+    [record_count],
+	*
+FROM sys.dm_db_index_physical_stats (DB_ID (N'testdb'), OBJECT_ID (N'tbl'), -1, 0, 'DETAILED');
+GO
+
+drop database testdb
 
 dbcc traceon(3604)
 go
@@ -190,11 +201,12 @@ inner join sys.partitions as p on a.container_id = p.partition_id
 where p.object_id = object_id('t')
 go
 
+drop database allocationuntis
+
 --now for each allocation unit, an IAM page is created. IAM page tells which pages(in case of mixed extents) and which extents belong to the table 
 --and which not. like GAM and SGAM pages, it too maps 4 GB of database file(it is also a bitmap). All IAM pages have 8 page pointer slots and then a set of bits that map 
 --a range of extents onto a file. The 8 page pointer slots are filled only for the 1rst IAM page for an object. if the mapping bit for a particular 
 --extent is set, then that belongs to the table associated with the IAM and if 0 then not.
-
 create database iampages;
 go
 
@@ -245,6 +257,7 @@ go
 dbcc page(iampages,1,320,3)
 go
 
+drop database iampages
 
 --bookmark lookup deadlock occurs when out of 2 concurrent sessions one is reading data from a NCI and has to perform lookups into
 --CI and other one is updating the CI(the key CI key) and thus has to update the NCI bookmark as well.
@@ -300,6 +313,9 @@ begin
 end
 
 
+drop database bookmarklkupdl
+
+
 --thread pool starvation. By default x64 bit SQL Server instance will have 512 threads if core count is <=4 and 576 if core count is <8 
 --and so on. All the databases on the SQL server instance will share the same thread pool. You can modify the default thread pool size.
 --When a thread running a query is in signal wait state or resource wait state, that thread is not available to do other tasks. Imagine 
@@ -307,8 +323,6 @@ end
 --we run, say 600, SELECT queries against that table. The queries would want a shared(S) lock but that is not compatible with X lock.
 --So the threads would move to the resource wait queue with 512 threads showing wait_type of 'LCK_M_IS' and the rest showing a wait_type 
 --of 'threadpool'.
-
-
 create database threadpoolwaits
 go
 
@@ -382,6 +396,7 @@ select * from sys.dm_os_waiting_tasks where wait_type ='threadpool'
 
 --always close the DAC connection, either in ssms or sqlcmd!!
 
+drop database threadpoolwaits
 
 create database latchcontentiondemo
 go
@@ -498,6 +513,7 @@ order by wait_time_ms desc
 --total tasks waiting is 136,047
 --total time waiting is 7,519,606
 
+drop database latchcontentiondemo
 
 create database hashcollisions
 go
@@ -530,4 +546,43 @@ durability = schema_only
 )
 go
 
+drop database hashcollisions
+
+create database UniqueCIStructure;
+go
+
+use UniqueCIStructure;
+go
+
+--create a table with length 400 bytes(393 + 7bytes overhead). Therefore u can fit 20 records on 1 page(8192 - 96 bytes overhead= 8060 bytes. 8060/400=20.15)
+create table cust
+(
+customerid int not null primary key identity(1,1),
+custname char(100) not null,
+custaddr char(100) not null,
+comments char(189)
+)
+go
+
+--insert 80,000 records
+declare @i int = 1;
+while(@i<=80000)
+begin
+	insert into cust values
+	(
+	'customername' + cast(@i as char),
+	'customeraddr' + cast(@i as char),
+	'comments' + cast(@i as char)
+	)
+	set @i += 1;
+end
+go 
+
+select * from cust
+
+--use the dmf dm_db_index_physical_stats 
+SELECT * FROM sys.dm_db_index_physical_stats (DB_ID (N'UniqueCIStructure'), OBJECT_ID (N'cust'), -1, 0, 'DETAILED');
+GO
+
+drop database UniqueCIStructure;
 
