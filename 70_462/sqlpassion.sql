@@ -1,3 +1,6 @@
+--todo: I need a good story explaining right from how sql server finds which pages or extents are free, their allocation to an table(heap or otherwise). how sql server decides 
+--which pages have some free space and thus can be used a,d if not how are new pages/extents allocated.
+
 --create database testdb
 --go
 
