@@ -1,22 +1,22 @@
 --todo: I need a good story explaining right from how sql server finds which pages or extents are free, their allocation to an table(heap or otherwise). how sql server decides 
 --which pages have some free space and thus can be used a,d if not how are new pages/extents allocated.
 
---create database testdb
---go
+create database testdb
+go
 
---use testdb
---go
---create table tbl
---(
---	firstname char(50),
---	lastname char(50),
---	address char(100)
---)
---go
+use testdb
+go
+create table tbl
+(
+	firstname char(50),
+	lastname char(50),
+	address char(100)
+)
+go
 
---insert into tbl values
---('ramneek','singh','sdfdsghgfh 32 esdfsdf,ewr')
---go 2
+insert into tbl values
+('ramneek','singh','sdfdsghgfh 32 esdfsdf,ewr')
+go 2
 
 
 dbcc traceon(3604)--need for dbcc page command
@@ -42,6 +42,7 @@ FROM sys.dm_db_index_physical_stats (DB_ID (N'testdb'), OBJECT_ID (N'tbl'), -1, 
 GO
 
 drop database testdb
+go
 
 dbcc traceon(3604)
 go
@@ -295,25 +296,25 @@ set transaction isolation level repeatable read
 --set transaction isolation level  read committed
 go
 
---execute in session 1
-while(1=1)
-begin
-	update deadlock
-	set col1 = col1 + 1
-	where col3 =1;
-end
+----execute in session 1
+--while(1=1)
+--begin
+--	update deadlock
+--	set col1 = col1 + 1
+--	where col3 =1;
+--end
 
 
---execute in session 2
-set transaction isolation level repeatable read
---set transaction isolation level  read committed
-go
+----execute in session 2
+--set transaction isolation level repeatable read
+----set transaction isolation level  read committed
+--go
 
-while(1=1)
-begin
-	select * from deadlock with (index(idx_col3))
-	where col3 =1
-end
+--while(1=1)
+--begin
+--	select * from deadlock with (index(idx_col3))
+--	where col3 =1
+--end
 
 
 drop database bookmarklkupdl
@@ -651,5 +652,88 @@ dbcc page(UniqueCIStructure, 1, 2310, 3)
 --actually being stored physically ordered on the page.
 dbcc page(UniqueCIStructure, 1, 2008, 1)
 
---drop database UniqueCIStructure;
+drop database UniqueCIStructure;
 
+--forwarding records/pointer. Issue with heap tables(why not an issue with B-Tree tables?). When a record moves to a different physical location in a heap, 
+--a fwd'ing record--/pointer is placed in it's original place. happens when a var length col is updated and the row can't fit on the page.
+--in this SQL Server avoids having to update all non-clustered indexes on the heap table. What happens in the case of CI tables?
+--why are forwarding records not used in CIs?
+create database forwardingrecords;
+go
+
+use forwardingrecords;
+go
+
+set statistics io on
+go
+
+create table heaptbl
+(
+c1 int identity(1,1),
+c2 char(2000),
+c3 varchar(1000)
+)
+go
+
+
+insert into heaptbl values
+(replicate('1',2000), ''),--there was not need to use replicate for c2. it would have reserved 2000 bytes even if we had entered empty string.
+(replicate('2',2000), ''),
+(replicate('3',2000), ''),
+(replicate('4',2000), '')
+go
+
+--should perfrom 1 logical read
+select * from heaptbl;
+
+update heaptbl
+set c3 = REPLICATE('t',300)
+where c1 = 4
+
+--should perform 2 logical reads. Although it showed 3 logical reads but using the DMF and dbcc below, we confirm 2 data pages
+select * from heaptbl;
+
+dbcc traceon(3604)--need for dbcc page command
+--find which data pages belong to our tbl. columns PageFID and PagePID.
+--this will return 3 pages: IAM page with pagetype 10 and 2 data pages
+dbcc ind(forwardingrecords,heaptbl,-1)
+
+--remember page header size is 96 bytes, then we have payload and then the rowoffset array(aslot array).
+--row offset array need 2 bytes to store location for each record
+--dump the 2 data pages using FID and PID of the page. First record in data pages are at offset 96. note the 'FORWARDING_STUB'
+dbcc page(forwardingrecords,1,328,3)
+dbcc page(forwardingrecords,1,328,1)
+dbcc page(forwardingrecords,1,328,2)
+
+dbcc page(forwardingrecords,1,329,3)
+dbcc page(forwardingrecords,1,329,1)
+dbcc page(forwardingrecords,1,329,2)
+
+--u can also use the dmf dm_db_index_physical_stats to get similar info. note the field forwarded_record_count
+SELECT
+	[forwarded_record_count],
+    [index_depth],
+    [index_level],
+    [page_count],
+    [record_count],
+	*
+FROM sys.dm_db_index_physical_stats (DB_ID (N'forwardingrecords'), OBJECT_ID (N'heaptbl'), -1, 0, 'DETAILED');
+GO
+
+
+--rebuilding a heap table gets rid of forwarding records.
+alter table heaptbl rebuild
+
+--now check again using DMF. Note forwarded_record_count is not 0. It would have updated the NCIs on the heap as well.
+SELECT
+	[forwarded_record_count],
+    [index_depth],
+    [index_level],
+    [page_count],
+    [record_count],
+	*
+FROM sys.dm_db_index_physical_stats (DB_ID (N'forwardingrecords'), OBJECT_ID (N'heaptbl'), -1, 0, 'DETAILED');
+GO
+
+drop database forwardingrecords;
+go
