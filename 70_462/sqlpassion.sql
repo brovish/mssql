@@ -41,6 +41,8 @@ SELECT
 FROM sys.dm_db_index_physical_stats (DB_ID (N'testdb'), OBJECT_ID (N'tbl'), -1, 0, 'DETAILED');
 GO
 
+use master
+go
 drop database testdb
 go
 
@@ -205,6 +207,8 @@ inner join sys.partitions as p on a.container_id = p.partition_id
 where p.object_id = object_id('t')
 go
 
+use master
+go
 drop database allocationuntis
 
 --now for each allocation unit, an IAM page is created. IAM page tells which pages(in case of mixed extents) and which extents belong to the table 
@@ -261,6 +265,8 @@ go
 dbcc page(iampages,1,320,3)
 go
 
+use master
+go
 drop database iampages
 
 --bookmark lookup deadlock occurs when out of 2 concurrent sessions one is reading data from a NCI and has to perform lookups into
@@ -317,6 +323,8 @@ go
 --end
 
 
+use master
+go
 drop database bookmarklkupdl
 
 
@@ -400,6 +408,8 @@ select * from sys.dm_os_waiting_tasks where wait_type ='threadpool'
 
 --always close the DAC connection, either in ssms or sqlcmd!!
 
+use master
+go
 drop database threadpoolwaits
 
 create database latchcontentiondemo
@@ -517,6 +527,8 @@ order by wait_time_ms desc
 --total tasks waiting is 136,047
 --total time waiting is 7,519,606
 
+use master
+go
 drop database latchcontentiondemo
 
 create database hashcollisions
@@ -550,6 +562,8 @@ durability = schema_only
 )
 go
 
+use master
+go
 drop database hashcollisions
 
 create database UniqueCIStructure;
@@ -582,11 +596,22 @@ begin
 end
 go 
 
-select * from cust
+select * from cust 
 
 --use the dmf dm_db_index_physical_stats 
 SELECT * FROM sys.dm_db_index_physical_stats (DB_ID (N'UniqueCIStructure'), OBJECT_ID (N'cust'), -1, 0, 'DETAILED');
 GO
+
+--u can also view the distribution of the data by checking the stats for the index. run sp_help on the table
+--to find out the name for the index. then run dbcc show_statistics. But SQL server might not have created 
+-- stats for the index as yet(remember SQL Server creates stats automatically for columns in a index but also 
+--not columns not in an index but used in a predicate). so first force an update to stats and query them
+--if we do not use FullScan, then a sample will be used to create the distribution which would not accurately reflect the data
+update statistics dbo.cust
+dbcc show_statistics('cust', 'PK__cust__B61ED7F5E167DD0F')
+--true distribution stats
+update statistics dbo.cust with fullscan
+dbcc show_statistics('cust', 'PK__cust__B61ED7F583E1873B')
 
 --create helper table to sore output of dbcc ind 
 CREATE TABLE sp_table_pages 
@@ -652,6 +677,8 @@ dbcc page(UniqueCIStructure, 1, 2310, 3)
 --actually being stored physically ordered on the page.
 dbcc page(UniqueCIStructure, 1, 2008, 1)
 
+use master
+go
 drop database UniqueCIStructure;
 
 --forwarding records/pointer. Issue with heap tables(why not an issue with B-Tree tables?). When a record moves to a different physical location in a heap, 
@@ -735,5 +762,7 @@ SELECT
 FROM sys.dm_db_index_physical_stats (DB_ID (N'forwardingrecords'), OBJECT_ID (N'heaptbl'), -1, 0, 'DETAILED');
 GO
 
+use master
+go
 drop database forwardingrecords;
 go
