@@ -1,3 +1,12 @@
+--questions: 
+--1) in case of a non-unique nci, the CI key is also stored in the index pages/nonleaf pages(it would be stored in leaf page 
+--anyways). What happens if the non-unique nci is on a heap. Is the RID stored in the non-leaf pages? What happens in case of non-unique CI?
+--2) i thought the CI defined order of rows was reflected by slot array not by the actual physical order of rows on the page. 
+--so the data should not have been physically ordered on individual pages but should have let the slot indexes define the order. But my testing show the rows are
+--actually being stored physically ordered on the page.
+--3)forwarding records/pointer. Issue with heap tables(why not an issue with B-Tree tables?). why are forwarding records not used in CIs?
+--What happens in the case of CI tables?
+
 --todo: I need a good story explaining right from how sql server finds which pages or extents are free, their allocation to an table(heap or otherwise). how sql server decides 
 --which pages have some free space and thus can be used a,d if not how are new pages/extents allocated.
 
@@ -765,4 +774,95 @@ GO
 use master
 go
 drop database forwardingrecords;
+go
+
+create database nci
+go
+use nci
+go
+
+--row length 393 + 7 bytes overhead = 400 bytes. 8,060/400 = 20.15. So 20 rows stored on each page.
+create table cust
+(
+customerid int not null,
+customername char(100) not null,
+customeraddr char(100) not null,
+comments char(189) not null
+)
+go
+
+create unique clustered index idx_custid on cust(customerid)
+go
+
+--insert 80,000 records..20 rows fit in one page. So 80,000 would fit in 80000/20 = 4,000 pages as we will see below.
+declare @i int = 1;
+while(@i<=80000)
+begin
+	insert into cust values
+	(
+	 @i,
+	'customername' + cast(@i as char),
+	'customeraddr' + cast(@i as char),
+	'comments' + cast(@i as char)
+	)
+	set @i += 1;
+end
+go 
+
+select * from cust
+
+--non-unique non clustered index on CI
+create nonclustered index idx_nonuniquenci_custname on cust(customername)
+
+--index_id 1 is for CI and index_id 2 is for nci
+SELECT	* FROM sys.dm_db_index_physical_stats (DB_ID (N'nci'), OBJECT_ID (N'cust'), -1, 0, 'DETAILED');
+GO
+
+--create helper table to sore output of dbcc ind 
+CREATE TABLE sp_table_pages 
+(
+PageFID tinyint,   
+PagePID int,   
+IAMFID   tinyint,   
+IAMPID  int,   
+ObjectID  int,   
+IndexID  tinyint,   
+PartitionNumber tinyint,   
+PartitionID bigint,   
+iam_chain_type varchar(30),   
+PageType  tinyint,   
+IndexLevel  tinyint,   
+NextPageFID  tinyint,   
+NextPagePID  int,   
+PrevPageFID  tinyint,   
+PrevPagePID int,   
+Primary Key (PageFID, PagePID));
+go
+
+--passing 2 for nci type
+insert into sp_table_pages
+exec('dbcc ind(nci, cust, 2)')
+
+--get the root page of nci.. the index has 3 levels
+select * from sp_table_pages where IndexLevel=2
+
+--now dump the root page of non-unique nci using dbcc page
+dbcc traceon(3604)
+go
+
+--16 rows are stored in the root page. because we created a non-unique nci, the CI key(in this case the customerid) is also 
+--stored in the index pages/nonleaf pages(it would be stored in leaf page anyways). What happens if the non-unique nci is on a
+--heap. Is the RID stored in the non-leaf pages?
+--Question:what happens in case of non-unique CI. 
+dbcc page('nci',1,4426,3)
+
+--now dump out a page from the 2nd level of the nci(cuse a childpageid from the above dbcc output)
+dbcc page('nci',1,4431,3)
+
+--now dump out a data page/leaf of the nci(cuse a childpageid from the above dbcc output)
+dbcc page('nci',1,5331,3)
+
+use master;
+go 
+drop database nci;
 go
