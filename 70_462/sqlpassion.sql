@@ -8,7 +8,7 @@
 --What happens in the case of CI tables?
 
 --todo: I need a good story explaining right from how sql server finds which pages or extents are free, their allocation to an table(heap or otherwise). how sql server decides 
---which pages have some free space and thus can be used a,d if not how are new pages/extents allocated.
+--which pages have some free space and thus can be used and if not how are new pages/extents allocated.
 
 create database testdb
 go
@@ -612,10 +612,19 @@ SELECT * FROM sys.dm_db_index_physical_stats (DB_ID (N'UniqueCIStructure'), OBJE
 GO
 
 --u can also view the distribution of the data by checking the stats for the index. run sp_help on the table
---to find out the name for the index. then run dbcc show_statistics. But SQL server might not have created 
--- stats for the index as yet(remember SQL Server creates stats automatically for columns in a index but also 
---not columns not in an index but used in a predicate). so first force an update to stats and query them
+--to find out the name for the index. then run dbcc show_statistics(or instead of doing prev 2 steps, just query sys.stats). 
+--But SQL server might not have created stats for the index as yet(remember SQL Server creates stats automatically for columns 
+--in a index but also  not columns not in an index but used in a predicate). so first force an update to stats and query them
 --if we do not use FullScan, then a sample will be used to create the distribution which would not accurately reflect the data
+select * from sys.stats where object_id =  OBJECT_ID('cust');--stats created by an index will have the same name as index and 
+--those created non-indexed predicate columns will have system generated name
+select * from sys.stats_columns where object_id =  OBJECT_ID('cust');--which columns are covered by stats..
+
+--stats are used to create a efficient execution plan and index are used faster retreival of data. if you have in-efficient execution plan,
+--then it is not necessary that the stats need to be updated as the problem could also be parameter sniffing. remember the excellent talk by
+--kimberley tripp on sp caching. a column with high selectivity(uniqueness) will have low density and a col with low selectivity will have
+--high density. Density = 1/(no. of distinct values in a col). The lower the col density, the more suitable it is for nci use.
+
 update statistics dbo.cust
 dbcc show_statistics('cust', 'PK__cust__B61ED7F5E167DD0F')
 --true distribution stats
