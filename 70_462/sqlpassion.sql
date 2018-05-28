@@ -7,8 +7,20 @@
 --3)forwarding records/pointer. Issue with heap tables(why not an issue with B-Tree tables?). why are forwarding records not used in CIs?
 --What happens in the case of CI tables?
 
+
 --todo: I need a good story explaining right from how sql server finds which pages or extents are free, their allocation to an table(heap or otherwise). how sql server decides 
 --which pages have some free space and thus can be used and if not how are new pages/extents allocated.
+
+--tatt: 1. pagesplit cause both internal(always) and external fragmentation(not always but often as the new page might not be physically adjacent). 
+--internal fragmentation is when we have free space in a page and it cause either by deletions or by page splits or by setting a fill factor.external 
+--fragmentation is a bigger problem in heaps if we have ncis on the heap as we have to update RowIDs. In case of CI, there is no change to index 
+--key and hence no change to nci. Also, defragmenting heaps is a problem if we have ncis on it due to the same reason as nci has to be rebuild as well.
+--external fragmentation is bad because you have to do random io instead of sequential io and more head movements are involved. Internal fragmentation
+--is bad because pages are not filled competely and thus you do more io to read the same amount of data.
+--2. row size is limited to 8000 kb if using fixed length type(int, char). you can exceed the 8000 byte limit during table creation using var length data types
+--but then if the 2 things could happen. page splits or the creation of 'ROW_OVERFLOW_DATA' allocation unit.  if the row size remains less than 8000
+--, then if a page is full and you are trying to add more data to a var col, a page split will occur. But if the row size tself becomes greater than 8000
+--by addition of var col, then 'ROW_OVERFLOW_DATA' allocation unit would be used.
 
 create database testdb
 go
@@ -620,10 +632,11 @@ select * from sys.stats where object_id =  OBJECT_ID('cust');--stats created by 
 --those created non-indexed predicate columns will have system generated name
 select * from sys.stats_columns where object_id =  OBJECT_ID('cust');--which columns are covered by stats..
 
---stats are used to create a efficient execution plan and index are used faster retreival of data. if you have in-efficient execution plan,
---then it is not necessary that the stats need to be updated as the problem could also be parameter sniffing. remember the excellent talk by
---kimberley tripp on sp caching. a column with high selectivity(uniqueness) will have low density and a col with low selectivity will have
---high density. Density = 1/(no. of distinct values in a col). The lower the col density, the more suitable it is for nci use.
+--stats are used to create a efficient execution plan and index are used faster retreival of data. example below in db onlystatsNoIndexCol.
+--if you have in-efficient execution plan, then it is not necessary that the stats need to be updated as the problem could also be parameter 
+--sniffing. remember the excellent talk by kimberley tripp on sp caching. a column with high selectivity(uniqueness) will have low density 
+--and a col with low selectivity will have high density. Density = 1/(no. of distinct values in a col). The lower the col density, the more 
+--suitable it is for nci use.
 
 update statistics dbo.cust
 dbcc show_statistics('cust', 'PK__cust__B61ED7F5E167DD0F')
@@ -875,3 +888,12 @@ use master;
 go 
 drop database nci;
 go
+
+create database onlystatsNoIndexCol
+go
+use onlystatsNoIndexCol
+go
+
+--stats are used to create a efficient execution plan and index are used faster retreival of data. But since index creation creates stats as well
+--so we get both benefits. the use of non-indexed(or non leading in case of compound key) column in a predicate leads to autocreation of stats on that
+--col(if autocreate stats option is on. autocreatestats option does not apply to index as for index stats are always created)
