@@ -6,7 +6,12 @@
 --actually being stored physically ordered on the page.
 --3)forwarding records/pointer. Issue with heap tables(why not an issue with B-Tree tables?). why are forwarding records not used in CIs?
 --What happens in the case of CI tables?
-
+--4) external fragmentation. Are we just referring to extents being physically out of order or only the pages. because if a page split happens, 
+--in a, say a filled extent, then that page is never going to be in physical order no matter the extent allocated to hold it is phyically contigous
+--or not. Even if a unfilled extent(some free pages) exists and is contigous, linked list of pages will physically be out of order(logical order would 
+--be maintained because, well, it is a linked list). If it is the extent ordering that is being considered, then in that case even when entering 
+--new data(no page splits), the extents being allocated for holding new pages might not be contigous. So does that also count as external 
+--fragmentation
 
 --todo: I need a good story explaining right from how sql server finds which pages or extents are free, their allocation to an table(heap or otherwise). how sql server decides 
 --which pages have some free space and thus can be used and if not how are new pages/extents allocated.
