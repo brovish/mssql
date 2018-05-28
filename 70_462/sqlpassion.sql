@@ -897,3 +897,70 @@ go
 --stats are used to create a efficient execution plan and index are used faster retreival of data. But since index creation creates stats as well
 --so we get both benefits. the use of non-indexed(or non leading in case of compound key) column in a predicate leads to autocreation of stats on that
 --col(if autocreate stats option is on. autocreatestats option does not apply to index as for index stats are always created)
+
+
+--nested loop join operator
+use AdventureWorks2014
+go
+
+--the stats on SalesOrderID gives the query optimizer an estimate of 1 row for soh and 24.076 for d. that is quite a small number of rows
+--so optimizer decides to use nested loop join..the query with lesser number of rows is always on the outer loop. if we parallelize the nested
+-- loop, it helps if the inner loop is the bigger one so that thread running it are kept busy. otherwise the overhead of starting a new thread and
+--then collecting work after it has finished overshadows the performance gain we could have expected by running the loop in parallel. 
+--and since the inner loop should be bigger and is run for each iteration of outer loop, it is important that the join column for the inner loop
+--is indexed so that seek operations are peformed instead of scan
+select soh.*, d.*
+from Sales.SalesOrderHeader as soh 
+inner join Sales.SalesOrderDetail as d on d.SalesOrderID = soh.SalesOrderID
+where soh.SalesOrderID = 71832
+go
+
+--find the index or stats name by executing sp_help
+--dbcc show_statistics('Sales.SalesOrderHeader', 'PK_SalesOrderHeader_SalesOrderID')
+--dbcc show_statistics('Sales.SalesOrderDetail', 'PK_SalesOrderDetail_SalesOrderID_SalesOrderDetailID')
+
+--now demonstrate nested loop join operator with bookmark lookups
+select EmailAddressID, EmailAddress, ModifiedDate
+from Person.EmailAddress
+where EmailAddress like 'sab%'
+
+--find the index or stats name by executing sp_help
+--dbcc show_statistics('Person.EmailAddress', 'IX_EmailAddress_EmailAddress')
+
+--note that a table variable does not have stats and for it a '1' is the hard coded no. of rows returned as an estimate to query otpimizer.
+--that means a table variable is always used as an outer table in case of a join with another table.
+
+declare @tVar as table
+(
+id int identity(1,1) primary key,
+firstname char(4000),
+lastname char(4000)
+)
+
+--inserting 20000 rows. by the way it is a bad practise as we should use table variables with only a few records. for larger no of rows
+--use temp table instead as temp table has stats on it(either through index or through the use of a col in a predicate(autocreation))
+insert into @tVar 
+select top 20000 name,name from master.dbo.syscolumns
+
+select * from Person.Person as p
+inner join @tVar as t on  t.id = p.BusinessEntityID;
+go
+
+--if we are not able to use temp table to use stats, then a workaround is to use query hint option(recompile)
+declare @tVar as table
+(
+id int identity(1,1) primary key,
+firstname char(4000),
+lastname char(4000)
+)
+
+insert into @tVar 
+select top 20000 name,name from master.dbo.syscolumns
+
+--this time, as stats are available on table var, merge join is used as the total number of rows involved is large enough
+select * from Person.Person as p
+inner join @tVar as t on  t.id = p.BusinessEntityID
+option(recompile);
+go
+
+
