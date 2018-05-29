@@ -969,3 +969,61 @@ option(recompile);
 go
 
 
+create database tippingpoint
+go
+
+set statistics io on
+set statistics time on
+go
+
+use tippingpoint
+go
+
+--20 records on one data page. 8060/400=20.15
+create table customers
+(
+custid int not null,
+custname char(100) not null,
+custaddr char(100) not null,
+comments char(185) not  null,
+value int not null
+)
+go
+
+create unique clustered index idx on customers(custid);
+go
+
+--insert 80000 records
+--drop table customers
+--truncate table customers
+declare @i as int = 1;
+while(@i<=80000)
+	begin
+	insert into customers values
+	(
+	@i, 'customername' + CAST(@i as char), 'customeraddr' + CAST(@i as char),
+	'comments' + CAST(@i as char), @i
+	)
+	set @i= @i+1;
+	end
+go
+
+create nonclustered index idxnci on customers(value)
+go
+
+--4000 page reads
+select * from customers;
+
+--tipping point is between 1.25% and 1.67% records
+--1.25/100 * 80000= 1000 records
+--1.67/100 * 80000= 1336 records
+
+--bookmark lookup performed. we are reading 1061 records which are about 1.3% of overall total records.
+--the query performs..if this plan is cached and reused for a bigger parameter value, it would be bad performance wise as it would still 
+--perform bookmark lookups. Parameter sniffing is the issue(not outdated stats)
+select * from customers 
+where value<1062
+
+--this performs CI scan..just adding one more records to our result set changes the plan
+select * from customers
+where value<1063
