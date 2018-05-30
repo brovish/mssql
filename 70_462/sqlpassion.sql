@@ -13,8 +13,11 @@
 --new data(no page splits), the extents being allocated for holding new pages might not be contigous. So does that also count as external 
 --fragmentation
 
---todo: I need a good story explaining right from how sql server finds which pages or extents are free, their allocation to an table(heap or otherwise). how sql server decides 
+--todo: 1. I need a good story explaining right from how sql server finds which pages or extents are free, their allocation to an table(heap or otherwise). how sql server decides 
 --which pages have some free space and thus can be used and if not how are new pages/extents allocated.
+--2. good story about query compilation. parse->expression tree->compilation to execution plan using COM objects(operators). You can refer to an
+--invalid table in a proc and it will throw an error during runtime but not the case with query. It seems query fails at the parsing step. why?
+--wasn't parsing supposed to check only syntax as it happens in case of a PROC?
 
 --tatt: 1. pagesplit cause both internal(always) and external fragmentation(not always but often as the new page might not be physically adjacent). 
 --internal fragmentation is when we have free space in a page and it cause either by deletions or by page splits or by setting a fill factor.external 
