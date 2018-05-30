@@ -994,36 +994,78 @@ create unique clustered index idx on customers(custid);
 go
 
 --insert 80000 records
---drop table customers
---truncate table customers
-declare @i as int = 1;
-while(@i<=80000)
-	begin
-	insert into customers values
-	(
-	@i, 'customername' + CAST(@i as char), 'customeraddr' + CAST(@i as char),
-	'comments' + CAST(@i as char), @i
-	)
-	set @i= @i+1;
-	end
-go
+--declare @i as int = 1;
+--while(@i<80000)
+--	begin
+--	insert into customers values
+--	(
+--	@i, 'customername' + CAST(@i as char), 'customeraddr' + CAST(@i as char),
+--	'comments' + CAST(@i as char), @i
+--	)
+--	set @i= @i+1;
+--	end
+--go
 
-create nonclustered index idxnci on customers(value)
-go
+--do not run loops like the above as they will take a loooong time. Just use cross apply/cross to mimick loop using series of numbers(the numbers which you will then use as row values)
+--helper function getnums is here:
+IF OBJECT_ID(N'dbo.GetNums', N'IF') IS NOT NULL DROP FUNCTION dbo.GetNums;
+GO
+CREATE FUNCTION dbo.GetNums(@low AS BIGINT, @high AS BIGINT) RETURNS TABLE
+AS
+RETURN
+  WITH
+    L0   AS (SELECT c FROM (SELECT 1 UNION ALL SELECT 1) AS D(c)),
+    L1   AS (SELECT 1 AS c FROM L0 AS A CROSS JOIN L0 AS B),
+    L2   AS (SELECT 1 AS c FROM L1 AS A CROSS JOIN L1 AS B),
+    L3   AS (SELECT 1 AS c FROM L2 AS A CROSS JOIN L2 AS B),
+    L4   AS (SELECT 1 AS c FROM L3 AS A CROSS JOIN L3 AS B),
+    L5   AS (SELECT 1 AS c FROM L4 AS A CROSS JOIN L4 AS B),
+    Nums AS (SELECT ROW_NUMBER() OVER(ORDER BY (SELECT NULL)) AS rownum
+             FROM L5)
+  SELECT TOP(@high - @low + 1) @low + rownum - 1 AS n
+  FROM Nums
+  ORDER BY rownum;
+GO
+
+insert into customers 
+	select n, 'customername' + CAST(n as char), 'customeraddr' + CAST(n as char),'comments' + CAST(n as char), n
+	from dbo.GetNums(1,80000) 
 
 --4000 page reads
 select * from customers;
 
---tipping point is between 1.25% and 1.67% records
---1.25/100 * 80000= 1000 records
---1.67/100 * 80000= 1336 records
+create nonclustered index idxnci on customers(value)
+go
 
---bookmark lookup performed. we are reading 1061 records which are about 1.3% of overall total records.
---the query performs..if this plan is cached and reused for a bigger parameter value, it would be bad performance wise as it would still 
---perform bookmark lookups. Parameter sniffing is the issue(not outdated stats)
+
+--tipping point is between 25% and 33% of total pages. We have 4000 pages. Remeber we are talking about percentage of pages, not no. of records(as records size varies and thus the total number that fits on a page).
+--but the 'number of pages' value we come up with will be equal to the 'number of rows' value in the sense that the same 'number of rows' read from NCI will cause that number of page reads into CI.
+--25/100*4000 pages = 1000 pages. 
+--33/100*4000 pages = 1320 pages.
+
+--bookmark lookup performed. we are reading 1062 records, you are performing 1062 lookups in to the CI and thus 1062 page reads(remember nested loop join operator is used for bookmark lookups
+--and the NCI is the outer table. Thus for each read from NCI, there is one corresponding page read from CI or heap). Now 1062 page reads into CI correspond to 1062 rows read from NCI. 
+--if you check the logical reads from stat io, you will see that number something like 3186. That is because to seek to a page in CI, it has to read index pages as well. Now the CI has 3 levels.
+--thus 3*1062 total logical IO
+--if this plan is cached and reused for a bigger parameter value, it would be bad performance wise as it would still perform bookmark lookups. Parameter sniffing is the issue(not outdated stats)
 select * from customers 
-where value<1062
-
---this performs CI scan..just adding one more records to our result set changes the plan
-select * from customers
 where value<1063
+
+--shows the index depth
+SELECT
+    [index_depth],
+    [index_level],
+    [page_count],
+    [record_count],
+	*
+FROM sys.dm_db_index_physical_stats (DB_ID (N'tippingpoint'), OBJECT_ID (N'customers'), -1, 0, 'DETAILED');
+GO
+--this performs CI scan..reading 1063 rows(the tipping point) would have led to 1063 page reads from CI which sql server deems to be costly. thus it performed a CI scan instead and read 
+--the 4000 leaf pages(shows as total logical IO)
+select * from customers 
+where value<1064
+
+use master
+go
+drop database tippingpoint
+go
