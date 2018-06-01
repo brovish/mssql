@@ -1072,3 +1072,59 @@ use master
 go
 drop database tippingpoint
 go
+
+create database mergejoin
+go
+
+use mergejoin
+go
+
+create table t1
+(
+col1 int primary key,
+col2 int
+)
+
+create table t2
+(
+col1 int primary key,
+col2 int
+)
+
+insert into t1 
+select top(1500) ROW_NUMBER() over (order by column_id ), ROW_NUMBER() over (order by column_id)
+from sys.all_columns
+
+insert into t2
+select top(1500) ROW_NUMBER() over (order by column_id ), ROW_NUMBER() over (order by column_id)
+from sys.all_columns
+
+
+--use hint to force merge join. An explicit sort operator is used to be able to use Merge Join. Also, the Merge Join is Many-to-Many
+--and it creates a worktable in TempDb. It assumes ManyToMany incorrectly as there is no supporting index on outer table to suggest that 
+--values in the outer table are unique.
+--And due to the sort operation, the query also requests memory which can be seen in 'Memory Grant'
+select t1.*, t2.*
+from t1 inner merge join t2 on t1.col2 = t2.col2
+
+create unique nonclustered index idx on t2(col2)
+
+--now when we run our query, we do not neet to provide Merge join hint. It automatically uses merge join. This t2 is the outer table
+--as query optimizer knows that we have unique values in col2 in t2 and also the merge join is not executed as ManyToMany.
+--The explicit sort operator is also eliminated as we sorted result from the index. therefore no worktable is created in tempdb
+--but there is still one sort operator remaining on t1
+select t1.*, t2.*
+from t1 inner join t2 on t1.col2 = t2.col2
+
+create unique nonclustered index idx1 on t1(col2)
+--no sort operator used this time
+select t1.*, t2.*
+from t1 inner join t2 on t1.col2 = t2.col2
+
+
+use master
+go
+
+alter database mergejoin set single_user with rollback immediate 
+drop database mergejoin
+go
