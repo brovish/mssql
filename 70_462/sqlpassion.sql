@@ -1128,3 +1128,79 @@ go
 alter database mergejoin set single_user with rollback immediate 
 drop database mergejoin
 go
+
+
+create database dbShrinking
+go
+
+use dbShrinking
+go
+
+--create a table that would be near the beginning of the data file
+create table t1
+(
+col1 int identity,
+col2 char(8000) default 'dummy'
+)
+go
+
+--inset 10 mb data
+--insert into t1 default values 
+--go 1280
+insert into t1 
+select top(1280) ROW_NUMBER() over(order by (select null))
+from sys.columns as b1 cross join sys.columns as b2
+
+--now create a table with a unique clustered index. this table would be come after the table t1 in the data file. To show the 
+--negative side effects of db shrinking, you need to have some indexes, clustered or nonclustered, after the address space in the 
+--data file that is going to made free and hence needs to be reclaimed after shrinking the db.
+create table cust
+(
+c1 int identity,
+c2 char(7800),
+c3 char(200) 
+);
+
+create unique clustered index id1 on cust(c1)
+go
+create nonclustered index idx2 on cust(c3)
+go
+
+--inset 10 mb data
+insert into cust
+select top(1280) ROW_NUMBER() over(order by b1.column_id, b2.column_id), ROW_NUMBER() over(order by b1.column_id, b2.column_id)
+from sys.columns as b1 cross join sys.columns as b2
+
+
+--check clustered index fragmentation of cust..It would be very small.
+select avg_fragmentation_in_percent from sys.dm_db_index_physical_stats(DB_ID('dbShrinking'), OBJECT_ID('cust'), 1, null, 'limited')
+
+--check nonclustered index fragmentation of cust..It would also be very small but a little more than clustered. why?
+select avg_fragmentation_in_percent from sys.dm_db_index_physical_stats(DB_ID('dbShrinking'), OBJECT_ID('cust'), 2, null, 'limited')
+
+--now drop the table t1 that comes before cust on the address space of the data file. now the size of the data file before the 'drop'
+drop table t1;
+
+--dropping the table did not make SQL server reclaim the space back in the data file.
+--now shrink db. This will reduce the size of data file
+dbcc shrinkdatabase(dbShrinking)
+
+--now again check clustered and nonclustered index fragmentation of cust..i can see high fragmentation(95 and 97%)
+--that is because the to fill the space that has been emptied, sql server starts moving the pages from the end of the file to the
+--the empty space. So if a index has leaf/data pages 80,81,82 they will will be moved to the empty space and will be placed in the physical
+--order 82,81,80. That is 100% external fragmentation(logical order differs from physical order)
+select avg_fragmentation_in_percent from sys.dm_db_index_physical_stats(DB_ID('dbShrinking'), OBJECT_ID('cust'), 1, null, 'limited')
+select avg_fragmentation_in_percent from sys.dm_db_index_physical_stats(DB_ID('dbShrinking'), OBJECT_ID('cust'), 2, null, 'limited')
+
+--rebuild indexes to defrag. But notice the size of the data file after defrag. The size even larger than before we performed drop! why?
+alter index id1 on cust rebuild;
+alter index idx2 on cust rebuild;
+select avg_fragmentation_in_percent from sys.dm_db_index_physical_stats(DB_ID('dbShrinking'), OBJECT_ID('cust'), 1, null, 'limited')
+select avg_fragmentation_in_percent from sys.dm_db_index_physical_stats(DB_ID('dbShrinking'), OBJECT_ID('cust'), 2, null, 'limited')
+
+use master
+go
+
+alter database dbShrinking set single_user with rollback immediate 
+drop database dbShrinking 
+go
