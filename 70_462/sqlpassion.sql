@@ -1204,3 +1204,82 @@ go
 alter database dbShrinking set single_user with rollback immediate 
 drop database dbShrinking 
 go
+
+--round robin policy sql server uses for datafiles makes sure that all the datafiles in the file group become completely full at around the same time. So if the files sizes in a file group
+--have different sizes, SQL server will fill them proportionally to make sure, in the end, they become full at the same time. So you get an IO imbalance and a performance hit.
+create database multipleFilegroups on primary
+(
+--primary filegroup
+Name= 'multipleFilegroups',
+FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL14.SQL2017\MSSQL\DATA\multipleFilegroups.mdf' , 
+SIZE = 5MB, MAXSIZE=unlimited, FILEGROWTH = 1024KB 
+),
+--secondary file group. this filegroup will have multiple files
+FileGroup FileGroup1
+(
+Name= 'multipleFilegroups1',
+FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL14.SQL2017\MSSQL\DATA\multipleFilegroups1.ndf' , 
+SIZE = 1MB, MAXSIZE=unlimited, FILEGROWTH = 1024KB 
+),
+--second file in the first secondary file group
+(
+Name= 'multipleFilegroups2',
+FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL14.SQL2017\MSSQL\DATA\multipleFilegroups2.ndf' , 
+SIZE = 1MB, MAXSIZE=unlimited, FILEGROWTH = 1024KB 
+)
+LOG ON 
+( NAME = N'multipleFilegroups_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL14.SQL2017\MSSQL\DATA\multipleFilegroups_log.ldf' , SIZE = 5MB, MAXSIZE=unlimited, FILEGROWTH = 1024KB )
+go
+
+--FileGroup1 becomes the default file group where new database objects will be created.
+alter database multipleFilegroups modify FileGroup FileGroup1 Default
+go
+
+use multipleFilegroups;
+go
+
+--1 row stored on 1 data page. Table would be create on FileGroup1
+create table t1
+(filler char(8000)
+)
+go
+
+--inset 40000 rows resulting in 312 MB of data. They would be distributed in a round robin fashion between the files in the file group. Each file will be around 160 MB.
+--while this query is still running, you can have a look at the files to note that they are growing sort of equally in a round robin fashion. Since the smallest allocation unit is an 
+--extent, file 1 allocates an extent, then file 2 and then file 1 and so on
+CREATE FUNCTION dbo.GetNums(@low AS BIGINT, @high AS BIGINT) RETURNS TABLE
+AS
+RETURN
+  WITH
+    L0   AS (SELECT c FROM (SELECT 1 UNION ALL SELECT 1) AS D(c)),
+    L1   AS (SELECT 1 AS c FROM L0 AS A CROSS JOIN L0 AS B),
+    L2   AS (SELECT 1 AS c FROM L1 AS A CROSS JOIN L1 AS B),
+    L3   AS (SELECT 1 AS c FROM L2 AS A CROSS JOIN L2 AS B),
+    L4   AS (SELECT 1 AS c FROM L3 AS A CROSS JOIN L3 AS B),
+    L5   AS (SELECT 1 AS c FROM L4 AS A CROSS JOIN L4 AS B),
+    Nums AS (SELECT ROW_NUMBER() OVER(ORDER BY (SELECT NULL)) AS rownum
+             FROM L5)
+  SELECT TOP(@high - @low + 1) @low + rownum - 1 AS n
+  FROM Nums
+  ORDER BY rownum;
+GO
+insert into t1
+	select REPLICATE('x',8000)
+	from GetNums(1,40000)
+
+--retreive file stats 
+declare @dbid as int;
+select @dbid=database_id from sys.databases where name='multipleFilegroups';
+select b.type_desc,
+		b.physical_name,
+		a.*
+from sys.dm_io_virtual_file_stats(@dbid,null) as a 
+inner join sys.database_files as b on b.file_id = a.file_id
+go
+
+use master
+go
+
+alter database multipleFilegroups set single_user with rollback immediate 
+drop database multipleFilegroups
+go
