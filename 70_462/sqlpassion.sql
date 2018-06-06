@@ -1283,3 +1283,87 @@ go
 alter database multipleFilegroups set single_user with rollback immediate 
 drop database multipleFilegroups
 go
+
+--demonstrates halloween problem that can come up during an update execution plan. Spool operator(where the records that satify the where predicate are written to the temp) is used to protect against halloween problem.
+--Spool operator separates the table from which data is being read and the table to which data is being written
+create database HalloweenProtection
+go
+
+use HalloweenProtection
+go
+
+create table t
+(
+col1 int primary key,
+col2 int,
+col3 int 
+)
+go
+
+create nonclustered index idx1 on t(col3);
+go
+
+insert into t(col1,col2,col3) values
+(1,1,1),(2,2,2),(3,3,3)
+go
+
+update t
+set col3 = col3*2 
+from t with(index(idx1))--specifying the table again here just to use the index hint. Wonder if hints like these can be provided at the update statement level which would have avoided this!!
+where col3<3 
+go
+
+use master
+go
+
+alter database HalloweenProtection set single_user with rollback immediate 
+drop database HalloweenProtection
+go
+
+
+--cxpacket is not a indication of an problem always. In a parallel execution plan you will always have a cxpacket wait for the co-ordinator thread even if the worker threads finish on the same time.
+--the co-ordinator thread initially dispatches the worker threads with work and then sits there waiting for them all to complete so to then combine the output of worker threads before the start of 
+--the serial region of execution plan. If the worker threads do not finish on the same time, then the worker threads that have finished will also incur cxpacket waits.
+use ContosoRetailDW
+go
+
+set statistics io on 
+set statistics time on 
+go
+
+--. it runs a parallel execution plan in a endless loop
+create procedure workload 
+as 
+begin
+	while(1=1)
+		Begin
+			select StoreKey, count(*) from FactOnlineSales 
+			group by StoreKey
+		end
+end 
+go
+
+dbcc sqlperf('sys.dm_os_wait_stats',clear);
+
+----run the sp in a separate session
+--use ContosoRetailDW
+--exec workload;
+
+--it will only show the co-ordinator thread
+select * from sys.dm_exec_requests where wait_type='cxpacket'
+
+select * from sys.dm_os_waiting_tasks where wait_type='cxpacket';
+select * from sys.dm_os_wait_stats where wait_type='cxpacket' order by waiting_tasks_count;
+
+--the session executing the request. status is set to 'suspended'
+--the only thread we see in dm_exec_requests is the co-ordinator thread that runs the single threaded region of parallel plan. 
+select wait_type, status, * from sys.dm_exec_requests where session_id = 55
+
+--dm_os_waiting_tasks shows the threads running the parallel regions but in a indirect way. The rows you will see here all have exec_context_id=0 which is for co-ordinator thread. 
+--But the column blocking_exec_context_id shows the thread on which the co-ordinator thread is waiting/bocked by and this thread is the thread running in parallel region.
+select * from sys.dm_os_waiting_tasks where wait_type='cxpacket';
+
+--now in this case since all the threads in parallel region were finishing at the same time, the cxpacket wait that is being shows in the dmvs is for the co-ordinator thread and it is not harmful.
+--but if we had threads in dm_os_waiting_tasks with exec_context_id!=0, then that would mean one of the parallel thread is waiting for other prarallel threads to complete and that is something we have
+--to investigate
+
