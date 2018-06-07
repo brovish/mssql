@@ -1367,3 +1367,113 @@ select * from sys.dm_os_waiting_tasks where wait_type='cxpacket';
 --but if we had threads in dm_os_waiting_tasks with exec_context_id!=0, then that would mean one of the parallel thread is waiting for other prarallel threads to complete and that is something we have
 --to investigate
 
+--it is actually a demo for wait stats analysis as well
+create database xeventsdemo;
+go
+
+use xeventsdemo;
+go
+
+--create a table and track wait stats for it
+create table dummyTable
+(
+col1 int identity(1,1) not null primary key,
+col2 int,
+col3 char(8000)
+);
+go
+
+
+--in a separate session run the following. Do not run it now but just open the session which will run it.. to trace the wait stats for this session we have to note the session id
+--use xeventsdemo;
+--go
+
+--declare @i as int = 0;
+--while(@i<200)
+--	Begin
+--		Begin tran
+--			insert into dummyTable values
+--			(@i,REPLICATE('x',8000));
+--		commit tran
+--		set @i+=1;
+--	End
+--go
+
+--create a new 'extended event session' that collects wait stats for the session that is doing the 200 inserts above.
+create event session CollectWaitStats
+on server
+add event sqlos.wait_info
+(
+	where sqlserver.session_id = 55
+)
+add target package0.event_file
+(
+	set filename = 'c:\temp\CollectWaitStats.xel'
+)
+
+--every extended event session is initiated with 'stop' state. So we have to start it
+alter event session CollectWaitStats
+on server
+state = start
+go
+
+--now run the '200 insert' script from above in the separate session
+
+
+drop event session CollectWaitStats
+on server
+go
+
+--now open the exented events log file in ssms and add 'duration' and 'wait_type' columns to table. Then do grouping on 'wait_type' using the grouping button in toolbar.
+--i only got 'writelog' and 'network_io' wait_type but it should have generated other wait_types as per demo?? Then use sum aggregation on duratin col and sort by descending to show which wait_types
+--took most time. Now in my case 'writelog' had a sum of duration of 0. had the transaction log been on a slower drive, it would have shown up as bottleneck with a non-zero value.
+
+use master
+go
+
+
+alter database CollectWaitStatsset set single_user with rollback immediate 
+drop database CollectWaitStats
+go
+
+--this session tells you how many logical and physical reads a specific query needed during its execution
+set statistics io on
+go
+
+use ContosoRetailDW
+go
+
+--this reports 47309 logical reads. 47309*8kb = around 369.6015625 MB was read from buffer pool to read the rowcount! But out of it only 47309 * 8060(payload size) = 363 MB is payload
+select COUNT(*) from FactOnlineSales;
+go
+
+--lets review the buffer pool. It returns one row for every page cached in the buffer pool. This dmv seems to be only referring to the data cache section(and not the plan cache) of buffer pool??
+--178421 * 8KB = 1.3 GB of memory being used by buffer pool in sql server. Buffer pool is the largest component in RAM available to SQL server. How do we find the non-buffer pool memory total for sql server?
+select * from sys.dm_os_buffer_descriptors
+select distinct page_type from sys.dm_os_buffer_descriptors
+select distinct database_id from sys.dm_os_buffer_descriptors
+go
+
+--now we find out which db takes how much space in buffer pool. it shows constosodb is taking around 366 MB(as we had run the query above on FactOnlineSales table)
+select bd.database_id, DB_NAME(bd.database_id), COUNT_big(*) * 8192 /1024/1024 as [mb]
+from sys.dm_os_buffer_descriptors as bd
+group by bd.database_id
+order by COUNT_BIG(*) desc
+
+--now break down the memory usage at table level to find which table uses most space. since the following query also returns the allocation_unit_id to which the cached page belongs.
+--now alllocation unit always belongs to a partition and a partition always belongs to a table(check the first demo in this script as well as the screen shot in doc file). 
+select * from sys.dm_os_buffer_descriptors as bd
+where database_id = DB_ID('ContosoRetailDW');
+
+--now use allocation_unit_id to navigate upto the table level through metadata dmvs
+select OBJECT_NAME(p.object_id) as [TableName],
+ COUNT_big(*) * 8192 /1024 as [kb]
+from sys.dm_os_buffer_descriptors as bd
+inner join sys.allocation_units as au on au.allocation_unit_id = bd.allocation_unit_id
+inner join sys.partitions as p on p.partition_id = au.container_id
+inner join sys.tables as t on t.object_id = p.object_id
+where database_id =  DB_ID('ContosoRetailDW') 
+	and t.is_ms_shipped = 0 --exclude system tables
+group by p.object_id
+order by COUNT_big(*) desc
+
