@@ -1448,6 +1448,7 @@ select COUNT(*) from FactOnlineSales;
 go
 
 --lets review the buffer pool. It returns one row for every page cached in the buffer pool. This dmv seems to be only referring to the data cache section(and not the plan cache) of buffer pool??
+--the size of plan-cache section of buffer pool can be found using sys.dm_exec_cached_plans
 --178421 * 8KB = 1.3 GB of memory being used by buffer pool in sql server. Buffer pool is the largest component in RAM available to SQL server. How do we find the non-buffer pool memory total for sql server?
 select * from sys.dm_os_buffer_descriptors
 select distinct page_type from sys.dm_os_buffer_descriptors
