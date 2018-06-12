@@ -1478,3 +1478,17 @@ where database_id =  DB_ID('ContosoRetailDW')
 group by p.object_id
 order by COUNT_big(*) desc
 
+--24.
+--reorganize and rebuild for index fragmentation. 
+--rebuild builds a new index in your data file and then deallocated the old one. That means if the index size is 1 GB, then another 1GB would be used in the 
+--data file and 1GB in transaction log(as rebuild is just one large transaction) for rebuild.
+use AdventureWorks2012;
+go
+
+--we have 1 CI, 2 NCI and multiple XML indexes. 'avg_fragmentation_in_percent' as given by the dmv is the external fragmentation where the logical order of pages does not 
+--match the physical order. The guideline is if the total number of pages is greater than 10,000, then:
+--1) if the fragmentation is between 10% and 30%, then reorganize the index
+--2) if the fragmentation is greater than 30%, then rebuild the index.
+--you can pass these 3 parameters to olla hallengren's script 'indexoptimize'.
+select *
+from sys.dm_db_index_physical_stats(DB_ID('AdventureWorks2012'), OBJECT_ID('Person.Person'), null, null, 'limited');
