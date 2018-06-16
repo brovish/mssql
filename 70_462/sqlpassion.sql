@@ -1493,3 +1493,44 @@ go
 --you can pass these 3 parameters to olla hallengren's script 'indexoptimize'.
 select *
 from sys.dm_db_index_physical_stats(DB_ID('AdventureWorks2012'), OBJECT_ID('Person.Person'), null, null, 'limited');
+
+
+--25.  isolation levels. isolation from acId is implemented by locks. READ COMMITED is default.
+--when we specify isolation levels in sql server, we are only changing the how long the shared locks are held(S) and we have no control over 
+--exclusive (X) locks. So we can only control how long a reader is holding a shared lock and we have no control over writers and the asscociated X lock
+--read committed has problem of non-repeatable reads..if u read some data multiple times in a transaction, you might get different results.
+
+use AdventureWorks2014;
+
+--session 1(sessionid = 54)
+begin tran 
+update Person.Person
+	set Title='mr'
+	where BusinessEntityID=1
+
+--u can still read the row in this session even though there is X lock(because it is in the same session?)
+select * from Person.Person
+where BusinessEntityID=1
+
+rollback tran 
+
+--session2(sessionid = 55). try to read. We are trying to acquire S lock but there already exists a incompatible X lock on the row. 
+--The reader is blocked by the writer seesion(uncommited tran means the X lock is held even after the update finishes but you can 
+--read the data in session1??). This session will wait indefinitely until S lock can be acquired
+select * from Person.Person
+where BusinessEntityID=1
+
+--session 3. this situation can be analzyed the locks that were acquired using dbvs. now there is a shared lock acquired for select statement
+--this leads to a blocking situation because we already have an exclusive lock.
+--this dmv returns a row for every lock stored in the hashtable for the lock manager
+select * from sys.dm_tran_locks 
+where request_session_id in('54','55') and resource_type <> 'metadata'
+
+--analyze the waiting tasks. the 2nd session is waiting for another session(column "blocking_session_id")
+--the column "resource_description" tells us for which lock on which object we are waiting
+select * from sys.dm_os_waiting_tasks
+where session_id in('54','55') 
+
+--the blocked session is currently suspended('status' column)
+select * from sys.dm_exec_requests
+where session_id in('54','55') 
