@@ -1198,6 +1198,7 @@ alter index idx2 on cust rebuild;
 select avg_fragmentation_in_percent from sys.dm_db_index_physical_stats(DB_ID('dbShrinking'), OBJECT_ID('cust'), 1, null, 'limited')
 select avg_fragmentation_in_percent from sys.dm_db_index_physical_stats(DB_ID('dbShrinking'), OBJECT_ID('cust'), 2, null, 'limited')
 
+--Autoshrink causes index fragmentation and autogrowth causes file fragmentation. if u have to shrink, shrink manually and then rebuild indexes
 use master
 go
 
