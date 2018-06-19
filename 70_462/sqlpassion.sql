@@ -1534,3 +1534,65 @@ where session_id in('54','55')
 --the blocked session is currently suspended('status' column)
 select * from sys.dm_exec_requests
 where session_id in('54','55') 
+
+
+--25. Repeatable read isolation level of a transaction. Once a shared lock is acquired(when a row is read), then that shared lock is held till the end of the transaction
+--(rollback or commit). So if u have some rows in a transaction and then read them again, those rows would have no change. It is another matter there might be
+-- some rows added to the result set.
+
+--session 1: 55
+use AdventureWorks2012;
+go
+
+set transaction isolation level repeatable read
+
+-- shared locks are acquired as soon as we first access row and held until the end
+begin tran
+select * from Person.Person
+--where ModifiedDate = '20030208'
+where BusinessEntityID = 1;
+
+
+--session 2: 53
+use AdventureWorks2012;
+go
+
+--this update statement will be blocked. cannot acquire X lock as shared lock on the 
+update Person.Person
+set Title='Mr.'
+where BusinessEntityID = 1;
+
+
+--session 3. look into lock manager's hash table with the dmv. 
+select * from sys.dm_tran_locks
+where request_session_id in (53)
+and resource_type = 'key'
+
+select * from sys.dm_tran_locks
+where request_session_id in (55)
+and resource_type = 'key'
+
+--session 1 
+commit
+
+--26. read uncommitted. Reader does not acquire a shared lock. It simply reads the data stored on the data page. Read uncommitted transaction isolation level is 
+--the same as the query hint NOLOCK but is for the whole session(transaction). 
+
+--session 1
+use AdventureWorks2012;
+go
+
+begin tran
+update Person.Person
+set Title='mr'
+where BusinessEntityID = 1;
+
+--session 2 ..read uncommitted tran value which would be rolled back. dirty read.
+use AdventureWorks2012;
+go
+set transaction isolation level read uncommitted
+select * from Person.Person
+where BusinessEntityID = 1;--could have also used NOCLOCK hint
+
+--session 1
+rollback
