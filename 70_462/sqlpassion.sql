@@ -12,6 +12,8 @@
 --be maintained because, well, it is a linked list). If it is the extent ordering that is being considered, then in that case even when entering 
 --new data(no page splits), the extents being allocated for holding new pages might not be contigous. So does that also count as external 
 --fragmentation
+--5) why does SERIALIZABLE isolation level requires NCI to use KEY RANGE LOCKING. Why cant it use a CI. When no NCI is present S lock are used on individual rows and when more than 5000 S locks are taken on rows, an S
+--table lock is taken(individual shared locks won't prevent the phantom rows anyway).
 
 --todo: 1. I need a good story explaining right from how sql server finds which pages or extents are free, their allocation to an table(heap or otherwise). how sql server decides 
 --which pages have some free space and thus can be used and if not how are new pages/extents allocated.
@@ -1538,7 +1540,7 @@ where session_id in('54','55')
 
 --25. Repeatable read isolation level of a transaction. Once a shared lock is acquired(when a row is read), then that shared lock is held till the end of the transaction
 --(rollback or commit). So if u have some rows in a transaction and then read them again, those rows would have no change. It is another matter there might be
--- some rows added to the result set.
+-- some rows added to the result set(phantom rows).
 
 --session 1: 55
 use AdventureWorks2012;
@@ -1575,7 +1577,7 @@ and resource_type = 'key'
 --session 1 
 commit
 
---26. read uncommitted. Reader does not acquire a shared lock. It simply reads the data stored on the data page. Read uncommitted transaction isolation level is 
+--27. read uncommitted. Reader does not acquire a shared lock. It simply reads the data stored on the data page. Read uncommitted transaction isolation level is 
 --the same as the query hint NOLOCK but is for the whole session(transaction). 
 
 --session 1
@@ -1596,3 +1598,41 @@ where BusinessEntityID = 1;--could have also used NOCLOCK hint
 
 --session 1
 rollback
+
+--28. Serializable. This is the last of the four psssimistic isolation levels. This is used to prevent phantom rows/records. No new rows would be added, existing rows deleted or updated in the range of rows read.
+--sql server uses something called KEY RANGE LOCKING which uses specialized LOCKs on every row read. For KEY RANGE LOCKING, there has to be a NCI on the key being used to read the rows(search predicate). If no NCI present,
+--SQL server uses shared lock(S) on the individual rows(which i think would not prevent phantom rows). And if you have more than 5000 S locks are taken on individual rows, then SQL server places a shared (S) table lock on the table. That makes the table reaonly. 
+--Therefore it is important that your table has a supporting NCI.
+use AdventureWorks2014;
+go
+
+set transaction isolation level serializable
+go
+
+--session 1
+begin tran
+--shared locks(actually KEY RANGE LOCKS as we have an NCI for the search predicate) are taken as soon as we first access the resource. The shared lock that is taken here is held until the end of the transaction.
+select *
+from Person.Address 
+where StateProvinceID between 10 and 12	
+
+--rollback
+
+----session 2
+--use AdventureWorks2014;
+--go
+
+--begin tran
+
+----try to insert a row in the range locked by another tran(10 to 12). this would be blocked by the previous tran. Reader(SELECT) blocks the writer(INSERT).
+--insert into person.Address (AddressLine1,AddressLine2,City,StateProvinceID,PostalCode,SpatialLocation,rowguid,ModifiedDate)
+--values('','','',11,'',null,NEWID(),GETDATE());
+
+--rollback
+
+--session 3...now look in the hash table of the lock manager, we see that 21 KEY RANGE LOCKs have been acquired. But we have read just 20 rows??
+--the insert statements waits to inserts in the range
+select * from sys.dm_tran_locks
+where request_session_id in (55)
+and resource_type = 'key'
+and resource_associated_entity_id = '72057594050117632'
