@@ -1642,8 +1642,8 @@ and resource_associated_entity_id = '72057594050117632'
 --and their granularity(for example single row S locks or key range locks). In optimistic isolation levels, readers do not acquire a shared lock(S) anymore. 
 --RCSI does not give you dirty reads(as it name suggests as well).
 
---before we can use RCSI, it has to be enabled at the database level(as tempdb/version-store is used to hold old rows if we are making changes to them). As soon as you enable, there is nothting else u need to do and it becomes the 
---default isolation level.
+--before we can use RCSI, it has to be enabled at the database level(as tempdb/version-store is used to hold old rows if we are making changes to them). As soon as you enable, there is nothting else u need to do and it 
+--becomes the default isolation level.
 alter database AdventureWorks2014 set read_committed_snapshot on;
 go
 
