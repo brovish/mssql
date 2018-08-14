@@ -131,4 +131,35 @@ select id, arr, n as indexpos, SUBSTRING(arr, n, CHARINDEX(',', arr + ',', n) - 
 from cte as base
 cross apply (select n from GetNums(1,len(base.arr)) as num where num.n = CHARINDEX(',', ',' + base.arr, num.n)  ) as a
 
+------------------------------------------------------------------------------------------------------------------
+use MyDB;
+--O: Gaps and islands
+create table tbl(col1 int not null primary key)
+go
+
+insert into tbl values(1),(2),(3),(5),(6),(8),(9),(11),(13);
+
+--gaps
+with cte as
+(select col1 as curr, LEAD(col1) over(order by col1) as nxt
+from tbl
+)
+select curr + 1 as gapStartsFrom, nxt - 1 as gapEndsAt
+from cte
+where nxt - curr >1
+
+--islands
+with cte as
+(
+select col1 as curr, col1 - DENSE_RANK() over(order by col1) as grp, DENSE_RANK() over(order by col1) as dn
+from tbl
+)
+select MIN(curr) as islandStart, max(curr) as islandEnd
+from cte
+group by grp
+
+
+
+
+
 
