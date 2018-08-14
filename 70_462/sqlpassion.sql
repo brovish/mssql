@@ -1670,3 +1670,44 @@ where ProductID = 1;
 --where ProductID = 1;
 
 ----rollback
+
+--30. Snapshot Isolation(SI). This again is an optimistic isolation level. It provides you with read stability: if you read data multiple times in a transaction, 
+--you will always get back the same data and without locking. But you can get into update conflicts with snapshot isolation. Since some other transaction might 
+--update the data in the meantime and then if your current transaction tries to update the data, it would encounter an error.
+
+--this again is a database level option to be enabled before hand.
+--alter database AdventureWorks2014 set allow_snapshot_isolation on
+
+--session 1:
+use AdventureWorks2014;
+go
+
+begin tran
+	update Production.Product
+	set ReorderPoint = 7500 --the old val is 750 which is copied to tempdb/version-store and other transactions will read 750 before session1 tran commits
+	where ProductID = 1
+
+--commit tran
+
+--session 2
+use AdventureWorks2014;
+go
+
+set transaction isolation level snapshot
+go
+
+begin tran
+----these is no locking and blocking involved. in pessimistic isolation levels, the session 1 would have had a X lock on the row and that would have blocked session 2 from reading the row. There are no shared locks(S) anymore.
+----It would have been a dirty read if value returned was 1000.
+----It has read stability as if we are reading the data multiple times in session2 and session1 completes, we will still get the same value here(750 
+---- for both when session1 is uncommited and 1000 when session 1 is committed)
+--select ReorderPoint  from Production.Product
+--where ProductID = 1;
+
+----rollback
+
+--the point to note is that SI does not mean you will get dirty reads as compared to RCSI. Both will return you committed values(as soon a tran starts 
+--making changes, the old values are transferred to version store in tempdb) but that SI will keep returning
+--the same value as it read at start even if the committed value changes due to changes made by some other tran. SI is a serializable optimistic isolation
+--level. RCSI is not serializable. But because SI is serializable, you are not working with the latest committed value. And updating a stale value will result 
+--in error 3960 (update conflict)
