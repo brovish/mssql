@@ -1776,3 +1776,48 @@ end
 
 exec DemonstrateTableVarNoRecompiles
 go
+
+--33: Deadlocks
+use tempdb;
+go
+
+create table t1
+(
+	c1 int
+)
+go
+
+insert into t1 values(1)
+go
+
+create table t2
+(
+	c1 int
+)
+go
+
+insert into t2 values(1)
+go
+
+--session 1 
+begin tran
+	--step1
+	update t1
+	set c1=2
+
+	--step4
+	--use Locks/Deadlock graph in profiler to capture deadlock graph
+	update t2
+	set c1=2
+
+--commit tran
+
+--session 2 
+begin tran
+	--step2
+	update t2
+	set c1=2
+
+	--step3
+	update t1
+	set c1=2
