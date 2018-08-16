@@ -158,6 +158,11 @@ select MIN(curr) as islandStart, max(curr) as islandEnd
 from cte
 group by grp
 
+with cte as
+(
+select t1.col1, (select min(t2.col1) from tbl as t2 where t2.col1 >= t1.col1 and not exists(select * from tbl as t3 where t3.col1 = t2.col1+1)) as grp
+from tbl as t1
+)
 
 
 
