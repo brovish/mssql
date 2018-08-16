@@ -14,6 +14,7 @@
 --fragmentation
 --5) why does SERIALIZABLE isolation level requires NCI to use KEY RANGE LOCKING. Why cant it use a CI. When no NCI is present S lock are used on individual rows and when more than 5000 S locks are taken on rows, an S
 --table lock is taken(individual shared locks won't prevent the phantom rows anyway).
+--6) does a temp table creation in a sp invalidates all the sps in plan cache as the db schema is changed?
 
 --todo: 1. I need a good story explaining right from how sql server finds which pages or extents are free, their allocation to an table(heap or otherwise). how sql server decides 
 --which pages have some free space and thus can be used and if not how are new pages/extents allocated.
@@ -1711,3 +1712,67 @@ begin tran
 --the same value as it read at start even if the committed value changes due to changes made by some other tran. SI is a serializable optimistic isolation
 --level. RCSI is not serializable. But because SI is serializable, you are not working with the latest committed value. And updating a stale value will result 
 --in error 3960 (update conflict)
+
+
+--31. Database Snapshots
+
+--32: Temp tables vs table variables
+--Temp tables introduce execution plan recompilations. If you are creating temp tables in a stored procedure, that table creation leads to a schema change(an addition of an index would also lead to schema change) which 
+--invalidates the existing sp execution plan. So the stored procdeure creating the temp table is compiled again. Now when you add data to the temp table, its stats are are updated and if you try to select the use the temp
+--table later in sp, the stats change will cause a further recompile. So you get 2 recompiles of sp, once on creation of temp table(due to shcema change) and once on its usage(after inserting some data into it which changes the stats)
+--Table vars don't suffer from recompile issues(which is still persisted in tempdb). first table var is not counted as a schema change(as it onl a variable not a table) and second, stats on table vars are not maintained. They have
+--a fixed cardinality value of 1. And because of this fixed cardinality, table vars are only sutiable for storing small amount of data. For larger number of rows, temp tables might be a better choice(as they have stats and hence 
+--query optimizer can use that info to generate a decent query plan).
+
+--to demo the recompiles, create a sql server profiler trace with following events:
+--	1. Stored Procedures/SP:Recompile
+--	2. TSQL/SQL:StmtRecompile
+
+use AdventureWorks2014;
+go
+
+create proc DemonstrateTempTableRecompiles
+as 
+begin
+	
+	--recompile because of schema change
+	create table #temptable
+	(
+		id int identity(1,1) primary key,
+		firstname char(4000),
+		lastname char(4000)
+	)
+
+	insert into #temptable(firstname, lastname)
+	select top 1000 name, name from master.dbo.syscolumns
+
+
+	--recompile because of stats change
+	select * from #temptable
+
+	drop table #temptable
+end
+
+exec DemonstrateTempTableRecompiles
+go
+
+create proc DemonstrateTableVarNoRecompiles
+as 
+begin
+	
+	--recompile because of schema change
+	declare @temptable table
+	(
+		id int identity(1,1) primary key,
+		firstname char(4000),
+		lastname char(4000)
+	)
+
+	insert into @temptable(firstname, lastname)
+	select top 1000 name, name from master.dbo.syscolumns
+		
+	select * from @temptable	
+end
+
+exec DemonstrateTableVarNoRecompiles
+go
