@@ -1821,3 +1821,59 @@ begin tran
 	--step3
 	update t1
 	set c1=2
+
+--commit tran
+
+--34: Statistics. Stats help the query optimizer estimate cardinality or the number of rows returned for a query so that it can compile a reasonably efficient physical execution plan. If the stats are out of data, query optimizer
+--might produce a sub-optimal execution plan. Take an example of non covering NCI and a query filtering on the nci columns. out of date stats might cause the query optimizer to seek into the nci and perform a bookmark lookup into
+--the heap or CI to get the other columns whereas it might be cheaper to just do a scan of heap or CI.
+
+use MyDB;
+go
+set statistics io on
+
+create table t
+(
+	col1 int,
+	col2 int 
+)
+go
+
+--insert 1500 records into table
+insert into t(col1,col2)
+select top 1500 ROW_NUMBER() over(order by (select null)), ROW_NUMBER() over(order by (select null)) 
+from master.dbo.syscolumns 
+
+--create nci on col2
+create nonclustered index nci_test on t(col2);
+go
+
+--select a record by filtering on col2 so that seek into the NCI is done. check the estimated and actual number of rows in execution plan 
+-- 3 logical reads
+select *
+from t where col2 =2
+
+--sql server will auto update stats when 20% + 500 rows are updated/added. So we need 300 + 500 (800) data changes to trigger auto update of stats. adding 799 does not trigger update
+--we added a lot more '2' values this time but the query optimizer still thinks there is only one value of 2 in col2. 
+insert into t(col1,col2)
+select top 799 ROW_NUMBER() over(order by (select null)), 2 
+from master.dbo.syscolumns 
+
+--out of date stats still cause seek into the NCI. check the estimated and actual number of rows in execution plan
+-- 809 logical reads
+select *
+from t where col2 =2
+
+--but doing a scan of the actual table costs us only 9 logical reads
+select *
+from t 
+
+--now insert 1 additional row causing stats update.
+insert into t(col1,col2)
+select top 1 ROW_NUMBER() over(order by (select null)), 2 
+from master.dbo.syscolumns 
+
+--up to date stats cause scan of the underlying table instead of a NCI seek with a bookmark lookup. check the estimated and actual number of rows in execution plan
+-- 9 logical reads
+select *
+from t where col2 =2
