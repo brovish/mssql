@@ -1076,6 +1076,107 @@ go
 drop database tippingpoint
 go
 
+--13: hash join is used when joining big un-indexed tables. For data warehouse scenarios, it might be fine but for OLTP scenarios, u don't
+--really want to see a hash join. Hash join suggest there is a problem with indexing strategy. Almost always Hash join requires a memory
+--grant for the hashtable and if the stats are out of date/inaccurate, the memory grant might be too small and sql server has to spill 
+--hash join to temp db. So the HASH JOIN operator could involve physical IO.
+--Which hash function is used by SQL server is undocumented. Hash Join consists of 2 phases: in the first phase a hastable is built for 
+--the outer table and in the second phase the inner table values(hashed values?) are probed in the hashtable to emit matching records.
+
+use AdventureWorks2014
+go
+
+set statistics io on 
+set statistics time on
+go
+
+--a memory grant of 8 MB was needed for this query. memory grant has to be granted before query can start executing.
+select p1.FirstName, p1.LastName, p2.PhoneNumber
+from Person.Person as p1
+inner join Person.PersonPhone as p2
+	on p1.BusinessEntityID = p2.BusinessEntityID
+
+--now lets c how outOfDate statistics can lead to spills to tempdb (hjahsh spills).
+create database hashspills;
+go
+
+use hashspills;
+go
+
+create table t1
+(
+col1 int identity primary key,
+col2 int,
+col3 char(2000)
+)
+go
+
+create nonclustered index idx_t1col2 on t1(col2);
+go
+
+select top 1500 IDENTITY(int, 1,1) as n into #nums
+from master.dbo.syscolumns as sc1
+
+insert into t1(col2,col3)
+select n, replicate('x',2000) from #nums
+drop table #nums
+go
+
+select * from t1;
+
+create table t2
+(
+col1 int identity primary key,
+col2 int,
+col3 char(2000)
+)
+go
+
+create nonclustered index idx_t2col2 on t2(col2);
+go
+
+select top 1500 IDENTITY(int, 1,1) as n into #nums
+from master.dbo.syscolumns as sc1
+
+insert into t2(col2,col3)
+select n, replicate('x',2000) from #nums
+drop table #nums
+go
+
+--execute our problematic statement in 1rst step. This will cause tehe caching of a sub-optimal execution plan
+select *
+from t1 inner hash join t2 on t1.col2 = t2.col2
+where t1.col2=2;
+go
+
+--insert 799 new rows. to trigger a stats update we need 800 rows(20% + 500)
+select top 799 IDENTITY(int, 1,1) as n into #nums
+from master.dbo.syscolumns as sc1
+
+insert into t1(col2,col3)
+select 2, replicate('x',2000) from #nums
+drop table #nums
+go
+
+--this will cause a hashspill as because of inaccurate stats. SQL server esitmates 1 row for hash join and requests a memory grant of 1 mb. 
+--that memory is needed to create the hashtable and if memory grant is less, the hashtable is spilled to tempdb
+select *
+from t1 inner hash join t2 on t1.col2 = t2.col2
+where t1.col2=2;
+go
+
+--update stats to estimate number of rows and thus the memory grant correctly.
+update statistics t1 with fullscan
+update statistics t2 with fullscan
+go
+
+--Since stats were updated, sql server recompiles the execution plan and this time memory grant is around 4mb and hashtable is not spilled to tempdb
+select *
+from t1 inner hash join t2 on t1.col2 = t2.col2
+where t1.col2=2;
+go
+
+
 create database mergejoin
 go
 
@@ -1877,3 +1978,6 @@ from master.dbo.syscolumns
 -- 9 logical reads
 select *
 from t where col2 =2
+
+
+--35: 
