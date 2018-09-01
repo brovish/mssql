@@ -178,3 +178,16 @@ select *
 from cte
 where rn<5
 
+--
+
+;with t0 as ( select * from (values(0),(0)) as t(n)),--2
+		t1 as ( select a.n from t0 as a cross join t0 as b),--4
+		t2 as ( select a.n from t1 as a cross join t1 as b),--16
+		t3 as ( select a.n from t2 as a cross join t2 as b),--256
+		t4 as ( select a.n from t3 as a cross join t3 as b),
+		t5 as ( select a.n from t4 as a cross join t4 as b),
+		nums as (select ROW_NUMBER() over(order by (select null)) as rn from t5)
+select rn from nums
+order by rn
+offset 0 rows fetch next 1000 rows only;
+
