@@ -23,6 +23,11 @@
 --2. good story about query compilation. parse->expression tree->compilation to execution plan using COM objects(operators). You can refer to an
 --invalid table in a proc and it will throw an error during runtime but not the case with query. It seems query fails at the parsing step. why?
 --wasn't parsing supposed to check only syntax as it happens in case of a PROC?
+--3. good story about bookmark lookup(RID lookup for heap and CI key for b-tree) and tying in with stats(bookmark lookup always uses NESTED LOOP JOIN). Also a good story for physical JOIN operators 
+-- with stats influence. Also, differentiate between index benefits(seeks into the b-tree) vs stats(cardinality estimation). index also creates stats but stats can also be created(either automatically or 
+--manually) independently of indexes. columns used in predicate are good candidates for stats. You can also create multi col stats either through a multi col index or auto/manual created stats but 
+--the histogram will only be created for leading col while the density vector would have info for leading col as well as col combination. Stats loose their accuracy(even when kept updated) as the table
+--data grows as the histogram can only have 200 steps
 
 --tatt: 1. pagesplit cause both internal(always) and external fragmentation(not always but often as the new page might not be physically adjacent). 
 --internal fragmentation is when we have free space in a page and it cause either by deletions or by page splits or by setting a fill factor.external 
