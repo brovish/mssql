@@ -40,6 +40,7 @@
 --, then if a page is full and you are trying to add more data to a var col, a page split will occur. But if the row size tself becomes greater than 8000
 --by addition of var col, then 'ROW_OVERFLOW_DATA' allocation unit would be used.
 --3. Locks provide transactional consitency and synchronize access to data at the relational level(row or table) while latches synchronize access to data structures(pages) between threads
+--4. The difference of the recovery model (full/Simple) is how SQL Server deals with the clearing of the transaction log.
 
 create database testdb
 go
@@ -1988,4 +1989,41 @@ select *
 from t where col2 =2
 
 
---35: 
+--35: crash recovery
+
+create database crashrecovery
+go
+
+use crashrecovery
+go
+
+create table foo
+(
+col1 char(100) not null,
+col2 char(100) not null,
+col3 char(100) not null
+)
+go
+
+--this mirrors transaction that has committed
+insert into foo values
+(
+	replicate('a',100),
+	replicate('b',100),
+	replicate('c',100)
+)
+go
+
+--this mirrors transaction that has not committed
+begin tran 
+
+update foo
+	set col1 = 	replicate('x',100)
+
+--run this in a separate session and then using sql server configuration manager, restart the sql server service
+shutdown with nowait
+go
+
+--after the sql server was restarted, all the transactions that we committed since last checkpoint are redone(redo) and then all the transactions
+--that were inflight/not committed are undone(undo). 
+select * from foo
