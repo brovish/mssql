@@ -2167,6 +2167,26 @@ go
 
 --assuming we were using full recovery model and had taken a Full backup, the tran log file size increases by 260 mb and data file size remains same
 
---now backup the tran log. this backup file is around 230 mb large
+--now backup the tran log. this backup file is around 360 mb large
 backup log ContosoRetailDW to disk = 'c:\temp\delLog1.trn'
 go
+
+
+--change the recovery model to simple, so that we can shrink the whole transaction log to get rid of old transaction log records
+--and then switch recovery mode to bulk logged
+alter database ContosoRetailDW set recovery simple with no_wait
+
+dbcc shrinkfile('ContosoRetailDW2.0_log',0)
+
+alter database ContosoRetailDW set recovery bulk_logged with no_wait
+
+--now we only generate 80mb of data in tran log
+alter index pk_FactOnlineSales_SalesKey on FactOnlineSales rebuild
+go
+
+--the following throws an error saying there is no current database backup. so log backup can't be performed
+--now again backup the tran log. this backup file is again the same size, around 260 mb large
+backup log ContosoRetailDW to disk = 'c:\temp\delLog_bloklogged.trn'
+go
+
+--so bulk logged recovery model has no influence on tran log backups but only minimizes the tran log size when you run minimally logged operations.
