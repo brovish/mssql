@@ -17,6 +17,9 @@
 --6) does a temp table creation in a sp invalidates all the sps in plan cache as the db schema is changed?
 --7)when a on disk work table is used, say for when hastable is spilled onto tempdb, why does it is show up as logical reads against the 'worktable' instead of 
 --physical reads?
+--8) Aren't columnstore indexes similar to NCI on that column(albeit NCI also stores RID or CI key)?
+--9)--If using FULL recovery model, take regular tran log backups as otherwise the tran log will keep on growing? Why does not the tran log keeps
+--on growing when using SIMPLE recovery? Take into account the data and log files while talking about recovery models.
 
 --todo: 1. I need a good story explaining right from how sql server finds which pages or extents are free, their allocation to an table(heap or otherwise). how sql server decides 
 --which pages have some free space and thus can be used and if not how are new pages/extents allocated.
@@ -28,6 +31,7 @@
 --manually) independently of indexes. columns used in predicate are good candidates for stats. You can also create multi col stats either through a multi col index or auto/manual created stats but 
 --the histogram will only be created for leading col while the density vector would have info for leading col as well as col combination. Stats loose their accuracy(even when kept updated) as the table
 --data grows as the histogram can only have 200 steps
+--4. Good story around data and log files while talking about recovery models
 
 --tatt: 1. pagesplit cause both internal(always) and external fragmentation(not always but often as the new page might not be physically adjacent). 
 --internal fragmentation is when we have free space in a page and it cause either by deletions or by page splits or by setting a fill factor.external 
@@ -2027,3 +2031,142 @@ go
 --after the sql server was restarted, all the transactions that we committed since last checkpoint are redone(redo) and then all the transactions
 --that were inflight/not committed are undone(undo). 
 select * from foo
+
+--40: columnstore indexes. in rowstore indexes, each page(8k size) stores all the column values for all the rows. In column store index, each page stores all the
+--values for one column for all the rows. Don't we sort of do the same when we create a NCI on that column(albeit it also stores RID or CI key)?
+use ContosoRetailDW;
+go
+
+--although we are only interested in 2 columns, all the other columns are also read into buffer pool from storage since we 
+--store all columns on the data pages(in this case CI pages). So a lot of unnecessary IO and logical reads
+select YEAR(datekey), MONTH(datekey), sum(salesamount)
+from FactOnlineSales 
+group by year(DateKey), month(DateKey)
+order by year(DateKey), month(DateKey)
+
+--create nonclustered columnstore index. clustered columnstore index were introduced in 2014. But note that there can be only 1 
+--clustered index, so it can either be columnstore or rowstore.
+create nonclustered columnstore index idx_cs_datekey_salesamount
+on factonlinesales
+(
+datekey,
+salesamount
+)
+go
+
+--now the same query runs faster and a lot less logical reads
+select YEAR(datekey), MONTH(datekey), sum(salesamount)
+from FactOnlineSales 
+group by year(DateKey), month(DateKey)
+order by year(DateKey), month(DateKey)
+
+--41: Simple recovery model. Recovery models tell us which database backups we can perform and how much data loss we might experience
+--if we have to restore ur db. Suppose if you have Simple recovery model and are taking Full and Differential backups.
+--Transaction log backups are not possible with recovery model simple. And that is the problem. You loose all your committed
+-- tranactions between Full and differential backups. SIMPLE recovery model is good for dbs where have mostly static data/no changes 
+--like datawarehousing dbs. Take into account the data and log files while talking about recovery models
+
+create database testdb
+go
+
+--by default FULL recovery model is used. Change it to SIMPLE
+alter database testdb
+	set recovery simple with no_wait
+
+use testdb
+go
+
+create table tt
+(
+FID int 
+)
+go
+
+--this won't work due to incompatible recovery model
+backup log testdb to disk = 'c:\temp\testLogbkp.trn'
+
+--FULL backup works
+backup database testdb to disk = 'c:\temp\testLogbkp.bak'
+
+--this transaction will be lost if we do not perform FULL or Differential backups after this
+insert into tt values(1)
+
+use master
+go
+drop database testdb
+
+--42: FULL recovery model (default for a db) enables the use of transaction log backups which have to be performed regularly to not loose 
+--committed transactions in case of a crash. FULL and differential backups can be very big in size as they are total or accumulative backups.
+--Transaction log backup remains small in size as they are in a sense truely differential in nature(and for that reason they also take 
+--less time to perform). But a long chain of log backups might take long time to restore wherease FULL and Differential might take less time.
+--You can still loose data as if a crash happens after the last transaction log backup, then all transactions committed after it will be lost. 
+--So it all comes down to how regularly u perform log backups (or for that matter other backups in general)
+--You restore your latest FULL, latest Differential and then all the transaction log backups after the differential backup to just before 
+--the point where crash happened.
+--Why can't we just take FULL backups(or FULL_Differential) at the same regular intervals as transaction log backups? Time taken to complete
+--the transaction log backup would be small(assuming you haven't changed the all the data in the db in that time frame) and thus chances of 
+--data loss are minimal. But Full or Differential would take a lot longer and hence there is a chance that if crash happens before backup is 
+--complete, the transactions committed during that time would be lost. Keeping the time frame same, the first differential backup would take 
+--same time as first transation log backup after a full backup. But after the first differential backup, the succeeding differential backups
+--would take a lot longer(as well mcuh bigger in size) as they are accumulative compared to succeeding tran log backups. Tran log backups 
+--are the true differential backups!
+--If using FULL recovery model, take regular tran log backups as otherwise the tran log will keep on growing? Why does not the tran log keeps
+--on growing when using SIMPLE recovery? Take into account the data and log files while talking about recovery models
+
+create database testdb
+go
+
+--by default FULL recovery model is used. 
+use testdb
+go
+
+create table tt
+(
+FID int 
+)
+go
+
+--this won't work as we have not taken a FULL backup as yet
+backup log testdb to disk = 'c:\temp\testLogbkp.trn'
+
+--FULL backup has to be performed before a tran log backup can be taken
+backup database testdb to disk = 'c:\temp\testLogbkp.bak'
+
+--now it works
+backup log testdb to disk = 'c:\temp\testLogbkp.trn'
+
+--this transaction will be lost if we do not perform FULL or Differential backups after this
+insert into tt values(1)
+
+--take another log backup
+backup log testdb to disk = 'c:\temp\testLogbkp1.trn'
+
+
+use master
+go
+drop database testdb
+
+--43: Bulk-Logged recovery model helps keep your transaction log small if you are working with minimally loggged operations(like bcp, bulk insert, insert select
+-- create or alter index, etc.) in sql server. When you are going to perform minimally logged operation, you can switch your database to Bulk-logged recovery model
+--Say if you are running a CI rebuild on a table of 1 GB in full recovery model(what happens in simple?), then the transaction log would grow by 1 GB in size. But 
+--if you are running the same operation under Bulk logged recovery model, then sql server just marks/logs those extents that have changed in data file. So the tran 
+--log stays quite small. You should change the recovery model immediately after minimally loged operation is complete. If you then take a tran log backup afterwards 
+--(ideally after changing recovery model), sql server copies individual changed records from tran log but also copies all the extents, marked as changed,
+-- from your data file into your tran log backup. So that means ultimately the size of the tran log backup is same as that would have been in recovery model full
+--but the size of tran log itself is smaller.
+
+use ContosoRetailDW
+go
+
+--assuming simple recovery model, tran log file size remains same while data file size increases by 340 mb as to do a rebuild it needs free space equivalent 
+--to size of table.
+--assuming full recovery model, the tran log file size increases by 260 mb and data file size remains same
+--assuming bulk logged recovery model, both log and data file sizes remain unchanged!
+alter index pk_FactOnlineSales_SalesKey on FactOnlineSales rebuild
+go
+
+--assuming we were using full recovery model and had taken a Full backup, the tran log file size increases by 260 mb and data file size remains same
+
+--now backup the tran log. this backup file is around 230 mb large
+backup log ContosoRetailDW to disk = 'c:\temp\delLog1.trn'
+go
