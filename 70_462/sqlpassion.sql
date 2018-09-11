@@ -5,7 +5,7 @@
 --so the data should not have been physically ordered on individual pages but should have let the slot indexes define the order. But my testing show the rows are
 --actually being stored physically ordered on the page.
 --3)forwarding records/pointer. Issue with heap tables(why not an issue with B-Tree tables?). why are forwarding records not used in CIs?
---What happens in the case of CI tables?
+--What happens in the case of CI tables? I think in case of CIs, we get page splits
 --4) external fragmentation. Are we just referring to extents being physically out of order or only the pages. because if a page split happens, 
 --in a, say a filled extent, then that page is never going to be in physical order no matter the extent allocated to hold it is phyically contigous
 --or not. Even if a unfilled extent(some free pages) exists and is contigous, linked list of pages will physically be out of order(logical order would 
