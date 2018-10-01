@@ -71,7 +71,7 @@ dbcc ind(testdb,tbl,-1)
 
 --remember page header size is 96 bytes, then we have payload and then the rowoffset array(aslot array).
 --row offset array need 2 bytes to store location for each record
---dump the first data page using FID and PID of the page. First record in data pages are at offset 96
+--dump the first data page using FID(FileID) and PID(PageID) of the page. First record in data pages are at offset 96
 dbcc page(testdb,1,312,3)
 dbcc page(testdb,1,312,1)
 dbcc page(testdb,1,312,2)
