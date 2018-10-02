@@ -43,7 +43,7 @@
 --but then if the 2 things could happen. page splits or the creation of 'ROW_OVERFLOW_DATA' allocation unit.  if the row size remains less than 8000
 --, then if a page is full and you are trying to add more data to a var col, a page split will occur. But if the row size tself becomes greater than 8000
 --by addition of var col, then 'ROW_OVERFLOW_DATA' allocation unit would be used.
---3. Locks provide transactional consitency and synchronize access to data at the relational level(row or table) while latches synchronize access to data structures(pages) between threads
+--3. Locks provide transactional consitency and synchronize access to data at the relational level(row or table.note that locks directly escalate from row to table wihtout going to page level) while latches synchronize access to data structures(pages) between threads
 --4. The difference of the recovery model (full/Simple) is how SQL Server deals with the clearing of the transaction log.
 
 create database testdb
