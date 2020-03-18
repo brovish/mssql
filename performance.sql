@@ -1,15 +1,22 @@
-use SQLCookbook;
-go
+--1 from
+--2 where
+--3 group by
+--4 having
+--5 select 
+--	expressions
+--	distinct
+--6 order by
+--7 top/offset-fetch
+
+SET STATISTICS TIME ON ;
+GO
+SET STATISTICS IO ON ;
+GO
 
 --this takes a long time. took more than 10 minutes 30 secs to return 100000000 rows with parallelism
 DBCC FREEPROCCACHE() ;
 DBCC DROPCLEANBUFFERS ;
 GO
-SET STATISTICS TIME ON ;
-GO
-SET STATISTICS IO ON ;
-GO
---this took 150 ms with parallelism and without ordering
 ;with cte as
 (
 select num
@@ -35,15 +42,10 @@ from cte4
 --order by num
 --OPTION	(MAXDOP 1)
 
---this takes a long time. took more than 10 minutes 30 secs to return 100000000 rows with parallelism
+--this takes a long time. took more than 10 minutes to return 100000000 rows with no parallelism
 DBCC FREEPROCCACHE() ;
 DBCC DROPCLEANBUFFERS ;
 GO
-SET STATISTICS TIME ON ;
-GO
-SET STATISTICS IO ON ;
-GO
---this took 150 ms with parallelism and without ordering
 ;with cte as
 (
 select num
@@ -72,10 +74,6 @@ OPTION	(MAXDOP 1)
 
 DBCC FREEPROCCACHE() ;
 DBCC DROPCLEANBUFFERS ;
-GO
-SET STATISTICS TIME ON ;
-GO
-SET STATISTICS IO ON ;
 GO
 --this took 150 ms with parallelism and without ordering
 ;with cte as
@@ -106,10 +104,6 @@ from cte4
 
 DBCC FREEPROCCACHE() ;
 DBCC DROPCLEANBUFFERS ;
-GO
-SET STATISTICS TIME ON ;
-GO
-SET STATISTICS IO ON ;
 GO
 --this took 14 secs with parallelism and with ordering
 ;with cte as
@@ -140,10 +134,6 @@ order by num
 DBCC FREEPROCCACHE() ;
 DBCC DROPCLEANBUFFERS ;
 GO
-SET STATISTICS TIME ON ;
-GO
-SET STATISTICS IO ON ;
-GO
 --this took 1 minute 8 secs with no parallelism
 ;with cte as
 (
@@ -172,13 +162,3 @@ OPTION	(MAXDOP 1)
 
 
 
-
---1 from
---2 where
---3 group by
---4 having
---5 select 
---	expressions
---	distinct
---6 order by
---7 top/offset-fetch
