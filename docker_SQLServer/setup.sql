@@ -9,3 +9,11 @@ USE heroes;
 GO
 CREATE TABLE HeroValue (id INT, name VARCHAR(50));
 GO
+
+-- server info 
+SELECT @@SERVERNAME,
+    SERVERPROPERTY('ComputerNamePhysicalNetBIOS'),
+    SERVERPROPERTY('MachineName'),
+    SERVERPROPERTY('ServerName'),
+    @@version;
+go

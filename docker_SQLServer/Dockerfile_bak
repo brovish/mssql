@@ -14,7 +14,7 @@
 
 ##if the volume persistence logic works, you would have to restore the db only once. Handle that.
 #docker cp "C:/mssqlsrv2019/backup/Adventure Works 2014 Full Database Backup/AdventureWorks2014.bak" sql2019:/var/backups/AdventureWorks2014.bak
-##after this you can connect to sql serverrunning in container using ssms or data studio at localhost,1401 and sa/passw0rd1!
+##after this you can connect to sql serverrunning in container using sqlcmd, ssms or data studio at localhost,1401 and sa/passw0rd1!
 ##and then restore the dtabase in the container
 #RESTORE DATABASE AdventureWorks2014 FROM DISK = '/var/backups/AdventureWorks2014.bak'
 # WITH
@@ -23,7 +23,8 @@
 
 #docker container ls 
 #docker exec -it sql2019 "bash"
-##this i running the sqlcmd. TODO: try using the sql cli as it has intellisense
+##this i running the sqlcmd. TODO: try using the sql cli as it has intellisense.
+##since this is running inside the container, u dont need to supply the port number even as by default it will use 1433
 #/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "passw0rd1!"
 #docker stop sql2019
 # docker rm sql2019
