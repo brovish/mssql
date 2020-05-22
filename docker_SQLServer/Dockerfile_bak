@@ -1,19 +1,20 @@
 # FROM mcr.microsoft.com/mssql/server:2019-latest
-# RUN -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=passw0rd1!" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-latest
+# RUN -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=passw0rd1!" -p 1401:1433 -d mcr.microsoft.com/mssql/server:2019-latest
 
 
 # docker pull mcr.microsoft.com/mssql/server:2019-latest
 
-##only one sql server can point to a volume. System databases are also stored here
+##only one sql server can point to a volume. System  databases (in addition to use databases)are also stored here
 #docker volume create sql_volume
 #docker volume ls
 #docker volume inspect sql_volume
 
-#docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=passw0rd1!" -p 1433:1433 --name sql2019 -v sql_volume:/var/opt/mssql -d mcr.microsoft.com/mssql/server:2019-latest
+##you can remove to -d parameter for debuggine (to look at the log to see the problems, say with, server startup)
+#docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=passw0rd1!" -p 1401:1433 --name sql2019 -v sql_volume:/var/opt/mssql -d mcr.microsoft.com/mssql/server:2019-latest
 
 ##if the volume persistence logic works, you would have to restore the db only once. Handle that.
 #docker cp "C:/mssqlsrv2019/backup/Adventure Works 2014 Full Database Backup/AdventureWorks2014.bak" sql2019:/var/backups/AdventureWorks2014.bak
-##after this you can connect to sql serverrunning in container using ssms or data studio at localhost,1437 and sa/passw0rd1!
+##after this you can connect to sql serverrunning in container using ssms or data studio at localhost,1401 and sa/passw0rd1!
 ##and then restore the dtabase in the container
 #RESTORE DATABASE AdventureWorks2014 FROM DISK = '/var/backups/AdventureWorks2014.bak'
 # WITH
@@ -28,3 +29,12 @@
 # docker rm sql2019
 #docker start sql2019
 
+##will this work for volume creation: 
+sudo docker run\
+ -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=Sql2017isfast'\
+  --hostname sql2\
+  -p 1402:1433\
+  -v sqlvolume2:/var/opt/mssql\
+  --name sql2\
+  -d\
+  mcr.microsoft.com/mssql/server:2017-latest-ubuntu
