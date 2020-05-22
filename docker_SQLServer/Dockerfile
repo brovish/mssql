@@ -9,6 +9,8 @@ WORKDIR /usr/work
 COPY . /usr/work/
 
 # Grant permissions for the import-data script to be executable
+# RUN chown -R /usr/work/import-data.sh
+USER root
 RUN chmod +x /usr/work/import-data.sh
 
 EXPOSE 1433
@@ -22,4 +24,4 @@ CMD /bin/bash ./entrypoint.sh
 #docker build -t mssql:dev .
 
 ##and then run the mssql:dev image (TODO: how to create a volume using dockerfile):
-# docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=passw0rd1!" --name sql2019 -p 1401:1433 -d mssql:dev -e "MSSQL_PID=Developer"
+# docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=passw0rd1!" --name sql2019 -p 1401:1433 -d mssql:dev 
