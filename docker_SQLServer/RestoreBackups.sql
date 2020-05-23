@@ -2,6 +2,7 @@ RESTORE DATABASE AdventureWorks2017 FROM DISK = '/usr/work/database_backups/Adve
  WITH
  MOVE 'AdventureWorks2017' TO '/var/opt/mssql/data/AdventureWorks2017.mdf',
  MOVE 'AdventureWorks2017_Log' TO '/var/opt/mssql/data/AdventureWorks2017.ldf'
+GO
 
 CREATE DATABASE heroes;
 GO
@@ -12,8 +13,8 @@ GO
 
 -- server info 
 SELECT @@SERVERNAME,
-    SERVERPROPERTY('ComputerNamePhysicalNetBIOS'),
-    SERVERPROPERTY('MachineName'),
-    SERVERPROPERTY('ServerName'),
+    -- SERVERPROPERTY('ComputerNamePhysicalNetBIOS'),
+    -- SERVERPROPERTY('MachineName'),
+    -- SERVERPROPERTY('ServerName'),
     @@version;
 go
