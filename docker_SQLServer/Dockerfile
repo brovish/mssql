@@ -27,5 +27,11 @@ CMD /bin/bash ./entrypoint.sh
 ##in the terminal window build the image and tag it mssql:dev :
 #docker build -t mssql:dev .
 
-##and then run the mssql:dev image (TODO: how to create a volume using dockerfile):
-# docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=passw0rd1!" --name sql2019 -p 1401:1433 -d mssql:dev -v sql_volume:/var/opt/mssql
+##and then run the "mssql:dev" image to build a container "sql2019" linking with volume created outside on the host:
+##if you have not created a external volume (step1.cmd), remove the option "-v sql_volume:/var/opt/mssql" from below
+##for debugging, run container without -d option. TODO: write about running the same image twice
+# docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=passw0rd1!" --name sql2019 -p 1401:1433 -v sql_volume:/var/opt/mssql -d mssql:dev
+
+##if you did not remove the -d option, you can still checkout the generated message in errorlog: 
+#docker exec -it sql2019 "bash"
+#cat /var/opt/mssql/log/errorlog

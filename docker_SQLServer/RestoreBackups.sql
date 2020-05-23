@@ -1,7 +1,7 @@
-RESTORE DATABASE AdventureWorks2014 FROM DISK = '/usr/work/database_backups/AdventureWorks2014.bak'
+RESTORE DATABASE AdventureWorks2017 FROM DISK = '/usr/work/database_backups/AdventureWorks2017.bak'
  WITH
- MOVE 'AdventureWorks2014_Data' TO '/var/opt/mssql/data/Adventureworks2014.mdf',
- MOVE 'AdventureWorks2014_Log' TO '/var/opt/mssql/data/Adventureworks2014.ldf'
+ MOVE 'AdventureWorks2017' TO '/var/opt/mssql/data/AdventureWorks2017.mdf',
+ MOVE 'AdventureWorks2017_Log' TO '/var/opt/mssql/data/AdventureWorks2017.ldf'
 
 CREATE DATABASE heroes;
 GO
