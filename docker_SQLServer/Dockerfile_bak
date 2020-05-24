@@ -23,8 +23,9 @@
 
 #docker container ls 
 #docker exec -it sql2019 "bash"
-##this i running the sqlcmd. TODO: try using the sql cli as it has intellisense.
-##since this is running inside the container, u dont need to supply the port number even as by default it will use 1433
+
+##this is running the sqlcmd. TODO: try using the sql cli as it has intellisense.
+##since this is running inside the container, u dont need to supply the port number even as by default it will use 1433.
 #/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "passw0rd1!"
 #docker stop sql2019
 # docker rm sql2019
