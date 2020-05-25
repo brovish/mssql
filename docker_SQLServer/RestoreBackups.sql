@@ -6,7 +6,7 @@ RESTORE DATABASE AdventureWorks2017 FROM DISK = '/usr/work/database_backups/Adve
  MOVE 'AdventureWorks2017_Log' TO '/var/opt/mssql/data/AdventureWorks2017.ldf'
 GO
 
-ALTER DATABASE AdventureWorks2017 SET QUERY_STORE = ON (OPERATION_MODE = READ_WRITE);
+ALTER DATABASE AdventureWorks2017 SET QUERY_STORE = ON (OPERATION_MODE = READ_WRITE, DATA_FLUSH_INTERVAL_SECONDS = 300, INTERVAL_LENGTH_MINUTES = 1, MAX_STORAGE_SIZE_MB = 20, MAX_PLANS_PER_QUERY = 10);
 GO
 
 RESTORE DATABASE [WideWorldImporters] FROM  DISK = N'/usr/work/database_backups/wwi.bak' 
@@ -17,7 +17,7 @@ RESTORE DATABASE [WideWorldImporters] FROM  DISK = N'/usr/work/database_backups/
     MOVE N'WWI_InMemory_Data_1' TO N'/var/opt/mssql/data/WideWorldImporters_InMemory_Data_1'
 GO
 
-ALTER DATABASE WideWorldImporters SET QUERY_STORE = ON (OPERATION_MODE = READ_WRITE);
+ALTER DATABASE WideWorldImporters SET QUERY_STORE = ON (OPERATION_MODE = READ_WRITE, DATA_FLUSH_INTERVAL_SECONDS = 300, INTERVAL_LENGTH_MINUTES = 1, MAX_STORAGE_SIZE_MB = 20, MAX_PLANS_PER_QUERY = 10);
 GO
 
 -- scripts will like these will persist the data changes over container restarts as well as image rebuilds 
