@@ -3,7 +3,7 @@
 --
 -- Last updated: 20141125
 --
--- © Itzik Ben-Gan
+-- ï¿½ Itzik Ben-Gan
 ---------------------------------------------------------------------
 
 -- creation script for sample database and tables
@@ -218,3 +218,7 @@ INSERT INTO dbo.Fact WITH (TABLOCK)
   FROM dbo.Dim1 AS D1
     CROSS JOIN dbo.Dim2 AS D2
     CROSS JOIN dbo.Dim3 AS D3;
+GO
+
+ALTER DATABASE PerformanceV3 SET QUERY_STORE = ON (OPERATION_MODE = READ_WRITE);
+GO  

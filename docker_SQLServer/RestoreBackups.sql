@@ -6,6 +6,20 @@ RESTORE DATABASE AdventureWorks2017 FROM DISK = '/usr/work/database_backups/Adve
  MOVE 'AdventureWorks2017_Log' TO '/var/opt/mssql/data/AdventureWorks2017.ldf'
 GO
 
+ALTER DATABASE AdventureWorks2017 SET QUERY_STORE = ON (OPERATION_MODE = READ_WRITE);
+GO
+
+RESTORE DATABASE [WideWorldImporters] FROM  DISK = N'/usr/work/database_backups/wwi.bak' 
+    WITH   
+    MOVE N'WWI_Primary' TO N'/var/opt/mssql/data/WideWorldImporters.mdf',  
+    MOVE N'WWI_UserData' TO N'/var/opt/mssql/data/WideWorldImporters_UserData.ndf',  
+    MOVE N'WWI_Log' TO N'/var/opt/mssql/data/WideWorldImporters.ldf',  
+    MOVE N'WWI_InMemory_Data_1' TO N'/var/opt/mssql/data/WideWorldImporters_InMemory_Data_1'
+GO
+
+ALTER DATABASE WideWorldImporters SET QUERY_STORE = ON (OPERATION_MODE = READ_WRITE);
+GO
+
 -- scripts will like these will persist the data changes over container restarts as well as image rebuilds 
 -- if you are using external volume 
 CREATE DATABASE heroes;
