@@ -1,1 +1,0 @@
--- C:\Users\sin17h\Documents\sql-server-samples\samples\features\in-memory-database\memory-optimized-tempdb-metadata>ostress.exe -Slocalhost,1401 -USA -Ppassw0rd1! -Q"Select name from sys.databases" -n1 -r1

@@ -6,7 +6,7 @@
 use master;
 go  
 
-SELECT compatibility_level,*
+SELECT compatibility_level, is_query_store_on, *
 from sys.databases
 
 use WideWorldImporters;
