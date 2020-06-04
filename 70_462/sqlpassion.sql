@@ -1,3 +1,5 @@
+--SQL Server Quickies by Klaus Aschenbrenner @Aschenbrenner. 
+
 --questions: 
 --1) in case of a non-unique nci, the CI key is also stored in the index pages/nonleaf pages(it would be stored in leaf page 
 --anyways). What happens if the non-unique nci is on a heap. Is the RID stored in the non-leaf pages? What happens in case of non-unique CI?
