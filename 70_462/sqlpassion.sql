@@ -48,6 +48,16 @@
 --3. Locks provide transactional consitency and synchronize access to data at the relational level(row or table) while latches synchronize access to data structures(pages) between threads
 --4. The difference of the recovery model (full/Simple) is how SQL Server deals with the clearing of the transaction log.
 
+--
+use master;
+go
+
+if exists(select * from sys.databases where name=N'testdb')
+	alter database testdb set single_user with rollback immediate;
+go
+drop database if exists testdb
+go
+
 create database testdb
 go
 
@@ -60,7 +70,7 @@ create table tbl
 	address char(100)
 )
 go
-
+--row size 207 bytes (7 bytes for metadata in each row)
 insert into tbl values
 ('ramneek','singh','sdfdsghgfh 32 esdfsdf,ewr')
 go 2
@@ -74,9 +84,9 @@ dbcc ind(testdb,tbl,-1)
 --remember page header size is 96 bytes, then we have payload and then the rowoffset array(aslot array).
 --row offset array need 2 bytes to store location for each record
 --dump the first data page using FID(FileID) and PID(PageID) of the page. First record in data pages are at offset 96
-dbcc page(testdb,1,312,3)
-dbcc page(testdb,1,312,1)
-dbcc page(testdb,1,312,2)
+dbcc page(testdb,1,240,3)
+dbcc page(testdb,1,240,1)--this shows u the row-offset array/table
+dbcc page(testdb,1,240,2)
 
 --u can also use the dmf dm_db_index_physical_stats to get similar info
 SELECT
@@ -88,10 +98,14 @@ SELECT
 FROM sys.dm_db_index_physical_stats (DB_ID (N'testdb'), OBJECT_ID (N'tbl'), -1, 0, 'DETAILED');
 GO
 
+--quickie 2: 
+
 use master
 go
 drop database testdb
 go
+
+--quickie 2L https://www.youtube.com/watch?v=mWDWHMYVXF4
 
 dbcc traceon(3604)
 go
@@ -129,6 +143,8 @@ dbcc page(tpc_e,1,511232,3)
 dbcc page(tpc_e,1,511233,3)
 
 
+
+--quickie 3: https://www.youtube.com/watch?v=3x5viBTd5ok
 create database allocationuntis
 go
 
@@ -258,10 +274,12 @@ use master
 go
 drop database allocationuntis
 
+--quickie 4: https://www.youtube.com/watch?v=PGnwmfzLuok
+
 --now for each allocation unit, an IAM page is created. IAM page tells which pages(in case of mixed extents) and which extents belong to the table 
---and which not. like GAM and SGAM pages, it too maps 4 GB of database file(it is also a bitmap). All IAM pages have 8 page pointer slots and then a set of bits that map 
---a range of extents onto a file. The 8 page pointer slots are filled only for the 1rst IAM page for an object. if the mapping bit for a particular 
---extent is set, then that belongs to the table associated with the IAM and if 0 then not.
+--and which not. like GAM and SGAM pages, it too maps 4 GB of database file(it is also a bitmap). All IAM pages have 8 page pointer slots and then a set 
+--of bits that map a range of extents onto a file. The 8 page-pointer slots are filled only for the 1rst IAM page for an object. if the mapping bit
+--for a particular extent is set, then that belongs to the table associated with the IAM and if 0 then not.
 create database iampages;
 go
 
@@ -293,7 +311,7 @@ go
 --get the iam page for table t
 --on prior versions(2012 and 2014?), 1 page in a mixed extent would be used. On newer versions, 1 page in uniform extent would be used.
 --the allocated page ids returned by the IAM page would be the same as retruned by dbcc ind
-dbcc page(iampages,1,320,3)
+dbcc page(iampages,1,93,3)
 go
 
 insert into t values
@@ -302,14 +320,13 @@ insert into t values
 )
 go 8
 
---this will return 2 pages: IAM page with pagetype 10 and data page with pagetype 1. get the first data page for the table
+--this will return 10 pages: IAM page with pagetype 10 and 9 data page with pagetype 1. 
 dbcc ind(iampages, t, -1)
 go
 
---get the iam page for table t
---on prior versions(2012 and 2014?), 1 page in a mixed extent would be used. On newer versions, 1 page in uniform extent would be used.
---the allocated page ids returned by the IAM page would be the same as retruned by dbcc ind
-dbcc page(iampages,1,320,3)
+--on prior versions(2012 and 2014?), 8 pages in a mixed extent and 1 page uniform extent would be used. On newer versions, so 2 uniform extents are 
+--allocated to hold the 9 data pages
+dbcc page(iampages,1,93,3)
 go
 
 use master
