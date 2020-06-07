@@ -329,6 +329,15 @@ go
 dbcc page(iampages,1,93,3)
 go
 
+--this gives you the  (FileID:PageID:SlotID) for each record. This is the row identifier RID that is also internally used by non-clustered indexes on a heap.
+--this formatted RID is not stored on the data page along with the record but has been generated from metadata
+select *
+from t
+CROSS APPLY (select sys.fn_PhysLocFormatter(%%physloc%%)) as f(rid)
+CROSS APPLY sys.fn_PhysLocCracker(%%physloc%%) 
+go
+
+
 use master
 go
 drop database iampages
