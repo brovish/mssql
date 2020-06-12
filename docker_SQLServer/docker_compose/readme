@@ -1,0 +1,4 @@
+docker-compose up
+
+Might get memory allocation errors like: [Failed to execute SystemTaskEntryPoint: unable to allocate MsqlXactManager]
+Go to docker settings and increase the default of 2gb memory allocated for containers to 8 gb.

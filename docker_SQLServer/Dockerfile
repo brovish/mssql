@@ -25,6 +25,7 @@ EXPOSE 1433
 #Block2: The following is used for running the image
 #the program/script that we want to execute when the image is run. This program/script has to 
 #be copied into the image as shown above. This is what is executed when [docker run] command
+# CMD [ "/opt/mssql/bin/sqlservr" ]
 CMD /bin/bash ./entrypoint.sh
 
 ##in the terminal window build the image and tag it mssql:dev You can also put this in a ps1 file
