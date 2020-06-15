@@ -1,3 +1,9 @@
+use master;
+go
+
+if exists(select * from sys.databases where name='sql_anti_patterns')
+	drop database sql_anti_patterns
+
 create database sql_anti_patterns;
 go
 
