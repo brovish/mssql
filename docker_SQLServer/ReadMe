@@ -7,3 +7,8 @@ SQL Server 2019 Learning Series
 https://www.youtube.com/playlist?list=PL-_k_UrAvrYugTB6GXpPSs_NMdTVX7XRD
 
 https://github.com/microsoft/sql-server-samples/tree/master/samples/features/sql2019notebooks
+
+https://github.com/microsoft/sqlworkshops-sql2019workshop/blob/master/sql2019workshop/10_Additional_Migration.md
+
+sql-assessment-api from microsoft to evaluate best practises on a ss instance:
+https://github.com/microsoft/sql-server-samples/tree/master/samples/manage/sql-assessment-api
