@@ -342,8 +342,10 @@ use master
 go
 drop database iampages
 
+
+--quickie 5: https://www.youtube.com/watch?v=91EZt5y4uiA
 --bookmark lookup deadlock occurs when out of 2 concurrent sessions one is reading data from a NCI and has to perform lookups into
---CI and other one is updating the CI(the key CI key) and thus has to update the NCI bookmark as well.
+--CI and other one is updating the CI(the key CI key) and thus has to update the NCI bookmark as well (NCI leaf pages stored the CI key).
 --when NCI is waiting to accquire a shared lock on CI to read data while CI has X(exclusive) lock and it is waiting to get a 
 --exclusive(X) lock on NCI. So both are blocking each other and we have a deadlock
 
@@ -763,6 +765,9 @@ dbcc page(UniqueCIStructure, 1, 2008, 1)
 use master
 go
 drop database UniqueCIStructure;
+
+
+--quickie 10: https://www.youtube.com/watch?v=ratvzQllAmw
 
 --forwarding records/pointer. Issue with heap tables(why not an issue with B-Tree tables?). When a record moves to a different physical location in a heap, 
 --a fwd'ing record--/pointer is placed in it's original place. happens when a var length col is updated and the row can't fit on the page.
