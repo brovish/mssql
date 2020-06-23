@@ -403,6 +403,7 @@ go
 drop database bookmarklkupdl
 
 
+--quickie 6: https://www.youtube.com/watch?v=XJ67oHBM2Hw
 --thread pool starvation. By default x64 bit SQL Server instance will have 512 threads if core count is <=4 and 576 if core count is <8 
 --and so on. All the databases on the SQL server instance will share the same thread pool. You can modify the default thread pool size.
 --When a thread running a query is in signal wait state or resource wait state, that thread is not available to do other tasks. Imagine 
@@ -432,6 +433,10 @@ begin
 select * from t;
 end
 
+EXEC sp_configure 'show advanced options', 1;  
+GO  
+RECONFIGURE ;  
+GO  
 --config value and run value is 0. means the default setting is being used
 sp_configure 'max worker threads'
 
@@ -454,6 +459,8 @@ select * from sys.dm_os_waiting_tasks where session_id=54--session 54 is the one
 --it does have worked threads to process new requests. A special thread is reserved for DAC and DAC can be used either using sqlcmd
 --or in ssms. For ssms, provide the server name as: admin:XPSDEGRAAFF\SQLSERVER2017
 --C:\Program Files\Microsoft Corporation\RMLUtils>ostress.exe -SXPSDEGRAAFF\SQLSERVER2017 -Q"EXEC threadpoolwaits.dbo.readworkload" -n600
+
+--run this in a different session (1rst runs the transaction, second executes the sp and this 3rd queries waiting_tasks)
 select * from sys.dm_os_waiting_tasks where wait_type ='LCK_M_IS'
 select * from sys.dm_os_waiting_tasks where wait_type ='threadpool'
 
@@ -464,7 +471,7 @@ select * from sys.dm_os_waiting_tasks where wait_type ='threadpool'
 --analyze all current executing requests waiting for shared lock.
 --1> select * from sys.dm_os_waiting_tasks where wait_type ='LCK_M_IS'
 --1> go
---analyze all current executing requests in sql server
+--analyze all current executing requests in sql server..queries with 'threadpool' wait type won't show here as they did not start not executing(and thus have not been assigned a worker thread).
 --1> select r.command, r.plan_handle, r.wait_type, r.wait_resource, r.wait_time, r.session_id, r.blocking_session_id from sys.dm_exec_requests as r inner join sys.dm_exec_sessions as s on r.session_id = s.session_id where s.is_user_process = 1
 --1> go
 --analyze head blocker session
