@@ -1,2 +1,6 @@
+--you can check if it is already MEMORY_OPTIMIZED or not
+ --SELECT SERVERPROPERTY('IsTempdbMetadataMemoryOptimized');
+ --go
+
 ALTER SERVER CONFIGURATION SET MEMORY_OPTIMIZED TEMPDB_METADATA = ON;
 GO

@@ -494,6 +494,10 @@ use master
 go
 drop database threadpoolwaits
 
+--quickie 7: https://www.youtube.com/watch?v=MMZAZet64TU
+--refer \mssql\docker_SQLServer\database_scripts\sql_2019_features_lab\tempdb\tempdb.sql tempdb contention is solved in sql2019 by
+--eliminating page latch contention for tempdb-heavy workloads
+
 create database latchcontentiondemo
 go
 
@@ -532,7 +536,9 @@ go
 --the following sample will demonstrate allocation bitmap contention(GAM, SGAM and PFS pages. in every data file file header is page 0, PFS page 1, GAM page 2 and SGAM is
 --page 3) in tempdb under high concurrent workload. There is a PFS page after every 8000 pages after first and GAM and SGAM each after 64000 extents(4GB).
 -- two workarounds exist to reduce Tempdb contention: add more tempdb files and disable mixed extents(this is already the default in new versions). 
---latches as intersnal sql server 'locks' used when to handle concurrent access scenarios. although this example is showing latch contention for non-data
+--latches as intersnal sql server 'locks' used when to handle concurrent thread access scenarios (this is the key difference: latches handle concurrent thread access
+--while locks handle concurrent transaction access. Locks can be managed by user code by setting transaction isolation level or by setting NOLOCK hint but user 
+--cannot manage latches). although this example is showing latch contention for non-data 
 --pages, the concept remains same for data pages as well. Take for example when we concurrently trying to update 2 separate records in a table. both updates will
 --get a row-level lock(hopefully) and if they are on spearate pages, both the updates can proceed concurrently with both page being 'latched' with PAGELATCH_EX. But if they 
 --are on the same page, then only one thread can get the PAGELATCH_EX latch and the other thread will have to wait even when the locks involved are row-level for 
