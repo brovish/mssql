@@ -536,8 +536,8 @@ go
 --the following sample will demonstrate allocation bitmap contention(GAM, SGAM and PFS pages. in every data file file header is page 0, PFS page 1, GAM page 2 and SGAM is
 --page 3) in tempdb under high concurrent workload. There is a PFS page after every 8000 pages after first and GAM and SGAM each after 64000 extents(4GB).
 -- two workarounds exist to reduce Tempdb contention: add more tempdb files and disable mixed extents(this is already the default in new versions). 
---latches as intersnal sql server 'locks' used when to handle concurrent thread access scenarios (this is the key difference: latches handle concurrent thread access
---while locks handle concurrent transaction access. Locks can be managed by user code by setting transaction isolation level or by setting NOLOCK hint but user 
+--latches as intersnal sql server 'locks' used when to handle concurrent thread access scenarios (this is the key difference: LATCHES HANDLE CONCURRENT THREAD ACCESS
+--WHILE LOCKS HANDLE CONCURRENT TRANSACTION ACCESS. Locks can be managed by user code by setting transaction isolation level or by setting NOLOCK hint but user 
 --cannot manage latches). although this example is showing latch contention for non-data 
 --pages, the concept remains same for data pages as well. Take for example when we concurrently trying to update 2 separate records in a table. both updates will
 --get a row-level lock(hopefully) and if they are on spearate pages, both the updates can proceed concurrently with both page being 'latched' with PAGELATCH_EX. But if they 
@@ -619,6 +619,11 @@ use master
 go
 drop database latchcontentiondemo
 
+--quickie 8: https://www.youtube.com/watch?v=xvbyG-fsbdw
+--hash indexes (along with bw trees. both of them are latch and lock free. So you can read and write concurrently)which are part of in-memory oltp features of hekaton
+--hash index is stored internally as a hashtable and during the creation of the hash-index you have to define the number of hash buckets you want to have. 
+--The number of hashbuckets you create will decide if you have hash collision issues or not.
+
 create database hashcollisions
 go
 use hashcollisions
@@ -631,7 +636,7 @@ alter database hashcollisions
 add file 
 (
 	name='hekatonContainer',
-	filename='C:\Program Files\Microsoft SQL Server\MSSQL14.SQLSERVER2017\MSSQL\DATA\hekatonContainer.ndf'
+	filename='C:\mssqlsrv2019\data\hekatonContainer.ndf'
 )
 to filegroup [hekatonFG]
 go
@@ -654,6 +659,7 @@ use master
 go
 drop database hashcollisions
 
+--quickie 9: https://www.youtube.com/watch?v=C4_tqLsF9cM
 create database UniqueCIStructure;
 go
 
@@ -671,7 +677,7 @@ comments char(189)
 go
 
 --insert 80,000 records..20 rows fit in one page. So 80,000 would fit in 80000/20 = 4,000 pages as we will see below.
-declare @i int = 1;
+declare @i as int = 1;
 while(@i<=80000)
 begin
 	insert into cust values
@@ -705,11 +711,12 @@ select * from sys.stats_columns where object_id =  OBJECT_ID('cust');--which col
 --and a col with low selectivity will have high density. Density = 1/(no. of distinct values in a col). The lower the col density, the more 
 --suitable it is for nci use.
 
+sp_help 'cust'
 update statistics dbo.cust
-dbcc show_statistics('cust', 'PK__cust__B61ED7F5E167DD0F')
---true distribution stats
+dbcc show_statistics('cust', 'PK__cust__B61ED7F589D15878')
+--true distribution stats as the above did a sampling to generate stats
 update statistics dbo.cust with fullscan
-dbcc show_statistics('cust', 'PK__cust__B61ED7F583E1873B')
+dbcc show_statistics('cust', 'PK__cust__B61ED7F589D15878')
 
 --create helper table to sore output of dbcc ind 
 CREATE TABLE sp_table_pages 
@@ -760,20 +767,20 @@ go
 dbcc traceon(3604)
 go
 
---dump the root index page (found using dbcc ind or by filtering the table containing the dumped output of dbcc ind). returns 269 records as it points to 14 pages in next level
+--dump the root index page (found using dbcc ind or by filtering the table containing the dumped output of dbcc ind). returns 14 records as it points to 14 pages in next level
 --the column customerid in the output tells us the smallest id value stored on a particular page in the next level
-dbcc page(UniqueCIStructure, 1, 959, 3)
+dbcc page(UniqueCIStructure, 1, 1007, 3)
 
---dump the intermediate index page. returns 269 records as it points to 269 pages in next level 
-dbcc page(UniqueCIStructure, 1, 2310, 3)
+--dump the intermediate index page using ChildPageID from above. returns 269 records as it points to 269 pages in next level 
+dbcc page(UniqueCIStructure, 1, 2358, 3)
 
---dump the leaf/data page. the row offset array in the end shows the page storing 20 records. we go through all the 20 rows on the page using row offset array 
---to find the row we are looking for(the page has laready been read into memory). Compare that with a NCI RID lookup(bookmark lookup for a heap) which takes 
+--dump the leaf/data page using ChildPageID from above. the row offset array in the end shows the page storing 20 records. we go through all the 20 rows on the page using row 
+--offset array to find the row we are looking for(the page has laready been read into memory). Compare that with a NCI RID lookup(bookmark lookup for a heap) which takes 
 --directly to the row as it stores the SlotID as well. in this case slot 12 has our row.
 --one question i have is that i thought the CI defined order of rows was reflected by slot array not by the actual order of rows on the page. 
 --so the data should not have been physically ordered on individual pages but should have let the slot indexes define the order. But my testing show the rows are
 --actually being stored physically ordered on the page.
-dbcc page(UniqueCIStructure, 1, 2008, 1)
+dbcc page(UniqueCIStructure, 1, 2056, 1)
 
 use master
 go
