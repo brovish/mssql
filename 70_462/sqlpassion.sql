@@ -875,7 +875,7 @@ go
 drop database forwardingrecords;
 go
 
---quickie 10: https://www.youtube.com/watch?v=ratvzQllAmw
+--quickie 11: https://www.youtube.com/watch?v=qcyQqaxBbiw
 
 create database NonClusteredIndex
 go
@@ -971,6 +971,9 @@ go
 drop database NonClusteredIndex;
 go
 
+
+--quickie __: https://www.youtube.com/watch?v=ccpkG-Jh0XE
+
 create database onlystatsNoIndexCol
 go
 use onlystatsNoIndexCol
@@ -979,7 +982,6 @@ go
 --stats are used to create a efficient execution plan and index are used faster retreival of data. But since index creation creates stats as well
 --so we get both benefits. the use of non-indexed(or non leading in case of compound key) column in a predicate leads to autocreation of stats on that
 --col(if autocreate stats option is on. autocreatestats option does not apply to index as for index stats are always created)
-
 
 --nested loop join operator
 use AdventureWorks2014
