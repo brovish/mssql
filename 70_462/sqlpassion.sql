@@ -660,13 +660,13 @@ go
 drop database hashcollisions
 
 --quickie 9: https://www.youtube.com/watch?v=C4_tqLsF9cM
-create database UniqueCIStructure;
+create database UniqueClusteredIndexStructure;
 go
 
-use UniqueCIStructure;
+use UniqueClusteredIndexStructure;
 go
 
---create a table with length 400 bytes(393 + 7bytes overhead). Therefore u can fit 20 records on 1 page(8192 - 96 bytes overhead= 8060 bytes. 8060/400=20.15)
+--create a table with length 400 bytes(393 + 7bytes overhead). Therefore u can fit 20 records on 1 page(8192 - 96 bytes overhead= 8096 bytes. 8096/400=20.24)
 create table cust
 (
 customerid int not null primary key identity(1,1),
@@ -693,7 +693,7 @@ go
 select * from cust 
 
 --use the dmf dm_db_index_physical_stats 
-SELECT * FROM sys.dm_db_index_physical_stats (DB_ID (N'UniqueCIStructure'), OBJECT_ID (N'cust'), -1, 0, 'DETAILED');
+SELECT * FROM sys.dm_db_index_physical_stats (DB_ID (N'UniqueClusteredIndexStructure'), OBJECT_ID (N'cust'), -1, 0, 'DETAILED');
 GO
 
 --u can also view the distribution of the data by checking the stats for the index. run sp_help on the table
@@ -740,7 +740,7 @@ Primary Key (PageFID, PagePID));
 go
 
 insert into sp_table_pages
-exec('dbcc ind(UniqueCIStructure, cust, 1)')
+exec('dbcc ind(UniqueClusteredIndexStructure, cust, 1)')
 
 --retreive all index pages/non-leaf level (pagetype = 2)
 select *
@@ -769,10 +769,10 @@ go
 
 --dump the root index page (found using dbcc ind or by filtering the table containing the dumped output of dbcc ind). returns 14 records as it points to 14 pages in next level
 --the column customerid in the output tells us the smallest id value stored on a particular page in the next level
-dbcc page(UniqueCIStructure, 1, 1007, 3)
+dbcc page(UniqueClusteredIndexStructure, 1, 1007, 3)
 
 --dump the intermediate index page using ChildPageID from above. returns 269 records as it points to 269 pages in next level 
-dbcc page(UniqueCIStructure, 1, 2358, 3)
+dbcc page(UniqueClusteredIndexStructure, 1, 2358, 3)
 
 --dump the leaf/data page using ChildPageID from above. the row offset array in the end shows the page storing 20 records. we go through all the 20 rows on the page using row 
 --offset array to find the row we are looking for(the page has laready been read into memory). Compare that with a NCI RID lookup(bookmark lookup for a heap) which takes 
@@ -780,11 +780,11 @@ dbcc page(UniqueCIStructure, 1, 2358, 3)
 --one question i have is that i thought the CI defined order of rows was reflected by slot array not by the actual order of rows on the page. 
 --so the data should not have been physically ordered on individual pages but should have let the slot indexes define the order. But my testing show the rows are
 --actually being stored physically ordered on the page.
-dbcc page(UniqueCIStructure, 1, 2056, 1)
+dbcc page(UniqueClusteredIndexStructure, 1, 2056, 1)
 
 use master
 go
-drop database UniqueCIStructure;
+drop database UniqueClusteredIndexStructure;
 
 
 --quickie 10: https://www.youtube.com/watch?v=ratvzQllAmw
@@ -875,9 +875,11 @@ go
 drop database forwardingrecords;
 go
 
-create database nci
+--quickie 10: https://www.youtube.com/watch?v=ratvzQllAmw
+
+create database NonClusteredIndex
 go
-use nci
+use NonClusteredIndex
 go
 
 --row length 393 + 7 bytes overhead = 400 bytes. 8,060/400 = 20.15. So 20 rows stored on each page.
@@ -893,7 +895,7 @@ go
 create unique clustered index idx_custid on cust(customerid)
 go
 
---insert 80,000 records..20 rows fit in one page. So 80,000 would fit in 80000/20 = 4,000 pages as we will see below.
+--insert 80,000 records..20 rows fit in one page. So 80,000 would fit in 80000/20 = 4,000 pages as we will ctsee below.
 declare @i int = 1;
 while(@i<=80000)
 begin
@@ -911,10 +913,13 @@ go
 select * from cust
 
 --non-unique non clustered index on CI
+--how many data pages in NCI? 100 (customername index key) +  4 (customerid CI key for bookmark lookup) + 4(metadata. check the page dump form which u can calculate) = 111 row size
+--page_size/row_size = no. of records per page 8060/111 = 72. 
+--total_no_records/records_per_page = 80000/72=1111 data page in NCI. But the actual no of data pages in NCI are 1101??
 create nonclustered index idx_nonuniquenci_custname on cust(customername)
 
 --index_id 1 is for CI and index_id 2 is for nci
-SELECT	* FROM sys.dm_db_index_physical_stats (DB_ID (N'nci'), OBJECT_ID (N'cust'), -1, 0, 'DETAILED');
+SELECT	* FROM sys.dm_db_index_physical_stats (DB_ID (N'NonClusteredIndex'), OBJECT_ID (N'cust'), -1, 0, 'DETAILED');
 GO
 
 --create helper table to sore output of dbcc ind 
@@ -940,7 +945,7 @@ go
 
 --passing 2 for nci type
 insert into sp_table_pages
-exec('dbcc ind(nci, cust, 2)')
+exec('dbcc ind(NonClusteredIndex, cust, 2)')
 
 --get the root page of nci.. the index has 3 levels
 select * from sp_table_pages where IndexLevel=2
@@ -953,17 +958,17 @@ go
 --stored in the index pages/nonleaf pages(it would be stored in leaf page anyways). What happens if the non-unique nci is on a
 --heap. Is the RID stored in the non-leaf pages?
 --Question:what happens in case of non-unique CI. 
-dbcc page('nci',1,4426,3)
+dbcc page('NonClusteredIndex',1,4858,3)
 
 --now dump out a page from the 2nd level of the nci(cuse a childpageid from the above dbcc output)
-dbcc page('nci',1,4431,3)
+dbcc page('NonClusteredIndex',1,4728,3)
 
 --now dump out a data page/leaf of the nci(cuse a childpageid from the above dbcc output)
-dbcc page('nci',1,5331,3)
+dbcc page('NonClusteredIndex',1,4536,3)
 
 use master;
 go 
-drop database nci;
+drop database NonClusteredIndex;
 go
 
 create database onlystatsNoIndexCol
