@@ -972,7 +972,7 @@ drop database NonClusteredIndex;
 go
 
 
---quickie __: https://www.youtube.com/watch?v=ccpkG-Jh0XE
+--quickie 12: https://www.youtube.com/watch?v=ccpkG-Jh0XE
 
 create database onlystatsNoIndexCol
 go
@@ -1048,6 +1048,7 @@ option(recompile);
 go
 
 
+--quickie 13: https://www.youtube.com/watch?v=7ffoWkFomqY
 create database tippingpoint
 go
 
