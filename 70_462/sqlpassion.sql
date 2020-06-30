@@ -705,7 +705,7 @@ select * from sys.stats where object_id =  OBJECT_ID('cust');--stats created by 
 --those created non-indexed predicate columns will have system generated name
 select * from sys.stats_columns where object_id =  OBJECT_ID('cust');--which columns are covered by stats..
 
---stats are used to create a efficient execution plan and index are used faster retreival of data. example below in db onlystatsNoIndexCol.
+--stats are used to create a efficient execution plan and index are used faster retreival of data. example in quickie 12 below.
 --if you have in-efficient execution plan, then it is not necessary that the stats need to be updated as the problem could also be parameter 
 --sniffing. remember the excellent talk by kimberley tripp on sp caching. a column with high selectivity(uniqueness) will have low density 
 --and a col with low selectivity will have high density. Density = 1/(no. of distinct values in a col). The lower the col density, the more 
@@ -974,11 +974,6 @@ go
 
 --quickie 12: https://www.youtube.com/watch?v=ccpkG-Jh0XE
 
-create database onlystatsNoIndexCol
-go
-use onlystatsNoIndexCol
-go
-
 --stats are used to create a efficient execution plan and index are used faster retreival of data. But since index creation creates stats as well
 --so we get both benefits. the use of non-indexed(or non leading in case of compound key) column in a predicate leads to autocreation of stats on that
 --col(if autocreate stats option is on. autocreatestats option does not apply to index as for index stats are always created)
@@ -1048,7 +1043,7 @@ option(recompile);
 go
 
 
---quickie 13: https://www.youtube.com/watch?v=7ffoWkFomqY
+--quickie 14: https://www.youtube.com/watch?v=rZ6B4dXjcMg
 create database tippingpoint
 go
 
@@ -1059,7 +1054,7 @@ go
 use tippingpoint
 go
 
---20 records on one data page. 8060/400=20.15
+--20 records on one data page with records 4+100+100+185+7 =400 byte long. 8060/400=20.15
 create table customers
 (
 custid int not null,
@@ -1118,16 +1113,22 @@ create nonclustered index idxnci on customers(value)
 go
 
 
---tipping point is between 25% and 33% of total pages. We have 4000 pages. Remeber we are talking about percentage of pages, not no. of records(as records size varies and thus the total number that fits on a page).
---but the 'number of pages' value we come up with will be equal to the 'number of rows' value in the sense that the same 'number of rows' read from NCI will cause that number of page reads into CI.
+--tipping point is between 25% and 33% of total pages. We have 4000 pages. Remember we are talking about percentage of pages, not no. of 
+--records(as records size varies and thus the total number that fits on a page).
+--but the 'number of pages' value we come up with will be equal to the 'number of rows' value in the sense that the same 'number of rows' read 
+--from NCI will cause that number of page reads into CI.
 --25/100*4000 pages = 1000 pages. 
 --33/100*4000 pages = 1320 pages.
 
---bookmark lookup performed. we are reading 1062 records, you are performing 1062 lookups in to the CI and thus 1062 page reads(remember nested loop join operator is used for bookmark lookups
---and the NCI is the outer table. Thus for each read from NCI, there is one corresponding page read from CI or heap). Now 1062 page reads into CI correspond to 1062 rows read from NCI. 
---if you check the logical reads from stat io, you will see that number something like 3186. That is because to seek to a page in CI, it has to read index pages as well. Now the CI has 3 levels.
+--bookmark lookup performed. we are reading 1062 records, you are performing 1062 lookups in to the CI and thus 1062 page reads(remember nested loop
+--join operator is used for bookmark lookups
+--and the NCI is the outer table. Thus for each read from NCI, there is one corresponding page read from CI or heap). Now 1062 page reads into CI 
+--correspond to 1062 rows read from NCI. 
+--if you check the logical reads from stat io, you will see that number something like 3186. That is because to seek to a page in CI, it has to 
+--read index pages as well. Now the CI has 3 levels.
 --thus 3*1062 total logical IO
---if this plan is cached and reused for a bigger parameter value, it would be bad performance wise as it would still perform bookmark lookups. Parameter sniffing is the issue(not outdated stats)
+--if this plan is cached and reused for a bigger parameter value, it would be bad performance wise as it would still perform bookmark lookups. 
+--Parameter sniffing is the issue(not outdated stats)
 select * from customers 
 where value<1063
 
@@ -1140,8 +1141,8 @@ SELECT
 	*
 FROM sys.dm_db_index_physical_stats (DB_ID (N'tippingpoint'), OBJECT_ID (N'customers'), -1, 0, 'DETAILED');
 GO
---this performs CI scan..reading 1063 rows(the tipping point) would have led to 1063 page reads from CI which sql server deems to be costly. thus it performed a CI scan instead and read 
---the 4000 leaf pages(shows as total logical IO)
+--this performs CI scan..reading 1063 rows(the tipping point) would have led to 1063 page reads from CI which sql server deems to be costly. thus it 
+--performed a CI scan instead and read the 4000 leaf pages(shows as total logical IO)
 select * from customers 
 where value<1064
 
@@ -1149,6 +1150,8 @@ use master
 go
 drop database tippingpoint
 go
+
+--quickie 13: https://www.youtube.com/watch?v=7ffoWkFomqY
 
 --13: hash join is used when joining big un-indexed tables. For data warehouse scenarios, it might be fine but for OLTP scenarios, u don't
 --really want to see a hash join. Hash join suggest there is a problem with indexing strategy. Almost always Hash join requires a memory
@@ -1250,6 +1253,15 @@ from t1 inner hash join t2 on t1.col2 = t2.col2
 where t1.col2=2;
 go
 
+use master
+go
+
+alter database hashspills set single_user with rollback immediate 
+drop database hashspills
+go
+
+
+--quickie 15: https://www.youtube.com/watch?v=ngx6sO844UA
 
 create database mergejoin
 go
