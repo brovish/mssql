@@ -1320,6 +1320,8 @@ drop database mergejoin
 go
 
 
+--quickie 16: https://www.youtube.com/watch?v=7Bsscz-tcfA
+
 create database dbShrinking
 go
 
@@ -1382,7 +1384,8 @@ dbcc shrinkdatabase(dbShrinking)
 select avg_fragmentation_in_percent from sys.dm_db_index_physical_stats(DB_ID('dbShrinking'), OBJECT_ID('cust'), 1, null, 'limited')
 select avg_fragmentation_in_percent from sys.dm_db_index_physical_stats(DB_ID('dbShrinking'), OBJECT_ID('cust'), 2, null, 'limited')
 
---rebuild indexes to defrag. But notice the size of the data file after defrag. The size even larger than before we performed drop! why?
+--rebuild indexes to defrag since the fragmentation is greater than 30%. But notice the size of the data file after defrag. The size even larger than before we performed drop! why?
+--Because index rebuild operation needs additional space in datafile(but shouldn't the index rebuild operation use tempdb for its operations??)
 alter index id1 on cust rebuild;
 alter index idx2 on cust rebuild;
 select avg_fragmentation_in_percent from sys.dm_db_index_physical_stats(DB_ID('dbShrinking'), OBJECT_ID('cust'), 1, null, 'limited')
