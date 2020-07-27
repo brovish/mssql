@@ -1399,6 +1399,8 @@ alter database dbShrinking set single_user with rollback immediate
 drop database dbShrinking 
 go
 
+--quickie 17: 
+
 --round robin policy sql server uses for datafiles makes sure that all the datafiles in the file group become completely full at around the same time. So if the files sizes in a file group
 --have different sizes, SQL server will fill them proportionally to make sure, in the end, they become full at the same time. So you get an IO imbalance and a performance hit.
 create database multipleFilegroups on primary
