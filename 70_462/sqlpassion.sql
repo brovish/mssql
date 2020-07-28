@@ -1399,10 +1399,15 @@ alter database dbShrinking set single_user with rollback immediate
 drop database dbShrinking 
 go
 
---quickie 17: 
+--quickie 17: https://www.youtube.com/watch?v=Qwq_CzlQzg8
 
---round robin policy sql server uses for datafiles makes sure that all the datafiles in the file group become completely full at around the same time. So if the files sizes in a file group
---have different sizes, SQL server will fill them proportionally to make sure, in the end, they become full at the same time. So you get an IO imbalance and a performance hit.
+--if you create a file group and then store the different files in that filegroup on different physical disks, it will create IO performance(due to use of round robin policy??)
+--round robin policy sql server uses for datafiles makes sure that all the datafiles in the file group become completely full at around the same time. So if the files sizes in a 
+--file group have different sizes, SQL server will fill them proportionally to make sure, in the end, they become full at the same time. So you get an IO imbalance and a 
+--performance hit.
+
+--what is happening is that the extents are allocated on different files in the FG based on a round robin policy. So if you are inserting data into a table, the first 8 pages(1 extent)
+--are allocated on the 1rst file, the next 8 page(2nd extent) on the second file and so on(files grow evenly)
 create database multipleFilegroups on primary
 (
 --primary filegroup
@@ -1410,7 +1415,7 @@ Name= 'multipleFilegroups',
 FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL14.SQL2017\MSSQL\DATA\multipleFilegroups.mdf' , 
 SIZE = 5MB, MAXSIZE=unlimited, FILEGROWTH = 1024KB 
 ),
---secondary file group. this filegroup will have multiple files
+--secondary file group. this filegroup will have multiple files. For the purposes of this demo, they are on same physical disk but should be on separate disks to get the IO improvements
 FileGroup FileGroup1
 (
 Name= 'multipleFilegroups1',
@@ -1479,6 +1484,8 @@ go
 alter database multipleFilegroups set single_user with rollback immediate 
 drop database multipleFilegroups
 go
+
+--quickie 17: 
 
 --demonstrates halloween problem that can come up during an update execution plan. Spool operator(where the records that satify the where predicate are written to the temp) is used to protect against halloween problem.
 --Spool operator separates the table from which data is being read and the table to which data is being written
