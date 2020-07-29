@@ -1407,7 +1407,10 @@ go
 --performance hit.
 
 --what is happening is that the extents are allocated on different files in the FG based on a round robin policy. So if you are inserting data into a table, the first 8 pages(1 extent)
---are allocated on the 1rst file, the next 8 page(2nd extent) on the second file and so on(files grow evenly)
+--are allocated on the 1rst file, the next 8 page(2nd extent) on the second file and so on(files grow evenly). I think it is solving the problem of resource contention(latch contention)
+-- waits due to latching of GAM pages. In a write heavy concurrent workload, IO performance degrades due to latching on GAM pages. Suppose there are concurrent threads waiting 
+--write data, then we concurrently try to get extents allocated from GAM bitmask, Excpet one threads, others looking to update the GAM (and thus get a extent allocated) have to wait. 
+--This can degrade performance in write intensive environments.
 create database multipleFilegroups on primary
 (
 --primary filegroup
@@ -1485,7 +1488,37 @@ alter database multipleFilegroups set single_user with rollback immediate
 drop database multipleFilegroups
 go
 
---quickie 17: 
+--quickie 18: https://www.youtube.com/watch?v=2XCc7hoKjJo
+
+--bookmark lookups
+use AdventureWorks2014;
+go
+
+set statistics io on;
+set statistics time on;
+go
+
+--no NCI contains these columns, so a bookmark lookup is performed which involves a NCI seek and a bookmark lookup resulting in 19 logical reads
+--2 reads for NCI seek and then 2 reads for each bookmark loopkup into CI(8 rows, therefore 16 reads).
+select AddressID, PostalCode
+from Person.Address
+where StateProvinceID = 42
+
+--remove the bookmark loopkup by using covering NCI that includes PostalCode
+create nonclustered index idx_Address_tatePRovinceID on Person.Address(StateProvinceID)
+include (PostalCode)
+
+--this time only 2 logial reads. Base table is not referenced(no bookmark lookup). Disadvantage is that data about PostalCode has to be maintained in 2 palces and hence write
+--performance degrades
+select AddressID, PostalCode
+from Person.Address
+where StateProvinceID = 42
+
+drop index Person.Address.idx_Address_tatePRovinceID;
+go
+
+
+--quickie 19: 
 
 --demonstrates halloween problem that can come up during an update execution plan. Spool operator(where the records that satify the where predicate are written to the temp) is used to protect against halloween problem.
 --Spool operator separates the table from which data is being read and the table to which data is being written
