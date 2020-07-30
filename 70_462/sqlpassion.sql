@@ -1407,10 +1407,13 @@ go
 --performance hit.
 
 --what is happening is that the extents are allocated on different files in the FG based on a round robin policy. So if you are inserting data into a table, the first 8 pages(1 extent)
---are allocated on the 1rst file, the next 8 page(2nd extent) on the second file and so on(files grow evenly). I think it is solving the problem of resource contention(latch contention)
--- waits due to latching of GAM pages. In a write heavy concurrent workload, IO performance degrades due to latching on GAM pages. Suppose there are concurrent threads waiting 
---write data, then we concurrently try to get extents allocated from GAM bitmask, Excpet one threads, others looking to update the GAM (and thus get a extent allocated) have to wait. 
---This can degrade performance in write intensive environments.
+--are allocated on the 1rst file, the next 8 page(2nd extent) on the second file and so on(files grow evenly). 
+
+--What is the problem it is trying to solve by having the different files on different physical disks?? I understand we solve IO bottleneck due to latch contention(resource 
+--contention) by having multiple files in a file group but why have them on different physical disks?? 
+--Latch contention (resource contention) waits happen due to latching of GAM pages. In a write heavy concurrent workload, IO performance degrades due to latching on GAM pages. Suppose 
+--there are concurrent threads waiting write data, then we concurrently try to get extents allocated from GAM bitmask, Except one of the threads, others looking to update the GAM (and 
+--thus get a extent allocated) have to wait. This can degrade performance in write intensive environments.
 create database multipleFilegroups on primary
 (
 --primary filegroup
