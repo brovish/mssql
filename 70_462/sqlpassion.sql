@@ -1521,10 +1521,14 @@ drop index Person.Address.idx_Address_tatePRovinceID;
 go
 
 
---quickie 19: 
+--quickie 19: https://www.youtube.com/watch?v=RSIZUVxzd48
 
 --demonstrates halloween problem that can come up during an update execution plan. Spool operator(where the records that satify the where predicate are written to the temp) is used to protect against halloween problem.
 --Spool operator separates the table from which data is being read and the table to which data is being written
+
+--halloween problems also demonstrates that the operators fetch one row at a time. The accompanying video by Klaus might be wrong in how he is demonstrating the index seek.
+--He is starting the scanning the rows from start till the condition is satisfied. IMO, for a non-equality predicate, a seek would be performed in NCI for value 3 and then all values less than that are range scanned to end.
+
 create database HalloweenProtection
 go
 
@@ -1559,6 +1563,8 @@ alter database HalloweenProtection set single_user with rollback immediate
 drop database HalloweenProtection
 go
 
+
+--quickie 20: 
 
 --cxpacket is not a indication of an problem always. In a parallel execution plan you will always have a cxpacket wait for the co-ordinator thread even if the worker threads finish on the same time.
 --the co-ordinator thread initially dispatches the worker threads with work and then sits there waiting for them all to complete so to then combine the output of worker threads before the start of 
