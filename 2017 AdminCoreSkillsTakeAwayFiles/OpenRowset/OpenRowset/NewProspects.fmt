@@ -1,0 +1,7 @@
+10.0
+4
+1       SQLCHAR       0       0   ";"      1     ProspectID               SQL_Latin1_General_CP1_CI_AS
+2       SQLCHAR       0       0   ";"      2     FirstName                SQL_Latin1_General_CP1_CI_AS
+3       SQLCHAR       0       0   ";"      3     MiddleName               SQL_Latin1_General_CP1_CI_AS
+4       SQLCHAR       0       0   "\r\n"   4     LastName                 SQL_Latin1_General_CP1_CI_AS
+

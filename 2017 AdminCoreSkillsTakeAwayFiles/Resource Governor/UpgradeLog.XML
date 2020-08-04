@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="Resource Governor">
+</Property><Property Name="Solution File" Value="G:\VPC Shared Data\Demos 2008\Resource Governor\Resource Governor.ssmssln">
+</Property><Property Name="Date" Value="Friday, 19 July 2013">
+</Property><Property Name="Time" Value="9:35 AM">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="Resource Governor.ssmssln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="Resource Governor.ssmssln" Description="Converted">
+</Event></UpgradeLog>

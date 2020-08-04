@@ -1,0 +1,5 @@
+CurrencyCode	CurrencyName	ExchangeRate	IsActive
+GBP	British Pound	0.7423	1
+PND	PNG Dollar	1.7822	0
+INR	Indian Rupee	56.4232	1
+JPY	Japanese Yen	93.8	1

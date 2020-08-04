@@ -1,0 +1,13 @@
+USE Compression;
+GO
+
+CREATE CLUSTERED COLUMNSTORE INDEX PK_FactResellerSales
+ON dbo.FactResellerSales
+WITH (DROP_EXISTING = ON, DATA_COMPRESSION = COLUMNSTORE_ARCHIVE);
+GO
+
+EXEC sp_spaceused 'dbo.FactResellerSales',false;
+GO
+
+SELECT 1328 * 100 / 12032;
+GO

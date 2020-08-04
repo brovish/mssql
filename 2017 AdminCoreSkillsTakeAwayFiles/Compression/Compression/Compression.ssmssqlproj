@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Compression">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="SDUPROD:GREGP50\Greg">
+          <Created>2017-05-14T14:20:12.8310069+02:00</Created>
+          <Type>SQL</Type>
+          <Server>SDUPROD</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName />
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="00 - Create Objects.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SDUPROD:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SDUPROD</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>00 - Create Objects.sql</FullPath>
+        </FileNode>
+        <FileNode Name="10 - Estimate Compression Savings.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SDUPROD:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SDUPROD</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>10 - Estimate Compression Savings.sql</FullPath>
+        </FileNode>
+        <FileNode Name="15 - Compressed Page Structures.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SDUPROD:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SDUPROD</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>15 - Compressed Page Structures.sql</FullPath>
+        </FileNode>
+        <FileNode Name="18 - Deciding on Compression Styles.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SDUPROD:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SDUPROD</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>18 - Deciding on Compression Styles.sql</FullPath>
+        </FileNode>
+        <FileNode Name="20 - Columnstore Compression.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SDUPROD:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SDUPROD</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>20 - Columnstore Compression.sql</FullPath>
+        </FileNode>
+        <FileNode Name="30 - Clustered Columnstore.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SDUPROD:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SDUPROD</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>30 - Clustered Columnstore.sql</FullPath>
+        </FileNode>
+        <FileNode Name="35 - Columnstore Archive.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SDUPROD:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SDUPROD</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>35 - Columnstore Archive.sql</FullPath>
+        </FileNode>
+        <FileNode Name="40 - Show Segment Structure.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SDUPROD:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SDUPROD</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>40 - Show Segment Structure.sql</FullPath>
+        </FileNode>
+        <FileNode Name="99 - Delete Objects.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>99 - Delete Objects.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

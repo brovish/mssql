@@ -1,0 +1,25 @@
+-- Execise 3
+
+USE master;
+GO
+
+CREATE FUNCTION dbo.UserClassifier()
+  RETURNS sysname WITH SCHEMABINDING
+AS BEGIN
+  DECLARE @WorkloadGroup sysname = 'default';
+
+  IF SUSER_SNAME() = N'HighPriorityUser' BEGIN
+    SET @WorkloadGroup = N'HighPriorityUsers';
+  END ELSE BEGIN
+    IF SUSER_SNAME() = N'MediumPriorityUser' BEGIN
+      SET @WorkloadGroup = N'MediumPriorityUsers';
+    END ELSE BEGIN
+      IF SUSER_SNAME() = N'LowPriorityUser' BEGIN
+        SET @WorkloadGroup = N'LowPriorityUsers';
+      END;
+    END; 
+  END;
+
+  RETURN @WorkloadGroup;
+END;
+GO
