@@ -3,7 +3,19 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
-        <ConnectionNode Name="SDUPROD:GREGP50\Greg">
+        <ConnectionNode Name="(local)\sql2019:NEXUS\sin17h">
+          <Created>2020-08-04T14:56:36.8275352+10:00</Created>
+          <Type>SQL</Type>
+          <Server>(local)\sql2019</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="SDUPROD:NEXUS\sin17h">
           <Created>2017-04-28T11:35:59.9179004+10:00</Created>
           <Type>SQL</Type>
           <Server>SDUPROD</Server>
@@ -20,22 +32,28 @@
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
         <FileNode Name="01 - CreateObjects.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\sql2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)\sql2019</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>01 - CreateObjects.sql</FullPath>
         </FileNode>
         <FileNode Name="02 - FileTable.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\sql2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)\sql2019</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>02 - FileTable.sql</FullPath>
         </FileNode>
         <FileNode Name="03 - DeleteObjects.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\sql2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)\sql2019</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>03 - DeleteObjects.sql</FullPath>
+        </FileNode>
+        <FileNode Name="ScratchSpace.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\sql2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)\sql2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>ScratchSpace.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>
