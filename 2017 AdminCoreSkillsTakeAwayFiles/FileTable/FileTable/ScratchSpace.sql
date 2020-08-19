@@ -12,11 +12,15 @@ where DB_NAME(database_id)='DocumentData';
 go
 
 
-INSERT INTO [dbo].SharedFiles
+INSERT INTO [dbo].Files_filetable
 ([name],[file_stream])
 SELECT
  'OZTentRV4_Mesh.jpg',
   * FROM OPENROWSET(BULK N'C:\Users\sin17h\Pictures\Saved Pictures\OZTentRV4_Mesh.jpg', SINGLE_BLOB) AS FileData
+union all
+SELECT
+ 'TentWorldRV4.jpg',
+  * FROM OPENROWSET(BULK N'C:\Users\sin17h\Pictures\Screenshots\TentWorldRV4.PNG', SINGLE_BLOB) AS FileData
 GO
 
 DECLARE @name varchar(1000);
@@ -28,13 +32,13 @@ SELECT @filetableroot = FileTableRootPath();
  
 --\\DATSUN-BM\SQL2019_FileStream\DocumentData\SharedFiles\New Bitmap Image.bmp
 SELECT @filetableroot + file_stream.GetFileNamespacePath() as FILEPATH
-FROM [dbo].SharedFiles
+FROM [dbo].Files_filetable
 WHERE Name = @name;
 
 DECLARE @filePath varchar(max);
 --\\DATSUN-BM\SQL2019_FileStream\v02-A60EC2F8-2B24-11DF-9CC3-AF2E56D89593\DocumentData\dbo\SharedFiles\file_stream\FFB7FCA7-16D6-EA11-87AD-CCF9E4C290AB\VolumeHint-HarddiskVolume3
 SELECT @filePath = file_stream.PathName()
-FROM dbo.SharedFiles
+FROM dbo.Files_filetable
 PRINT @filepath
 
 SELECT *
