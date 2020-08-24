@@ -1564,7 +1564,7 @@ drop database HalloweenProtection
 go
 
 
---quickie 20: 
+--quickie 20: https://www.youtube.com/watch?v=ToFuaEv3xms
 
 --cxpacket is not a indication of an problem always. In a parallel execution plan you will always have a cxpacket wait for the co-ordinator thread even if the worker threads finish on the same time.
 --the co-ordinator thread initially dispatches the worker threads with work and then sits there waiting for them all to complete so to then combine the output of worker threads before the start of 
@@ -1612,7 +1612,10 @@ select * from sys.dm_os_waiting_tasks where wait_type='cxpacket';
 --but if we had threads in dm_os_waiting_tasks with exec_context_id!=0, then that would mean one of the parallel thread is waiting for other prarallel threads to complete and that is something we have
 --to investigate
 
---it is actually a demo for wait stats analysis as well
+
+--quickie 21: https://www.youtube.com/watch?v=yk-s3aL9Dk0
+
+--Wait statistics analysis using extended events
 create database xeventsdemo;
 go
 
@@ -1681,6 +1684,9 @@ alter database CollectWaitStatsset set single_user with rollback immediate
 drop database CollectWaitStats
 go
 
+--quickie 22: https://www.youtube.com/watch?v=sMnYdRm9BJ0
+
+--buffer pool demo
 --this session tells you how many logical and physical reads a specific query needed during its execution
 set statistics io on
 go
@@ -1722,6 +1728,10 @@ where database_id =  DB_ID('ContosoRetailDW')
 	and t.is_ms_shipped = 0 --exclude system tables
 group by p.object_id
 order by COUNT_big(*) desc
+
+--quickie 23: 
+--Plan Cache Pollution
+
 
 --24.
 --reorganize and rebuild for index fragmentation. 
