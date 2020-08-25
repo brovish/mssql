@@ -1729,14 +1729,32 @@ where database_id =  DB_ID('ContosoRetailDW')
 group by p.object_id
 order by COUNT_big(*) desc
 
---quickie 23: 
---Plan Cache Pollution
+--quickie 23: https://www.youtube.com/watch?v=g6zyg1JAFdU
+--Plan Cache Pollution: pollute the plan cache with same sql statement/adhoc query over and over again.
+--waste of buffer pool memory storing unparameterized queries AND CPU resources compiling the unparameterized query again and again.
+
+--when you execute a sql query, which could be parameterized, many times with different hard coded parameter values, then in that case SQL Server caches
+--the execution plan for each query. And that is plan cache pollution. Because had that query been parameterized, the plan would have been cached only once(the
+--first time the query was executed) and used for all the different parameter values the query was subsequently called with. Now that is another matter that 
+--due to parameter
+--sniffing, the plan generated might not be very efficient for different subsequent parameter values. Note: some solve parameter sniffing in stored procs by using 'option recompile'. Not sure if that can be used with one-off/adhoc queries as well.
+--Think about it in this way, when SQL server stores a plan in cache store, the plan is stored with a key that is the hash of query. So before a query is sent to 
+--optimizer for generating a plan, the cache is checked using the queries' hash to see if a plan already exists. Now if hard coded param values as being used, the
+--query hash generated would be different for different queries. But with parameterized query, the hash remains same and can be used to reuse already existing plans.
 
 
---24.
---reorganize and rebuild for index fragmentation. 
+--TODO:i think not only unparameterized adhoc queries, but even simple adhoc queries can lead to cache pollution if those queries differ by something cosmetic 
+--such as number of spaces in the query. I think i had read it somewhere. I think that makes sense as the hash generated would be different for those queries and
+-- therefore they would not be reused when looking for the plan in cache using hash as the key lookup.
+
+
+--quickie 24: https://www.youtube.com/watch?v=PpxFU2DkXpQ
+
+--reorganize and rebuild for index fragmentation. Internal(not fully filled pages caused of deletion of data) and external fragmentation(logical order of pages is different from physical order. page splits due to insertion of data inbetween is one reason). But here i think we are only concerned with external fragmentation.
+
 --rebuild builds a new index in your data file and then deallocated the old one. That means if the index size is 1 GB, then another 1GB would be used in the 
---data file and 1GB in transaction log(as rebuild is just one large transaction) for rebuild.
+--data file and 1GB in transaction log(as rebuild is just one large transaction) for rebuild. reorganize just reorganizes the page in leaf level without recreating
+--the whole index again.
 use AdventureWorks2012;
 go
 
