@@ -1913,7 +1913,7 @@ where request_session_id in (55)
 and resource_type = 'key'
 and resource_associated_entity_id = '72057594050117632'
 
---quickie 28: https://www.youtube.com/watch?v=azDhjpBaj0M
+--quickie 29: https://www.youtube.com/watch?v=azDhjpBaj0M
 --READ COMMITTED SNAPSHOT ISOLATION(RCSI). This is the first optimistic isolation level and is the optimistic implementation of pessimistic transaction isolation level READ COMMITTED. Pessimistic isolation levels 
 --means we use locks for providing isolation. Shared Locks(S) are used for reads and Exclusive locks(X) for writes. Different pessimistic isolation levels differ in the time for which the S locks are held 
 --and their granularity(for example single row S locks or key range locks). In optimistic isolation levels, readers do not acquire a shared lock(S) anymore. 
@@ -1948,7 +1948,8 @@ where ProductID = 1;
 
 ----rollback
 
---quickie 30: 
+--quickie 30: https://www.youtube.com/watch?v=NObahFaNmz4
+
 --Snapshot Isolation(SI). This again is an optimistic isolation level. It provides you with read stability: if you read data multiple times in a transaction, 
 --you will always get back the same data and without locking. But you can get into update conflicts with snapshot isolation. Since some other transaction might 
 --update the data in the meantime and then if your current transaction tries to update the data, it would encounter an error.
@@ -1977,10 +1978,11 @@ go
 begin tran
 ----these is no locking and blocking involved. in pessimistic isolation levels, the session 1 would have had a X lock on the row and that would have blocked session 2 from reading the row. There are no shared locks(S) anymore.
 ----It would have been a dirty read if value returned was 1000.
-----It has read stability as if we are reading the data multiple times in session2 and session1 completes, we will still get the same value here(750 
----- for both when session1 is uncommited and 1000 when session 1 is committed)
+----It has read stability as we will still get the same value in session2(750 for both when session1 is uncommited and when session 1 is committed)
 --select ReorderPoint  from Production.Product
 --where ProductID = 1;
+
+--but if you try to update the same row here, SQL server will throw an error to let you know that you can't update it as it has already been updated.
 
 ----rollback
 
@@ -1991,15 +1993,25 @@ begin tran
 --in error 3960 (update conflict)
 
 
---31. Database Snapshots
+--quickie 31: https://www.youtube.com/watch?v=7on5wFJZsew
 
---32: Temp tables vs table variables
---Temp tables introduce execution plan recompilations. If you are creating temp tables in a stored procedure, that table creation leads to a schema change(an addition of an index would also lead to schema change) which 
---invalidates the existing sp execution plan. So the stored procdeure creating the temp table is compiled again. Now when you add data to the temp table, its stats are are updated and if you try to select the use the temp
---table later in sp, the stats change will cause a further recompile. So you get 2 recompiles of sp, once on creation of temp table(due to shcema change) and once on its usage(after inserting some data into it which changes the stats)
---Table vars don't suffer from recompile issues(which is still persisted in tempdb). first table var is not counted as a schema change(as it onl a variable not a table) and second, stats on table vars are not maintained. They have
---a fixed cardinality value of 1. And because of this fixed cardinality, table vars are only sutiable for storing small amount of data. For larger number of rows, temp tables might be a better choice(as they have stats and hence 
---query optimizer can use that info to generate a decent query plan).
+--Database Snapshots (not the snapshots from transaction isolation levels) created on a db will store the pages before they are changed in the source db. So as 
+--you are making changes to the source db, the pages which are being changed are first copied into the snapshot and only then the change is done in source db. 
+--and then if you had by mistake done the changes in source, you can get the original data back from snapshot. Snapshots will only store 
+--the (before change)pages which have are changed in source. So if you do not make any change in the source db after you created the snapshot, 
+--the snapshot will remain empty. 
+
+--quickie 32: https://www.youtube.com/watch?v=iYEeLBC_cwA
+
+--Temp tables vs table variables
+--Temp tables introduce execution plan recompilations. If you are creating temp tables in a stored procedure, that table creation leads to a schema change(an addition of an index
+--would also lead to schema change) which invalidates the existing sp execution plan. So the stored procdeure creating the temp table is compiled again. Now when you add data 
+--to the temp table, its stats are are updated and if you try to select the use the temp table later in sp, the stats change will cause a further recompile. So you get 2 recompiles 
+--of sp, once on creation of temp table(due to shcema change) and once on its usage(after inserting some data into it which changes the stats).
+
+--Table vars don't suffer from recompile issues(which is still persisted in tempdb). first table var is not counted as a schema change(as it onl a variable not a table) and second, 
+--stats on table vars are not maintained. They have a fixed cardinality value of 1. And because of this fixed cardinality, table vars are only sutiable for storing small amount of
+--data. For larger number of rows, temp tables might be a better choice(as they have stats and hence query optimizer can use that info to generate a decent query plan).
 
 --to demo the recompiles, create a sql server profiler trace with following events:
 --	1. Stored Procedures/SP:Recompile
@@ -2020,6 +2032,7 @@ begin
 		lastname char(4000)
 	)
 
+	--this will kick an autoupdate of stats but only when the table is used(below) that the SP recompilation will commence
 	insert into #temptable(firstname, lastname)
 	select top 1000 name, name from master.dbo.syscolumns
 
@@ -2037,17 +2050,19 @@ create proc DemonstrateTableVarNoRecompiles
 as 
 begin
 	
-	--recompile because of schema change
-	declare @temptable table
+	--no recompile because of schema change as table var is not considered a part of the schema, it is just a variable!
+	declare @temptable as table
 	(
 		id int identity(1,1) primary key,
 		firstname char(4000),
 		lastname char(4000)
 	)
 
+	--no autoupdate of stats as stats are not maintained!
 	insert into @temptable(firstname, lastname)
 	select top 1000 name, name from master.dbo.syscolumns
 		
+	--no recompile because of stats change because stats on table vars are not maintained!
 	select * from @temptable	
 end
 
