@@ -1767,7 +1767,9 @@ select *
 from sys.dm_db_index_physical_stats(DB_ID('AdventureWorks2012'), OBJECT_ID('Person.Person'), null, null, 'limited');
 
 
---25.  isolation levels. isolation from acId is implemented by locks. READ COMMITED is default.
+--quickie 25: https://www.youtube.com/watch?v=STC2qXEPcsI
+
+--Isolation levels. Isolation from acid is implemented by locks. READ COMMITED is default.
 --when we specify isolation levels in sql server, we are only changing the how long the shared locks are held(S) and we have no control over 
 --exclusive (X) locks. So we can only control how long a reader is holding a shared lock and we have no control over writers and the asscociated X lock
 --read committed has problem of non-repeatable reads..if u read some data multiple times in a transaction, you might get different results.
@@ -1808,7 +1810,8 @@ select * from sys.dm_exec_requests
 where session_id in('54','55') 
 
 
---25. Repeatable read isolation level of a transaction. Once a shared lock is acquired(when a row is read), then that shared lock is held till the end of the transaction
+--quickie 26: https://www.youtube.com/watch?v=YgZv_CrPxho
+--Repeatable read isolation level of a transaction. Once a shared lock is acquired(when a row is read), then that shared lock is held till the end of the transaction
 --(rollback or commit). So if u have some rows in a transaction and then read them again, those rows would have no change. It is another matter there might be
 -- some rows added to the result set(phantom rows).
 
@@ -1847,8 +1850,9 @@ and resource_type = 'key'
 --session 1 
 commit
 
---27. read uncommitted. Reader does not acquire a shared lock. It simply reads the data stored on the data page. Read uncommitted transaction isolation level is 
---the same as the query hint NOLOCK but is for the whole session(transaction). 
+--quickie 27: https://www.youtube.com/watch?v=j-ZSI9ezN0A
+--read uncommitted. Reader does not acquire a shared lock. It simply reads the data stored on the data page. Read uncommitted transaction isolation level is 
+--the same as the query hint NOLOCK but is for the whole session. 
 
 --session 1
 use AdventureWorks2014;
@@ -1869,7 +1873,9 @@ where BusinessEntityID = 1;--could have also used NOCLOCK hint
 --session 1
 rollback
 
---28. Serializable. This is the last of the four psssimistic isolation levels. This is used to prevent phantom rows/records. No new rows would be added, existing rows deleted or updated in the range of rows read.
+--quickie 28: https://www.youtube.com/watch?v=LLnfFEJ3xyw
+
+--Serializable. This is the last of the four pessimistic isolation levels. This is used to prevent phantom rows/records. No new rows would be added, existing rows deleted or updated in the range of rows read.
 --sql server uses something called KEY RANGE LOCKING which uses specialized LOCKs on every row read. For KEY RANGE LOCKING, there has to be a NCI on the key being used to read the rows(search predicate). If no NCI present,
 --SQL server uses shared lock(S) on the individual rows(which i think would not prevent phantom rows). And if you have more than 5000 S locks are taken on individual rows, then SQL server places a shared (S) table lock on the table. That makes the table reaonly. 
 --Therefore it is important that your table has a supporting NCI.
@@ -1907,10 +1913,11 @@ where request_session_id in (55)
 and resource_type = 'key'
 and resource_associated_entity_id = '72057594050117632'
 
---29. READ COMMITTED SNAPSHOT ISOLATION(RCSI). This is the first optimistic isolation level and is the optimistic implementation of pessimistic transaction isolation level READ COMMITTED. Pessimistic isolation levels 
+--quickie 28: https://www.youtube.com/watch?v=azDhjpBaj0M
+--READ COMMITTED SNAPSHOT ISOLATION(RCSI). This is the first optimistic isolation level and is the optimistic implementation of pessimistic transaction isolation level READ COMMITTED. Pessimistic isolation levels 
 --means we use locks for providing isolation. Shared Locks(S) are used for reads and Exclusive locks(X) for writes. Different pessimistic isolation levels differ in the time for which the S locks are held 
 --and their granularity(for example single row S locks or key range locks). In optimistic isolation levels, readers do not acquire a shared lock(S) anymore. 
---RCSI does not give you dirty reads(as it name suggests as well).
+--RCSI does not give you dirty reads(as its name suggests as well).
 
 --before we can use RCSI, it has to be enabled at the database level(as tempdb/version-store is used to hold old rows if we are making changes to them). As soon as you enable, there is nothting else u need to do and it 
 --becomes the default isolation level.
@@ -1941,7 +1948,8 @@ where ProductID = 1;
 
 ----rollback
 
---30. Snapshot Isolation(SI). This again is an optimistic isolation level. It provides you with read stability: if you read data multiple times in a transaction, 
+--quickie 30: 
+--Snapshot Isolation(SI). This again is an optimistic isolation level. It provides you with read stability: if you read data multiple times in a transaction, 
 --you will always get back the same data and without locking. But you can get into update conflicts with snapshot isolation. Since some other transaction might 
 --update the data in the meantime and then if your current transaction tries to update the data, it would encounter an error.
 
