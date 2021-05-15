@@ -34,3 +34,13 @@ else
 {
     curl -OutFile "./database_backups/wwi.bak" "https://github.com/Microsoft/sql-server-samples/releases/download/wide-world-importers-v1.0/WideWorldImporters-Full.bak"
 }
+
+$fileToCheck = "./database_backups/AdventureWorksDW2016.bak"
+if (Test-Path $fileToCheck -PathType leaf)
+{
+    # nothing to do here
+}
+else
+{
+    curl -OutFile "./database_backups/AdventureWorksDW2016.bak" "https://github.com/Microsoft/sql-server-samples/releases/download/adventureworks/AdventureWorksDW2016.bak"
+}

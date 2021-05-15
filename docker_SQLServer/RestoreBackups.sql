@@ -20,6 +20,15 @@ GO
 ALTER DATABASE WideWorldImporters SET QUERY_STORE = ON (OPERATION_MODE = READ_WRITE, DATA_FLUSH_INTERVAL_SECONDS = 300, INTERVAL_LENGTH_MINUTES = 1, MAX_STORAGE_SIZE_MB = 20, MAX_PLANS_PER_QUERY = 10);
 GO
 
+RESTORE DATABASE AdventureWorksDW2016 FROM DISK = '/usr/work/database_backups/AdventureWorksDW2016.bak'
+ WITH
+ MOVE 'AdventureWorksDW2016_Data' TO '/var/opt/mssql/data/AdventureWorksDW2016.mdf',
+ MOVE 'AdventureWorksDW2016_Log' TO '/var/opt/mssql/data/AdventureWorksDW2016.ldf'
+GO
+
+ALTER DATABASE AdventureWorksDW2016 SET QUERY_STORE = ON (OPERATION_MODE = READ_WRITE, DATA_FLUSH_INTERVAL_SECONDS = 300, INTERVAL_LENGTH_MINUTES = 1, MAX_STORAGE_SIZE_MB = 20, MAX_PLANS_PER_QUERY = 10);
+GO
+
 -- scripts will like these will persist the data changes over container restarts as well as image rebuilds 
 -- if you are using external volume 
 CREATE DATABASE heroes;
