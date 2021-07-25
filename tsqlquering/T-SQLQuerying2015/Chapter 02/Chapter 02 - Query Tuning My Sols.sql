@@ -1,3 +1,90 @@
+--the last pattern in the chapter 2 of book showing use of cross apply did not make the query faster for me
+
+--ramneek:
+--product, 10 highest prices for each product(with ties) and transaction date 
+--3% relative to the batch. should have been slow but it is faster than cross apply solutions below. The reason seems to be large spills when using cross apply solutions.
+;with cte as 
+(
+select *, row_number()over(partition by ProductID order by ActualCost desc) as rnk
+from #bigger_transactions as b
+--where ProductID in (1,1001,2001)
+)
+select bp.name, TransactionDate, ActualCost
+from cte 
+cross apply (select bp.Name from #bigger_products as bp where bp.ProductID=cte.ProductID) as bp(name)
+where rnk <=10
+
+--3% relative to the batch. should have been slow but it is faster than cross apply solutions below
+SELECT
+    p.Name,
+    x.TransactionDate,
+    x.ActualCost
+FROM
+(
+    SELECT
+        th.ProductID,
+        th.TransactionDate,
+        th.ActualCost,
+        ROW_NUMBER() OVER
+        (
+            PARTITION BY
+                th.ProductId
+            ORDER BY
+                th.ActualCost DESC
+        ) AS rn
+    FROM #bigger_transactions AS th
+	--where ProductID in (1,1001,2001)
+) AS x
+INNER JOIN #bigger_products AS p ON
+    p.ProductID = x.ProductID
+WHERE
+    x.rn <= 10;
+GO
+
+--31% relative to the batch. should have been fast
+select bp.name, bt.TransactionDate, bt.ActualCost 
+from #bigger_products as bp
+cross apply (select top(10) TransactionDate, ActualCost 
+				from #bigger_transactions as bt 
+				where bt.ProductID = bp.ProductID
+				order by ActualCost desc) as bt(TransactionDate, ActualCost)
+--where ProductID in (1)
+
+--31% relative to the batch. should have been fast
+select bp.name, bt.TransactionDate, bt.ActualCost 
+from #bigger_products as bp
+cross apply (select TransactionDate, ActualCost , row_number()over (order by ActualCost desc) as rn
+				from #bigger_transactions as bt 
+				where bt.ProductID = bp.ProductID) as bt(TransactionDate, ActualCost, rn)
+where rn<=10
+
+--31% relative to the batch. should have been fast
+SELECT
+    p.Name,
+    x.TransactionDate,
+    x.ActualCost
+FROM #bigger_products AS p
+CROSS APPLY
+(
+    SELECT
+        th.TransactionDate,
+        th.ActualCost,
+        ROW_NUMBER() OVER
+        (
+            ORDER BY
+                th.ActualCost DESC
+        ) AS rn
+    FROM #bigger_transactions AS th
+    WHERE
+        th.ProductID = p.ProductID
+) AS x
+WHERE
+    x.rn <= 10;
+GO
+--ramneek:end
+
+
+
 -- Underestimation
 DECLARE @i AS INT = 500000;
 
