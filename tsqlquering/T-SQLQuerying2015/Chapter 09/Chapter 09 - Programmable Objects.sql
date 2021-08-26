@@ -97,7 +97,7 @@ DECLARE
   @cols AS NVARCHAR(1000),
   @sql  AS NVARCHAR(4000);
 
-SET @cols =
+SET @cols = --Ramneek: generating the column list like such is not readable and looks unnecessarily complex using XML path(although XML path might be faster. Benchmark the results). No need to use it. See my version below
   STUFF(
     (SELECT N',' + QUOTENAME(orderyear) AS [text()]
      FROM (SELECT DISTINCT YEAR(orderdate) AS orderyear
@@ -111,6 +111,26 @@ FROM (SELECT custid, YEAR(orderdate) AS orderyear, val
   PIVOT(SUM(val) FOR orderyear IN(' + @cols + N')) AS P;';
 
 EXEC sys.sp_executesql @stmt = @sql;
+
+--ramneek:
+declare @cols_r as nvarchar(max)='';
+
+select @cols_r += concat(',',  quotename(DATEPART(yy,orderdate)) )
+		--@cols_r += concat(',', '[', DATEPART(yy,orderdate), ']')--use quotename instead
+from Sales.OrderValues
+group by DATEPART(yy,orderdate)
+
+----out of the comma separated list of quoted values, extract columns in this format: [2013],[2014],[2015] by removing the leading comma. you can use either stuff or substring
+--select IIF(len(@cols_r)>0, SUBSTRING(@cols_r,2,len(@cols_r)), null)
+--	   ,STUFF(@cols_r, 1, 1, '')
+
+declare @sql_r as nvarchar(max) = 'select * 
+from (select custid, val, DATEPART(yy,orderdate) as yr
+		from Sales.OrderValues) as src
+	pivot(sum(val) for yr in ('+ IIF(len(@cols_r)>0, SUBSTRING(@cols_r,2,len(@cols_r)), null) + ')) as pvt';--works with STUFF(@cols_r, 1, 1, '') as well
+
+exec(@sql_r);
+--ramneek:end
 
 -- Creation script for the sp_pivot stored procedure
 USE master;
