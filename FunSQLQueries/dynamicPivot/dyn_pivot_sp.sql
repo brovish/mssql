@@ -11,7 +11,8 @@ go
 --dynamic query, we can embed print statement inside it. Refer approach 3.3
 --4. This is vulnerable to SQL injection as the query to be run itself is being formed using the parameter values. If the parameters are used plug-in components into a query, it is then that they help avoid 
 --sql injection. So instead of having devs be able to run this to do the pivot, only generate the pivot statement and not execute it in the sp. Maybe, add a OUTPUT parameter to this SP which will hold the generated
---pivot statement. What I did in 'dynamic_pivot_generation.sql' was to create a View with that pivot SQL. For me it is fine, do not give access to others.
+--pivot statement. What I did in 'dynamic_pivot_generation.sql' was to create a View with that pivot SQL. For me it is fine, do not give access to others. What is cool about that is that it is doing an exec 
+--inside an exec!
 
 create or alter proc dbo.sp_dynPivot
 	@base_table as nvarchar(max),--table or view to be queried
