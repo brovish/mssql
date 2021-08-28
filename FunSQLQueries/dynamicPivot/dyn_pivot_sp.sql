@@ -134,13 +134,12 @@ as
 		exec sp_executesql @stmt= @sql
 		select @cols, 'Does not work 4.2';
 
-		--Tatt: 1. Either instantiate the variable(@cols) (linked to output parameter) before executing the dynamic SQL Or instantiate the output parameter (@col_values) inside the dynamic query (approach 3.2). 
-		--Instantiating the output parameter outside the dynamic query(where it is declared).
-		--does not work.
-		--2. Unparameterized query in this case won't work as we want to embed a variable in the dynamic query so that we can concatenate the values in it. Unparameterized query embeds the value of variables in the dynamic query
-		--, not the variable itself.
-		--3. Printing the sql string before executing it aids in debugging the statement as is. But if the query is parameterized and we want to check the values of variables embedded in the dynamic query, we can embed print 
-		--statement inside it. Refer approach 3.3
+		--Tatt: 1. Either instantiate the variable(@cols) (linked to output parameter) before executing the dynamic SQL (approach 2.2) Or instantiate the output parameter (@col_values) inside the dynamic 
+		--query (approach 3.2). Instantiating the output parameter where it is declared (outside the dynamic query) does not work (approach 3.3).
+		--2. Unparameterized query in this case won't work as we want to embed a variable in the dynamic query so that we can concatenate the values in it. Unparameterized query embeds the value of 
+		--variables in the dynamic query (approach 4.1 and 4.2), not the variable itself.
+		--3. Printing the sql string before executing it aids in debugging the statement as is. But if the query is parameterized and we want to check the values of variables embedded in the 
+		--dynamic query, we can embed print statement inside it. Refer approach 3.3
 
 		--select 1;
 	end try	
