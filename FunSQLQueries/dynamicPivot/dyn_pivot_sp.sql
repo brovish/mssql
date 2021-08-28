@@ -9,6 +9,9 @@ go
 --variables in the dynamic query (approach 4.1 and 4.2), not the variable itself.
 --3. Printing the sql string before executing it aids in debugging the statement as is. But if the query is parameterized and we want to check the values of variables embedded in the 
 --dynamic query, we can embed print statement inside it. Refer approach 3.3
+--4. This is vulnerable to SQL injection as the query to be run itself is being formed using the parameter values. If the parameters are used plug-in components into a query, it is then that they help avoid 
+--sql injection. So instead of having devs be able to run this to do the pivot, only generate the pivot statement and not execute it in the sp. Maybe, add a OUTPUT parameter to this SP which will hold the generated
+--pivot statement. What I did in 'dynamic_pivot_generation.sql' was to create a View with that pivot SQL. For me it is fine, do not give access to others.
 
 create or alter proc dbo.sp_dynPivot
 	@base_table as nvarchar(max),--table or view to be queried
@@ -29,10 +32,13 @@ as
 				@newline as nvarchar(2) = nchar(13) + nchar(10);
 
 		--Construct a derived table query from the base table so that it goes in the FROM section of pivot template. Also provide an ALIAS for it.
+		--I do not think we need to construct a derived table base table query.
 		if coalesce(object_id(@base_table, N'u'), object_id(@base_table, N'v')) is not null
-			set @base_table = N'select * from ' + @base_table;--should have used concat
-
-		set @base_table = N'(' + @base_table + ') as baseTableQuery';
+			--set @base_table = N'select * from ' + @base_table;--should have used concat
+			print 'Found the base table or view';
+		else
+			throw 50001, 'Invalid input @base_table paramaeter. It should refer to a table or a view.', 1;			
+		--set @base_table = N'(' + @base_table + ') as baseTableQuery';
 
 		--if the user passes '*' in @agg_col parameter, use column number '1' for aggregation
 		if @agg_col = N'*'
@@ -141,6 +147,13 @@ as
 		--exec sp_executesql @stmt= @sql
 		--select @cols, 'Does not work 4.2';
 
+		--create the pivot query. Instead of STUFF, i could use: IIF(len(@cols)>0, SUBSTRING(@cols,2,len(@cols)), null)
+		set @sql = N' select *
+						from (select '+ @on_rows+', ' + @agg_col + ', ' + @on_col + ' as categoricalCol from ' + @base_table + ') as B
+						pivot (' + @agg_func + '(' + @agg_col+ ') for categoricalCol' + + ' in (' + STUFF(@cols, 1, 1, '') + ')  ) as p';
+		print @sql;--the reason i provided an alias for @on_col above was because the @on_col/categorical column could be an computed column. So give it an alias so that we can refer to it in pivot clause below
+		exec sp_executesql @stmt=@sql;
+
 		--select 1;
 	end try	
 	begin catch
@@ -149,7 +162,7 @@ as
 go
 
 exec dbo.sp_dynPivot 
-	@base_table = N'TSQLV3.Sales.Orders',
+	@base_table = N'TSQLV3.Sales.OrderValues',
 	@on_rows = N'custid',--'For' Column or the 'GROUP BY'key/columns 
 	@on_col = N'year(orderdate)',--'Categorical' column. Distinct values of this col become new columns
 	@agg_func = N'max',--the aggregate func
