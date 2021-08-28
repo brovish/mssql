@@ -60,7 +60,7 @@ as
 		--				from (select distinct ' + @on_col + ' as pivotColVal
 		--						from ' + @query + ') as distinctPivotColValues;'; 
 
-		--print @sql;
+		--print @sql;--generated sql statement is correct. But the @col_values output parameter is returned null as it was not instantiated (therefore NULL)
 		--exec sp_executesql @stmt= @sql, @params = N'@col_values as nvarchar(max) output', @col_values = @cols output
 		--select @cols, 'Does not work 2.1';
 
@@ -76,7 +76,7 @@ as
 		--select @cols, 'works 2.2';
 
 		----Approach 3:
-		----3.1 Commentary: You cannot declare @col_values inside the dynamic query as the variable is already declared outside as a OUTPUT parameter
+		----3.1 Commentary: You cannot declare @col_values inside the dynamic query as a variable as it is already declared outside as a OUTPUT parameter
 		--set @sql = N'declare @col_values as nvarchar(max) = N''''; select @col_values += concat('','',  quotename(pivotColVal) )
 		--				from (select distinct ' + @on_col + ' as pivotColVal
 		--						from ' + @query + ') as distinctPivotColValues;'; 
@@ -99,7 +99,7 @@ as
 		--				from (select distinct ' + @on_col + ' as pivotColVal
 		--						from ' + @query + ') as distinctPivotColValues;'; 
 
-		--print @sql;
+		--print @sql;--generated sql statement is correct. But the @col_values output parameter is returned null as it was instantiated outside the dynamic query string which for some reason does not work.
 		--exec sp_executesql @stmt= @sql, @params = N'@col_values as nvarchar(max) = N'' ''  output', @col_values = @cols output
 		--select @cols, 'Does not work 3.3';
 
@@ -108,32 +108,39 @@ as
 		--				from (select distinct ' + @on_col + ' as pivotColVal
 		--						from ' + @query + ') as distinctPivotColValues;'; 
 								
-		--print @sql;--this generated sql statement is correct. But the @col_values output parameter is returned null??
+		--print @sql;--this generated sql statement is correct. But the @col_values output parameter is returned null as it was not instantiated (therefore NULL)
 		--exec sp_executesql @stmt= @sql, @params = N'@col_values as nvarchar(max) = N'' '' output', @col_values = @cols output
 		--select @cols, 'Does not work 3.3. Debug the @col_values by printing it when the query is executed. Check the Messages tab for printed output';
 
-		--Approach 4:
-		----4.1 Commentary: We can also remove parameterization from the query and directly use @cols in the dynamic query This won't work as @cols is uninstantiated. So 
-		----concatenating with NULL will result in NULL
+		--Approach 4: We can also remove parameterization from the query and directly use @cols in the dynamic query. But it wont work for both uninstantiated and instantiated case.
+		----4.1 Commentary: This won't work as @cols is uninstantiated. So concatenating with NULL will result in NULL
 		--set @sql = N'select '+ @cols +' += concat('','',  quotename(pivotColVal) )
 		--		from (select distinct ' + @on_col + ' as pivotColVal
 		--				from ' + @query + ') as distinctPivotColValues;'; 
 								
-		--print @sql;--this generated sql statement is correct. But the @col_values output parameter is returned null??
+		--print @sql;--generated sql statement is wrong as value of @cols is embedded in the query, not the variable itself.
 		--exec sp_executesql @stmt= @sql
 		--select @cols, 'Does not work 4.1';
 
-		--4.2 Commentary: We can also remove parameterization from the query and directly use @cols in the dynamic query This won't work as @cols is uninstantiated. So 
-		--concatenating with NULL will result in NULL
+		--4.2 Commentary: We can instantiate @cols to empty string but the problem here when @cols is already evaluated to its value before we execute the dynamic query. The print @sql statement shows
+		--that the empty string for @cols is embedded in the dynamic query as an value. But we want the @cols variable to be embedded, not its value. Contrast it with @on_col and @query variables whose value
+		--we want to embed in the query, not the variable themselves (we cold have embed them as variables as well and it would also work). 
 		set @cols = N'';
 		set @sql = N'select '+ @cols +' += concat('','',  quotename(pivotColVal) )
 				from (select distinct ' + @on_col + ' as pivotColVal
 						from ' + @query + ') as distinctPivotColValues;'; 
 								
-		print @sql;--this generated sql statement is correct. But the @col_values output parameter is returned null??
+		print @sql;--generated sql statement is wrong as value of @cols is embedded in the query, not the variable itself.
 		exec sp_executesql @stmt= @sql
 		select @cols, 'Does not work 4.2';
 
+		--Tatt: 1. Either instantiate the variable(@cols) (linked to output parameter) before executing the dynamic SQL Or instantiate the output parameter (@col_values) inside the dynamic query (approach 3.2). 
+		--Instantiating the output parameter outside the dynamic query(where it is declared).
+		--does not work.
+		--2. Unparameterized query in this case won't work as we want to embed a variable in the dynamic query so that we can concatenate the values in it. Unparameterized query embeds the value of variables in the dynamic query
+		--, not the variable itself.
+		--3. Printing the sql string before executing it aids in debugging the statement as is. But if the query is parameterized and we want to check the values of variables embedded in the dynamic query, we can embed print 
+		--statement inside it. Refer approach 3.3
 
 		--select 1;
 	end try	
