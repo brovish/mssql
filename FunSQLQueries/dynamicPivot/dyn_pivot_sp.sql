@@ -13,6 +13,7 @@ go
 --sql injection. So instead of having devs be able to run this to do the pivot, only generate the pivot statement and not execute it in the sp. Maybe, add a OUTPUT parameter to this SP which will hold the generated
 --pivot statement. What I did in 'dynamic_pivot_generation.sql' was to create a View with that pivot SQL. For me it is fine, do not give access to others. What is cool about that is that it is doing an exec 
 --inside an exec!
+--5. TODO: Benchmark the performance results of using STUFF with XML path to generate distinct column values vs using the approach used here. Maybe also throw in CURSOR approach for oding same.
 
 create or alter proc dbo.sp_dynPivot
 	@base_table as nvarchar(max),--table or view to be queried. A query can also be passed to it.
@@ -41,7 +42,7 @@ as
 		--	throw 50001, 'Invalid input @base_table paramaeter. It should refer to a table or a view.', 1;			
 		set @base_table = N'(' + @base_table + ') as baseTableQuery';--no need for it if we restrict @base_table to table or view
 
-		--if the user passes '*' in @agg_col parameter, use column number '1' for aggregation
+		--if the user passes '*' in @agg_col parameter, use column number '1' for aggregation. PIVOT clause does not support *.
 		if @agg_col = N'*'
 			set @agg_col = N'1';
 
@@ -188,5 +189,14 @@ exec dbo.sp_dynPivot
 	@base_table = N'select * from Sales.OrderValues',
 	@on_rows = N'custid, empid',--'For' Column or the 'GROUP BY'key/columns 
 	@on_col = N'year(orderdate)',--'Categorical' column. Distinct values of this col become new columns
+	@agg_func = N'max',--the aggregate func
+	@agg_col = N'val'--'Data' column which is then aggregated
+
+use TSQLV3;--example 3: If passing in derived columns (expressions) in @on_rows column list, use ALIAS
+go
+exec dbo.sp_dynPivot 
+	@base_table = N'select * from Sales.OrderValues',
+	@on_rows = N'empid, year(orderdate) as orderYear',--'For' Column or the 'GROUP BY'key/columns 
+	@on_col = N'month(orderdate)',--'Categorical' column. Distinct values of this col become new columns
 	@agg_func = N'max',--the aggregate func
 	@agg_col = N'val'--'Data' column which is then aggregated
