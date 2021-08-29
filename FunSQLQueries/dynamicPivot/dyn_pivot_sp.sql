@@ -15,9 +15,9 @@ go
 --inside an exec!
 
 create or alter proc dbo.sp_dynPivot
-	@base_table as nvarchar(max),--table or view to be queried
-	@on_rows as nvarchar(max),--the 'For' column or the GROUP BY key column. The @agg_func works for each unique value for this key for spreading.
-	@on_col as nvarchar(max),--the 'Categorical' column. The column whose distict values become the new columns
+	@base_table as nvarchar(max),--table or view to be queried. A query can also be passed to it.
+	@on_rows as nvarchar(max),--the 'For' column or the GROUP BY key column (or comma separated columns). The @agg_func works for each unique value for this key for spreading.
+	@on_col as nvarchar(max),--the 'Categorical' column. The column whose distict values become the new columns. Multiple columns not supported due to restriction of PIVOT statement (only supported if we used CROSS APPLY instead for pivoting)
 	@agg_func as nvarchar(max) = N'MAX',
 	@agg_col as nvarchar(max)--The 'Data' Column. The col on which we apply the @agg_func to compute the values for newly generated columns.
 as
@@ -33,13 +33,13 @@ as
 				@newline as nvarchar(2) = nchar(13) + nchar(10);
 
 		--Construct a derived table query from the base table so that it goes in the FROM section of pivot template. Also provide an ALIAS for it.
-		--I do not think we need to construct a derived table base table query.
+		--If we restricted the input @base_table to be only table or view, we did not need to construct a derived table base table query we are dong here
 		if coalesce(object_id(@base_table, N'u'), object_id(@base_table, N'v')) is not null
-			--set @base_table = N'select * from ' + @base_table;--should have used concat
-			print 'Found the base table or view';
-		else
-			throw 50001, 'Invalid input @base_table paramaeter. It should refer to a table or a view.', 1;			
-		--set @base_table = N'(' + @base_table + ') as baseTableQuery';
+			set @base_table = N'select * from ' + @base_table;--should have used concat. No need for it if we restrict @base_table to table or view
+			--print 'Found the base table or view';
+		--else
+		--	throw 50001, 'Invalid input @base_table paramaeter. It should refer to a table or a view.', 1;			
+		set @base_table = N'(' + @base_table + ') as baseTableQuery';--no need for it if we restrict @base_table to table or view
 
 		--if the user passes '*' in @agg_col parameter, use column number '1' for aggregation
 		if @agg_col = N'*'
@@ -162,6 +162,9 @@ as
 	end catch
 go
 
+--because it is created in Master db, it can be called from any db, not only Master db
+use Master;--example 1:calling from within Master. Use the database prefix for the @base_table
+go
 exec dbo.sp_dynPivot 
 	@base_table = N'TSQLV3.Sales.OrderValues',
 	@on_rows = N'custid',--'For' Column or the 'GROUP BY'key/columns 
@@ -169,3 +172,21 @@ exec dbo.sp_dynPivot
 	@agg_func = N'max',--the aggregate func
 	@agg_col = N'val'--'Data' column which is then aggregated
 
+use TSQLV3;--example 2: calling from within a user database. Since sp_dynPivot was created in Master, it is a system level sp. No need for database prefix for the @base_table
+go
+exec dbo.sp_dynPivot 
+	@base_table = N'Sales.OrderValues',
+	@on_rows = N'custid',--'For' Column or the 'GROUP BY'key/columns 
+	@on_col = N'year(orderdate)',--'Categorical' column. Distinct values of this col become new columns
+	@agg_func = N'max',--the aggregate func
+	@agg_col = N'val'--'Data' column which is then aggregated
+
+
+use TSQLV3;--example 3: For the @base_table, pass in a query instead of a table or a view. Also, pass in multiple columns for the 'GROUP BY' key or 'For' key/columns
+go
+exec dbo.sp_dynPivot 
+	@base_table = N'select * from Sales.OrderValues',
+	@on_rows = N'custid, empid',--'For' Column or the 'GROUP BY'key/columns 
+	@on_col = N'year(orderdate)',--'Categorical' column. Distinct values of this col become new columns
+	@agg_func = N'max',--the aggregate func
+	@agg_col = N'val'--'Data' column which is then aggregated
