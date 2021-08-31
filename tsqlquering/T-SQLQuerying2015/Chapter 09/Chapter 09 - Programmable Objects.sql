@@ -133,6 +133,7 @@ exec(@sql_r);
 --ramneek:end
 
 -- Creation script for the sp_pivot stored procedure
+--ramneek: check out my version here at ".\mssql\FunSQLQueries\dynamicPivot\dyn_pivot_sp.sql" which does not use stuff with xml path which i find is not very readable.
 USE master;
 GO
 IF OBJECT_ID(N'dbo.sp_pivot', N'P') IS NOT NULL DROP PROC dbo.sp_pivot;
@@ -438,6 +439,12 @@ USE PerformanceV3;
 SELECT orderid, custid, empid, shipperid, orderdate, filler
 FROM dbo.Orders
 WHERE orderdate = DATEADD(year, DATEDIFF(year, '19001231', orderdate), '19001231');
+
+--ramneek: this is more readable than above.
+SELECT orderid, custid, empid, shipperid, orderdate, filler
+FROM dbo.Orders
+where orderdate =DATEFROMPARTS(year(orderdate), 12,31) 
+--ramneek:end
 
 -- Check performance of serial plan
 SELECT orderid, custid, empid, shipperid, orderdate, filler
