@@ -8,6 +8,8 @@ namespace BigCSVImportTest {
         private static SqlConnection myConnection;
 
         static void Main(string[] args) {
+            //some things to consider. Disable indexes in an already existing table, changing the recovery-model to 'Simple'
+
             Console.WriteLine("Hello World!");
             //string[] lines = File.ReadAllLines("allCountries.txt");
             var lines = File.ReadLines("allCountries.txt");
