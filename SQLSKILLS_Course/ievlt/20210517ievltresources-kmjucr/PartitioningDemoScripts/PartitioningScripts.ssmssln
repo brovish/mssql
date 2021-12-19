@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# SQL Server Management Studio Solution File, Format Version 18.00
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Lab Scripts", "Lab Scripts\Lab Scripts.ssmssqlproj", "{21A2116D-204B-42A5-B6B3-611518D32895}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Whitepaper Scripts", "Whitepaper Scripts\Whitepaper Scripts.ssmssqlproj", "{3FF3BC25-E675-449F-A286-05BE6C63260F}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Xtra-ILLExtendedExercises", "Xtra-ILLExtendedExercises\Xtra-ILLExtendedExercises.ssmssqlproj", "{A3540BE1-2699-4B5B-BB04-4423307A8721}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Default|Default = Default|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F87A10D1-1A29-4C4C-A388-05F2F8C306DE}.Default|Default.ActiveCfg = Default
+		{21A2116D-204B-42A5-B6B3-611518D32895}.Default|Default.ActiveCfg = Default
+		{3FF3BC25-E675-449F-A286-05BE6C63260F}.Default|Default.ActiveCfg = Default
+		{A3540BE1-2699-4B5B-BB04-4423307A8721}.Default|Default.ActiveCfg = Default
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {25661A60-7961-40CB-821D-D0A14817A78C}
+	EndGlobalSection
+EndGlobal

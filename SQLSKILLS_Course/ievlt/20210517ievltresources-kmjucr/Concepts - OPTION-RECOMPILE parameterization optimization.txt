@@ -1,0 +1,9 @@
+SELECT...
+OPTION (RECOMPILE)
+
+do not use
+exec with recompile
+create with recompile
+
+Paul White
+https://sqlperformance.com/2013/08/t-sql-queries/parameter-sniffing-embedding-and-the-recompile-options

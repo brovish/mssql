@@ -1,0 +1,15 @@
+:ON ERROR IGNORE
+go
+
+USE SalesDB
+go
+
+SET NOCOUNT ON
+go
+
+WHILE 1=1
+BEGIN
+	:r GetCustomerInfo.sql  
+	WAITFOR DELAY '00:00:00.050'
+END
+go
