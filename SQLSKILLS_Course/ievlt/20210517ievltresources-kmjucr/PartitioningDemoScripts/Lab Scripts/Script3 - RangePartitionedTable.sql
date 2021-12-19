@@ -66,7 +66,7 @@ GO
 -- filegroup is acceptible as it's only a logical locator, 
 -- no rows will ever reside there. 
 
-
+--Ramneek: Kimberly update the script and instead of the PRIMARY being referred above in the comments, we are now using TINY filegroup.
 -------------------------------------------------------
 -- Create the OrdersRange table on the partition scheme
 -------------------------------------------------------

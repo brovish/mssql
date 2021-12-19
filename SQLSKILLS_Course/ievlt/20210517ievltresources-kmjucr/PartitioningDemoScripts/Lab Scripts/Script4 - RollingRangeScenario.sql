@@ -99,6 +99,8 @@ GO
 -------------------------------------------------------
 -- The table *must* have the same clustered index
 -- definition!
+--ramneek: it could be a non-unique clustered index as well but the point is that is has to remain consistent accros partitions 
+--whatever we use.
 -------------------------------------------------------
 --CREATE CLUSTERED INDEX [Orders2004Q3CLInd]
 CREATE UNIQUE CLUSTERED INDEX [Orders2004Q3CLInd]
@@ -112,7 +114,7 @@ sp_help [Orders2004Q3];
 go
 
 -- What have we done?
--- Created the data for staging in and placed it on DESTINATION
+-- Created the data for staging in and placed it on DESTINATION filegroup
 
 
 -------------------------------------------------------
@@ -300,7 +302,7 @@ ALTER TABLE [dbo].[Orders2004Q3]
 SWITCH TO [dbo].[OrdersRange] PARTITION 5;
 GO
 
-SELECT * FROM [dbo].[Orders2004Q3];   
+SELECT * FROM [dbo].[Orders2004Q3];--empty after the SWITCH!  
 GO
 
 -------------------------------------------------------
