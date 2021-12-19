@@ -20,20 +20,20 @@
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
         <FileNode Name="RangeCaseStudyScript1-Filegroups.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DATSUN-BM:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DATSUN-BM</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>RangeCaseStudyScript1-Filegroups.sql</FullPath>
         </FileNode>
         <FileNode Name="RangeCaseStudyScript2-PartitionedTable.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DATSUN-BM:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DATSUN-BM</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>RangeCaseStudyScript2-PartitionedTable.sql</FullPath>
         </FileNode>
         <FileNode Name="RangeCaseStudyScript3-JoiningAlignedTables.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DATSUN-BM:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DATSUN-BM</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>RangeCaseStudyScript3-JoiningAlignedTables.sql</FullPath>
         </FileNode>

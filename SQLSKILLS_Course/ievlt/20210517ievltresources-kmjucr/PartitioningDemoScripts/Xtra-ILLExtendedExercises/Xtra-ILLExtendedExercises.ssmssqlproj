@@ -56,8 +56,8 @@
           <FullPath>03_CreditPT-Setup.sql</FullPath>
         </FileNode>
         <FileNode Name="04_CreditPT-QueryDamageAccessRepair.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DATSUN-BM:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DATSUN-BM</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>04_CreditPT-QueryDamageAccessRepair.sql</FullPath>
         </FileNode>
@@ -74,14 +74,14 @@
           <FullPath>AdventureWorks - FilteredIndexes.sql</FullPath>
         </FileNode>
         <FileNode Name="LoopingCharges.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DATSUN-BM:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DATSUN-BM</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>LoopingCharges.sql</FullPath>
         </FileNode>
         <FileNode Name="PartitionedViews&amp;StoredProcedurePlans.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DATSUN-BM:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DATSUN-BM</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>PartitionedViews&amp;StoredProcedurePlans.sql</FullPath>
         </FileNode>

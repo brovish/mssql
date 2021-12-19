@@ -32,14 +32,14 @@
           <FullPath>Script2 - CreateOrders.sql</FullPath>
         </FileNode>
         <FileNode Name="Script3 - RangePartitionedTable.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DATSUN-BM:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DATSUN-BM</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>Script3 - RangePartitionedTable.sql</FullPath>
         </FileNode>
         <FileNode Name="Script4 - RollingRangeScenario.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DATSUN-BM:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DATSUN-BM</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>Script4 - RollingRangeScenario.sql</FullPath>
         </FileNode>
