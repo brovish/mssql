@@ -1,0 +1,240 @@
+from Randolph West to everyone:    9:06 AM
+*innocent look*
+from John C to everyone:    9:10 AM
+."..and there have been no code changes" :-)
+from rajeshd to everyone:    9:10 AM
+SentryOne is great interms of providing blocking details 
+from Ivan Nunez to everyone:    9:10 AM
+Nothing ever changes
+from Randolph West to everyone:    9:11 AM
+try the resources, see which ones you like, and come up with a checklist for when the production issue happens
+from John C to everyone:    9:13 AM
+Great suggestion Randolph
+from Randolph West to everyone:    9:34 AM
+hey big spender
+from sree to everyone:    9:47 AM
+are they two separate options and do they always go hand in hand
+from Randolph West to everyone:    9:51 AM
+It used to slow things down on spinning disks, and REALLY busy systems, but "it depends"
+from Randolph West to everyone:    9:51 AM
+I turn it on for all new DBs
+from Brian Kallion to everyone:    9:54 AM
+can SQL pick up three+ way deadlocks?  eg. A waiting for B waiting for C waiting for A
+from Brian Kallion to everyone:    9:57 AM
+i asked it a bit late
+from Brian Kallion to everyone:    9:57 AM
+awesome, thanks
+from Randolph West to everyone:    10:00 AM
+ScarePoint
+from Randolph West to everyone:    10:28 AM
+I remember hearing about how turning on versioning changed the expected results, but I don't remember the details, and I feel like it had something to do with serializable isolation
+from Randolph West to everyone:    10:29 AM
+got it
+from John C to everyone:    10:30 AM
+Transaction Processing: Concepts and Techniques (The Morgan Kaufmann Series in Data Management Systems) 1st Edition
+from John C to everyone:    10:30 AM
+?
+from Ricky Davis to everyone:    10:30 AM
+I am going ot buy that now.  I have been using Kalen's book but I am always looking for books togive.
+from James O'Doherty to everyone:    10:30 AM
+Transaction Processing: Concepts and Techniques
+from SQLskills Training to everyone:    10:31 AM
+Great book.
+from Ricky Davis to everyone:    10:31 AM
+This is what I read not that stuff paul reads
+from SQLskills Training to everyone:    10:31 AM
+https://www.sqlskills.com/blogs/paul/so-you-want-to-write-a-storage-engine/
+from SQLskills Training to everyone:    10:31 AM
+For a list of applicable texetbooks
+from Randolph West to everyone:    10:32 AM
+I just bought the Kindle of that book and it wasn't cheap ??
+from Ricky Davis to everyone:    10:38 AM
+here is my question if the database is in read only mode do you need a no lock hint
+from Ricky Davis to everyone:    10:39 AM
+right, and I have a great uses that I can implement that now.  I just never was sure about that answer
+from Ricky Davis to everyone:    10:40 AM
+but does readonly still put shared locks?  just want to get my argument solid
+from Ricky Davis to everyone:    10:42 AM
+ok
+from rajeshd to everyone:    10:43 AM
+dirty reads ?
+from Randolph West to everyone:    10:49 AM
+You're more interesting
+from rajeshd to everyone:    10:53 AM
+yeah
+from Ricky Davis to everyone:    10:54 AM
+so I have all these stored procedures that use a nolock hint but the database is really only readonly but it is not set.
+from Ricky Davis to everyone:    10:54 AM
+I am a slow typer
+from James Donnelly to everyone:    10:54 AM
+mind haze, excellent beer
+from Ricky Davis to everyone:    10:55 AM
+ok but it has always been in my mind but I hate argueing with app developers
+
+
+from Ricky Davis to everyone:    11:31 AM
+I love erland
+from Ricky Davis to everyone:    11:31 AM
+these are rattes from states and medicare that we uodate evry two weeks.
+from Ricky Davis to everyone:    11:32 AM
+But the stored procedures that they do always see nolock and I want them to remove that
+from Ben Miller to everyone:    11:32 AM
+My understanding of NOLOCK on a Read-Only database is a NOOP. But I cannot remember the source.
+from Ricky Davis to everyone:    11:33 AM
+excellent. i will do that trace
+from Ben Miller to everyone:    11:33 AM
+I will see if I can dig up the source.
+from Ricky Davis to everyone:    11:35 AM
+haha
+from Ricky Davis to everyone:    11:56 AM
+I imagine can wonder why it is provided.
+from Randolph West to everyone:    11:57 AM
+I see SERIALIZABLE in vendor code and it makes me want to cry
+from Ricky Davis to everyone:    11:57 AM
+i see the logic but the practicality requires a different solutiong
+from Ricky Davis to everyone:    11:58 AM
+in 2008 we were scared about tempdb contention.
+from Ricky Davis to everyone:    12:00 PM
+you even memory optimized table types
+from Ricky Davis to everyone:    12:01 PM
+jonathan educated me on this, and I have no fear of using versioning.  
+from Randolph West to everyone:    12:06 PM
+I don't use ALLOW_SNAPSHOT_ISOLATION at all
+from Randolph West to everyone:    12:06 PM
+mainly because it requires code changes
+from Randolph West to everyone:    12:07 PM
+yay
+from Ben Miller to everyone:    12:07 PM
+Would you ever use one without the other?  Or should they be paired in the Database Options?
+from Ben Miller to everyone:    12:10 PM
+That really was the question. RCSI you get without changing the code and Allow Snapshot would require code changes to take advantage of it.
+from John C to everyone:    12:12 PM
+Just an FYI..... we are having a huge lightning storm and my lights flickered once or twice already.  So if I dissappear, I'm not being rude ;)
+from John C to everyone:    12:13 PM
+Thanks
+from Ricky Davis to everyone:    12:14 PM
+yep if my system is sequential inserts then the versions are not going to change'
+from Ricky Davis to everyone:    12:22 PM
+how about combining versions with temporal table where there are only inserts but updates are handeled by a delete and a new insert
+from Ricky Davis to everyone:    12:22 PM
+we need to be optmiistic not pessmistic
+from Randolph West to everyone:    12:23 PM
+optimistic is in-memory
+from Randolph West to everyone:    12:30 PM
+yep
+from Gaurang to everyone:    12:39 PM
+any formula to set size of temp db with RC with versioning
+from Gaurang to everyone:    12:40 PM
+scenario with multiple versioning of the same row, which version would get readed in that case ?
+from Gaurang to everyone:    12:42 PM
+how does it get decided ? automatically  wihich to choose ?
+from Gaurang to everyone:    12:42 PM
+got it
+from Gaurang to everyone:    12:42 PM
+it picks the latest version
+from Gaurang to everyone:    12:44 PM
+oh yes,   I
+from Gaurang to everyone:    12:44 PM
+Thx
+from Bruce Pratt to everyone:    12:47 PM
+Did Kimberly just say "Grok!?"
+from Bruce Pratt to everyone:    12:47 PM
+:-)
+from John C to everyone:    12:47 PM
+its a technical term
+from Bruce Pratt to everyone:    12:48 PM
+Heinlein....
+from Bruce Pratt to everyone:    12:58 PM
+Snapshot isolation transaction aborted due to update conflict. You cannot use snapshot isolation to access table '%.*ls' directly or indirectly in database '%.*ls' to update, delete, or insert the row that has been modified or deleted by another transaction. Retry the transaction or change the isolation level for the update/delete statement.?  msgid 3960
+from Randolph West to everyone:    1:02 PM
+so as I understand it, the best scenario for enabling both is for "report-style" queries to use the same point in time
+from Ricky Davis to everyone:    1:02 PM
+but you convinced me that nolock will work
+from Ricky Davis to everyone:    1:02 PM
+which is what we now do.
+from Ben Miller to everyone:    1:03 PM
+Joe Sack is the source and the statement is that NOLOCK hints are ignored when it is in Read-Only mode, same as a ReadOnly AG Secondary.  Documented here: https://docs.microsoft.com/en-us/troubleshoot/sql/availability-groups/query-performance-degradation
+from Randolph West to everyone:    1:03 PM
+Joe knows what he's talking about
+from Ricky Davis to everyone:    1:04 PM
+thanks ben
+from Ben Miller to everyone:    1:06 PM
+no worries.
+from Randolph West to everyone:    1:10 PM
+your FILLFACTOR comment answers a question I had
+from Ben Miller to everyone:    1:11 PM
+That is really good information about the rebuild/updates.  I did not know that. Thanks.
+from Bruce Pratt to everyone:    1:11 PM
+Versions are removed?  The ones in the tempdb version store, right?
+from Ricky Davis to everyone:    1:13 PM
+we have nonclustered indexes on guid and otehrs
+from Ricky Davis to everyone:    1:13 PM
+and we have a web application that uses entity framework that passes back non sargable queries
+from Randolph West to everyone:    1:13 PM
+Bruce, the 14-byte pointer in-row
+from Ben Miller to everyone:    1:14 PM
+I am a little confused about the rebuild and the 14 bytes of row overhead.  Is the tag removed when the index is rebuilt?  Or is it just the versions themselves in the tempdb?
+from SQLskills Training to everyone:    1:14 PM
+The tag's removed. My bad. My team built versioning and we didn't consider that case.
+from SQLskills Training to everyone:    1:14 PM
+So if it gets versioned again, row grows again by 14 - bytes
+from Ben Miller to everyone:    1:15 PM
+Oh boy. Thanks.
+from SQLskills Training to everyone:    1:15 PM
+Yup - it's sucky.
+from Ben Miller to everyone:    1:15 PM
+So the sticky is really all about Updates.
+from Bruce Pratt to everyone:    1:16 PM
+Arte Johnson on tag removal: "Velly intereting..."
+from Ben Miller to everyone:    1:16 PM
+What about REORGANIZE?
+from SQLskills Training to everyone:    1:16 PM
+Nope - doesn't touch them
+from Ben Miller to everyone:    1:16 PM
+that is what I thought, just wanting to be complete
+from SQLskills Training to everyone:    1:17 PM
+Yes - that's what I say in my modules :-)
+from SQLskills Training to everyone:    1:17 PM
+Pedantry helps with this stuff
+from SQLskills Training to everyone:    1:21 PM
+Don't know
+from Randolph West to everyone:    1:23 PM
+I used that DMV to answer a question someone asked me in the hallway at PASS Summit
+from Stephen Skidmore to everyone:    1:26 PM
+So if you 'ALLOW_SNAPSHOT_ISOLATION' the row overhead (14 bytes) applies immediately to all future data modifications within that database - not just from the first time someone executes with SET TRANSACTION ISOLATION LEVEL SNAPSHOT?
+from Randolph West to everyone:    1:27 PM
+yeah which is why it has to kick everyone off the DB when you turn it on
+from Randolph West to everyone:    1:27 PM
+yep
+from Brian Kallion to everyone:    1:27 PM
+actual typo alert!  seemlessly
+from Randolph West to everyone:    1:28 PM
+"seamlessly"
+from Brian Kallion to everyone:    1:28 PM
+yup s/b seamlessly
+from Brian Kallion to everyone:    1:28 PM
+i'm still scarred from my false positive typo the other day, now i can relax :)
+from Bruce Pratt to everyone:    1:32 PM
+versioning and overhead.  Could it be true that the overhead of implementing read-only ag is approximately that of turning on Snapshot Isolation?
+from SQLskills Training to everyone:    1:33 PM
+Exactly the same, but without the local tempdb usage
+from Bruce Pratt to everyone:    1:33 PM
+Good deal.  Thanks!
+from Christina Fetherolf to everyone:    1:34 PM
+Is there a table hint for snapshot isolation? So you could just use it on DB1 in that scenario?
+from SQLskills Training to everyone:    1:34 PM
+https://www.sqlskills.com/blogs/paul/sqlskills-sql101-readable-secondary-performance-problems/
+from SQLskills Training to everyone:    1:34 PM
+Christina - no - db-level only
+from Gaurang to everyone:    1:38 PM
+Can you plz explain transaction isolation level on whiteboard like the way you explained statement isolation level ?
+from Stephen Skidmore to everyone:    1:38 PM
+Thanks also to Randolph; I changed my question as we hit the later slide.
+from SQLskills Training to everyone:    1:40 PM
+They're the same
+from SQLskills Training to everyone:    1:41 PM
+Yup - just the versioning timestamp is different - stmt vs txn
+from SQLskills Training to everyone:    1:42 PM
+The thread doing the work in the Access Methods doesn't know the difference
+from Randolph West to everyone:    1:43 PM
+I'm glad to know there's a way to do reports from a single point in time

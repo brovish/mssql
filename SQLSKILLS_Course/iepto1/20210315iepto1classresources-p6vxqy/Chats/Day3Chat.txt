@@ -1,0 +1,181 @@
+from John C the Mick to everyone:    9:05 AM
+Yeah "Sharepoint"!
+from Brian Kallion to everyone:    9:12 AM
+left-handed mouse too!
+from Brian Kallion to everyone:    9:12 AM
+darn you beat me
+from Randolph West to everyone:    9:12 AM
+that's my computer
+from John C the Mick to everyone:    9:12 AM
+VT100?
+from Ricky Davis to everyone:    9:21 AM
+exclusive lock on rows does it still keep intent lock on page.
+from SQLskills Training to everyone:    9:21 AM
+Yes - has to
+from Ricky Davis to everyone:    9:22 AM
+ah convert not escalation
+from Ricky Davis to everyone:    9:23 AM
+so the other ix can lock other rows as well ?
+from Ricky Davis to everyone:    9:31 AM
+it may help I learned this whe looking at the causes of phantom and non repeatable reads.
+from Randolph West to everyone:    9:59 AM
+when locks are released, even if it happens really fast, they're still sequential, not all at once yeah?
+from Ricky Davis to everyone:    10:00 AM
+so how will the nolock impact tiis specific case
+from rajeshd to everyone:    10:00 AM
+so if the reader has Read uncommited, the result would be before the update trasaction state correct?
+from Stephen Skidmore to everyone:    10:00 AM
+I've seen a demo of rows be counted twice with NOLOCK (before+after modification), but not thought about modifiications in this context. Thanks.
+from Randolph West to everyone:    10:01 AM
+it makes sense to do it sequentially
+from Sree to everyone:    10:01 AM
+Why did you say that the transaction isn't yet durable while it was middle of updating rows just because it is all or nothing
+from Ricky Davis to everyone:    10:01 AM
+i mean if sql has a range predicae would it be sequetnil by slot so the slot may not be sequnetial
+from Ricky Davis to everyone:    10:15 AM
+wow a select count(*) is not alwasy using the pk clustered this means a wat to handle pagination logic might be handled differently. thanks!
+from Ricky Davis to everyone:    10:16 AM
+I think I am ok
+from Ricky Davis to everyone:    10:16 AM
+your diagram helped me
+from rajeshd to everyone:    10:24 AM
+can you please repeat from this slide 
+from John C the Mick to everyone:    10:27 AM
+can you pop back to slide 12 for just 2 seconds?
+from Gaurang to everyone:    10:28 AM
+you said, two diff. logs 1 on the disk and another one where ?
+from Stephen Skidmore to everyone:    10:29 AM
+From Log (in buffer) to Transaction Log (on disk), advise user... write to data file '
+from Stephen Skidmore to everyone:    10:29 AM
+'later'
+from rajeshd to everyone:    10:30 AM
+disk meaning log file not data file 
+from SQLskills Training to everyone:    10:30 AM
+Correct
+from rajeshd to everyone:    10:36 AM
+any difference between using nolock vs read commited 
+from rajeshd to everyone:    10:40 AM
+can you give an example of "do not allow interaction in the midst of the batch"
+from rajeshd to everyone:    10:43 AM
+thanks
+from SQLskills Training to everyone:    10:46 AM
+In-memory tables don't use locks
+from SQLskills Training to everyone:    10:46 AM
+I'll discuss in M5
+from Ricky Davis to everyone:    10:47 AM
+hekaton = floating point excdeption in my mind
+from rajeshd to everyone:    10:47 AM
+I wonder why the IsReadCommittedSnapshotOn is off by defult ?
+from Bruce Pratt to everyone:    10:49 AM
+compatability with earlier sql editions
+from rajeshd to everyone:    10:50 AM
+TIL: that Azure has by default IsReadCommittedSnapshotOn is ON
+from Brian Kallion to everyone:    10:52 AM
+interesting to think of it that way, the decisions they made there without regard for backward compatibility
+from Sree to everyone:    10:52 AM
+just for AzureSQL DB though right
+
+
+
+from Randolph West to everyone:    11:42 AM
+I dig that feature
+from John C the Mick to everyone:    11:53 AM
+Most;y
+from John C the Mick to everyone:    11:53 AM
+Mostly
+from James O'Doherty to everyone:    11:53 AM
+multiple schema
+from Ivan Nunez to everyone:    11:53 AM
+here
+from Ben Miller to everyone:    11:53 AM
+Not the majority in mine
+from John C the Mick to everyone:    11:53 AM
+We've seen more than one but mostly dbo
+from rajeshd to everyone:    11:53 AM
+one schema for app dbo and admin for just DBA procs
+from Christina Fetherolf to everyone:    11:53 AM
+We use specific schemas...but not really for security 
+from Randolph West to everyone:    11:53 AM
+I use schemas for logical partitioning
+from Alex to everyone:    11:56 AM
+most are dbo, some aren't
+from rajeshd to everyone:    11:57 AM
+some would do it just to find out how big of a problem it would create compared to later in the noon
+from Sree to everyone:    11:58 AM
+Cross schema referencing indexed views burnt us as the column stats aren't generated for those
+from rajeshd to everyone:    11:59 AM
+online rebuild still requires schema lock before and at  the end. Reffered Pauls block once
+from rajeshd to everyone:    11:59 AM
+blog*
+from rajeshd to everyone:    12:01 PM
+I though it removes the plan from the procedure cache 
+from SQLskills Training to everyone:    12:07 PM
+@Rajesh - online index ops require an S lock at the start and a SCH-M at the end. I'll explain in module 7.
+from Randolph West to everyone:    12:08 PM
+yes
+from Randolph West to everyone:    12:08 PM
+:P
+from John C the Mick to everyone:    12:08 PM
+Nope, we eliminated 2008 and back!
+from Stephen Skidmore to everyone:    12:18 PM
+Ooof. Recently had a NOLOCK query (report) run hours longer than it should have (due to a value missing in the statistics) and block the completion of an online index rebuild the next morning (Sch-M)... which subsequent blocked all select statements on that table until we got into work and stopped the long running query.
+from rajeshd to everyone:    12:21 PM
+can you start from top please if that's ok
+from rajeshd to everyone:    12:30 PM
+If I were to rebuld an index online, is disabling the statistics for that index before and enable back post index build  
+from rajeshd to everyone:    12:30 PM
+suggested ?
+from SQLskills Training to everyone:    12:31 PM
+No - I haven't heard of that.
+from SQLskills Training to everyone:    12:44 PM
+No - I can't see anywhere in table properties wizard in SSMS to set lock escalation
+from rajeshd to everyone:    12:48 PM
+Table,properties,extended properties, add custom property in this case "LockEscalation"
+from Randolph West to everyone:    12:49 PM
+PRIMARY
+from Randolph West to everyone:    12:49 PM
+you're fired
+from SQLskills Training to everyone:    12:52 PM
+@Rajesh - that doesn't change the escalation setting, it just adds a named extended property
+from rajeshd to everyone:    12:55 PM
+ah ok, thanks for checking 
+from SQLskills Training to everyone:    12:55 PM
+Extended proporties don't change the table - they're just user-defined metadata
+from SQLskills Training to everyone:    12:55 PM
+Like developer who created a proc or who last updated a table definition
+from SQLskills Training to everyone:    12:57 PM
+You haven't configured partitioning yet
+from Sree to everyone:    1:09 PM
+would it be okay to spend a min or two on difference between lock escalation attempts and actual lock escalations as in what is actually preventing an escalation attempt from actually escalating.. is this the same as estimated plan vs actual plan?
+from SQLskills Training to everyone:    1:20 PM
+@sree - you're talking about the counter in dm_db_index_operational_stats, right?
+from Sree to everyone:    1:20 PM
+yes
+from SQLskills Training to everyone:    1:20 PM
+Just because the lock manager wants to escalate, doesn't mean it can. Another SPID may be holding a blocking lock that's not compatible with, say, table X
+from Sree to everyone:    1:22 PM
+So it getting blocked would be the only scenario that it woudn't escalate when it wants to
+from SQLskills Training to everyone:    1:22 PM
+Correct
+from rajeshd to everyone:    1:37 PM
+not when batching mostly in our env
+from Sree to everyone:    1:39 PM
+Would you suggest batching using a low row count as a solution to avoid lock escalation?
+from Sree to everyone:    1:39 PM
+contention is between writers in my case
+from Sree to everyone:    1:40 PM
+blocking
+from Gaurang to everyone:    1:45 PM
+We have intermittent blocking some times for Vendor App where we can't change the code. Any suggestion if anything can be done from Infrastructure side ? Or monitoring scripts that reports blocking reports with query to Vendor ?
+from SQLskills Training to everyone:    1:45 PM
+Snapshot isolation
+from Christina Fetherolf to everyone:    1:47 PM
+YES!
+from Sree to everyone:    1:47 PM
+yes
+from Brian.Woolwine to everyone:    1:47 PM
+yep
+from Gaurang to everyone:    1:47 PM
+yes
+from SQLskills Training to everyone:    1:48 PM
+We use it with clients too

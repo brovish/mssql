@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Transactions">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="KLRANDAL\SQL2019DEV:KLRANDAL\KRandal">
+          <Created>2021-03-16T13:47:10.5573405-07:00</Created>
+          <Type>SQL</Type>
+          <Server>KLRANDAL\SQL2019DEV</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB>master</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="BindToken01 - GetBindToken.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>BindToken01 - GetBindToken.sql</FullPath>
+        </FileNode>
+        <FileNode Name="BindToken02 - BindSession.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>BindToken02 - BindSession.sql</FullPath>
+        </FileNode>
+        <FileNode Name="CheckingForXACT_ABORTinALLprocedures.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KLRANDAL\SQL2019DEV:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>KLRANDAL\SQL2019DEV</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>CheckingForXACT_ABORTinALLprocedures.sql</FullPath>
+        </FileNode>
+        <FileNode Name="ErrorHandling and XACT_ABORT.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KLRANDAL\SQL2019DEV:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>KLRANDAL\SQL2019DEV</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>ErrorHandling and XACT_ABORT.sql</FullPath>
+        </FileNode>
+        <FileNode Name="nested savepoints.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>nested savepoints.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Raiserror with a permanent user-defined message.SQL">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Raiserror with a permanent user-defined message.SQL</FullPath>
+        </FileNode>
+        <FileNode Name="Restore log with marked transactions.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Restore log with marked transactions.sql</FullPath>
+        </FileNode>
+        <FileNode Name="transaction madness.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>transaction madness.sql</FullPath>
+        </FileNode>
+        <FileNode Name="update using SET with variable and column.SQL">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>update using SET with variable and column.SQL</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

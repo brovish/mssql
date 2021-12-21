@@ -1,0 +1,234 @@
+from Gaurang to everyone:    8:43 AM
+Hi Paul, Good morning
+from Gaurang to everyone:    8:43 AM
+I have one concern with our last Topic: Logging and Recovery
+from Gaurang to everyone:    8:43 AM
+With Simple Recovery mode turned ON, we can't have point in time recovery since Tran Log backup won't run, so how LOG space would get released in between two Full backups. Will it keep growing ? It would release LOG space when In flight transaction gets committed Else it will keep growing LOG file, So in this case How DBCC shrink File with log backup helps releasing space ?
+from SQLskills Training to everyone:    8:44 AM
+Checkpoints
+from SQLskills Training to everyone:    8:44 AM
+Look at slide 50 in the module
+from Gaurang to everyone:    8:45 AM
+ok Thank you!
+from Alex to everyone:    8:45 AM
+Morning
+from Randolph West to everyone:    8:54 AM
+this is my favourite module
+from Kimberly Slides to everyone:    8:55 AM
+mine too!! so many lightbulb moments!
+from Kimberly Slides to everyone:    8:55 AM
+well... and stats...
+from Kimberly Slides to everyone:    8:55 AM
+and indexing strategies...
+from Kimberly Slides to everyone:    8:55 AM
+lol
+from Randolph West to everyone:    8:55 AM
+haha
+from Kimberly Slides to everyone:    8:55 AM
+let the good times roll!
+from Randolph West to everyone:    8:56 AM
+is it true that statistics for an object fit on a single data page? That explains the limit of 200 steps
+from Randolph West to everyone:    8:57 AM
+my 16 week-old puppy is on my lap if it helps your decision
+from Randolph West to everyone:    8:58 AM
+I'll tweet her
+from Stephen Skidmore to everyone:    8:58 AM
+Randolph, I think I can answer that one. Yes. But wait for Kimberly's explaination of Filtered Statistics. :)
+from Randolph West to everyone:    8:59 AM
+ah! that makes sense
+from Stephen Skidmore to everyone:    8:59 AM
+#learning :)
+from SQLskills Training to everyone:    8:59 AM
+Not till 9am
+from rajeshd to everyone:    8:59 AM
+Good morning everyone!
+from Christina Fetherolf to everyone:    8:59 AM
+He needs more coffee apparently
+from Stephen Skidmore to everyone:    9:00 AM
+Good morning Paul
+from John C to everyone:    9:00 AM
+mornin'
+from Stephen Skidmore to everyone:    9:03 AM
+I'm sure you did :)
+from Ricky Davis to everyone:    9:12 AM
+if you haven't coverened it I  am interested in how to interpret the scan coutn in io statistics.  
+from Ricky Davis to everyone:    9:15 AM
+yeah
+from Ricky Davis to everyone:    9:16 AM
+that is what I do but I did not have a reason for it until now
+from Ricky Davis to everyone:    9:25 AM
+it explains why sybase consultatns argue for heaps on sybase
+from Ricky Davis to everyone:    9:26 AM
+my first job on sybase really threw me off but I did not know why until now
+from rajeshd to everyone:    9:35 AM
+what does the scan count 9 means ?
+from rajeshd to everyone:    9:35 AM
+ah got it.
+from rajeshd to everyone:    9:35 AM
+thanks
+from Ricky Davis to everyone:    9:49 AM
+so if I don't update the records then this is not a concern but Paul talked about how heaps are less efficient in inserts
+from Ricky Davis to everyone:    9:51 AM
+ok good to aks
+from Randolph West to everyone:    9:56 AM
+yikes
+from Randolph West to everyone:    10:01 AM
+are you sharing a screen?
+from Sree to everyone:    10:03 AM
+That was going to my question in the break.. Maintenance needed to NC Indexes when changing the clustering Key .. but that seems to be more apt for a later module?
+from Randolph West to everyone:    10:39 AM
+heh
+from Sree to everyone:    10:54 AM
+The clustering key choice slide is awesome!
+
+
+from Sree to everyone:    11:45 AM
+Hide Yo guids
+from Randolph West to everyone:    11:47 AM
+yep
+from Ben Miller to everyone:    11:47 AM
+19B
+from Ben Miller to everyone:    11:48 AM
+I would require therapy if there was a guid(s) in this table for sure.
+from Randolph West to everyone:    11:51 AM
+oh I hate that
+from Ivan Nunez to everyone:    12:01 PM
+[AdventureWorks].[Sales].[SalesOrderHeader] adds SO to the SalesOrderNumber and PO to the PurchaseOrderNumber
+from Sree to everyone:    12:17 PM
+why do you have the (identity?) next to bigint
+from Sree to everyone:    12:17 PM
+Curious when would DateCol+Int comes into play.. because if you didn't have an identity in the first place and have to add a bigint as well then wouldn't you just make it identity and then go with just that..
+from Sree to everyone:    12:22 PM
+you said would not use as a primary key , you meant as the clustering key correct?
+from Randolph West to everyone:    12:23 PM
+SSMS makes your PK clustered, but it's not required
+from Sree to everyone:    12:25 PM
+Because it is a challenge in an existing app that already uses NewID()
+from Randolph West to everyone:    12:25 PM
+ReplicationGUID says hi
+from Ben Miller to everyone:    12:25 PM
+NEWSEQUENTIALID() does have to be in a DEFAULT, so that may be why some don't use it, but it would be like IDENTITY, so it is not so hard.
+from Sree to everyone:    12:26 PM
+but what if you have existing GUID's
+from Sree to everyone:    12:26 PM
+do you have to change them out
+from Ben Miller to everyone:    12:27 PM
+PowerPoint is HARD :-)
+from Randolph West to everyone:    12:38 PM
+now we have ten problems
+from Bruce Pratt to everyone:    12:39 PM
+"But it worked on my system!"  ;-)
+from SQLskills Training to everyone:    12:44 PM
+Nope
+from SQLskills Training to everyone:    12:44 PM
+There are some blog posts where people say it doesn't help a whole bunch
+from SQLskills Training to everyone:    12:44 PM
+Because it auto-throttles inside
+from Randolph West to everyone:    12:44 PM
+Pam's blog post says that the other techniques may be quicker
+from rajeshd to everyone:    12:45 PM
+https://techcommunity.microsoft.com/t5/sql-server/behind-the-scenes-on-optimize-for-sequential-key/ba-p/806888
+from Randolph West to everyone:    12:45 PM
+https://techcommunity.microsoft.com/t5/sql-server/behind-the-scenes-on-optimize-for-sequential-key/ba-p/806888
+from Randolph West to everyone:    12:45 PM
+snap
+from Bruce Pratt to everyone:    12:47 PM
+yes she did say that!  and she can tell you how and why to do it.
+from Christina Fetherolf to everyone:    12:47 PM
+solve one problem...create others...
+from Bruce Pratt to everyone:    12:48 PM
+she did not say delete data.  she said elimiate big table problem by eliminated big tables.
+from Ben Miller to everyone:    12:56 PM
+Can you bulk copy into a PV?
+from Ben Miller to everyone:    12:58 PM
+should we be seeing a screen?
+from Ben Miller to everyone:    12:59 PM
+and there could be a billion rows.
+from Bruce Pratt to everyone:    12:59 PM
+it is a multiple sze of table operation....  :-(
+from Ivan Nunez to everyone:    1:00 PM
+nah, do it all live
+from Bruce Pratt to everyone:    1:04 PM
+Isn't there a caveat on that FASTEST type for the queries that are range queires that align to the clustered key?
+from Bruce Pratt to everyone:    1:05 PM
+ah of course.  leaf size is a factor...
+from rajeshd to everyone:    1:39 PM
+yea
+from Brian Kallion to everyone:    1:39 PM
+hello! :)
+from J Donnelly to everyone:    1:40 PM
+still here
+from Randolph West to everyone:    1:53 PM
+stunned silence ??
+from rajeshd to everyone:    1:54 PM
+thanks for that
+from Randolph West to everyone:    1:54 PM
+I love it
+from rajeshd to everyone:    1:54 PM
+I meant for uploading today itself 
+from Bruce Pratt to everyone:    1:55 PM
+i'm waiting for the leafs to take root....
+from Sree to everyone:    1:55 PM
+Question on Sequential GUID
+from Ricky Davis to everyone:    1:56 PM
+so you create a table that maps a large varchar to an int id then all of your selects have to hit the mapping table to get the id so tht it can join against other tables.  Is it worth the cost.  I have keys for indexes that are varchar(50) and varchar(64) that are client defined.
+from SQLskills Training to everyone:    1:56 PM
+Might hit a dupe
+from SQLskills Training to everyone:    1:57 PM
+I wouldn't recommend it tbh
+from Randolph West to everyone:    1:57 PM
+I use that model for retrieving archive data
+from Randolph West to everyone:    1:57 PM
+Ricky
+from SQLskills Training to everyone:    1:59 PM
+Why not change to a bigint?
+from Ricky Davis to everyone:    1:59 PM
+got it
+from SQLskills Training to everyone:    2:01 PM
+I'll show that tomorrow
+from SQLskills Training to everyone:    2:01 PM
+bigint
+from Bruce Pratt to everyone:    2:01 PM
+Too geeky to call it the SawToothSequenceGUID...  ;-)
+from Ben Miller to everyone:    2:01 PM
+just don't store them as text :-)
+from Stephen Skidmore to everyone:    2:02 PM
+Do Sequential GUID's still include mac addresses?
+from Ricky Davis to everyone:    2:02 PM
+but they are global unique and developers just love them.
+from Bruce Pratt to everyone:    2:03 PM
+but devs also love RBAR....
+from SQLskills Training to everyone:    2:03 PM
+Yes, it is partially based on MAC address.
+from Ricky Davis to everyone:    2:03 PM
+can i unmute
+from SQLskills Training to everyone:    2:03 PM
+They're only unique across multiple servers if each server has a network card
+from SQLskills Training to everyone:    2:03 PM
+(from the docs)
+from J Donnelly to everyone:    2:06 PM
+we found bigint's worked great for us, especially when hitting billion record tables, but if your services are distributed on cloud, where your ID assignments might be more complicated, then potentially go with sequences or grids (Dan Lindstedt explains the various strategies well in Data Vault 2.0, not specific to SQL Server however)
+from Bruce Pratt to everyone:    2:08 PM
+This could be a case that could warrant indexed computed, eg, hash function of some sort, on those columns.
+from J Donnelly to everyone:    2:08 PM
+yep, better put
+from Stephen Skidmore to everyone:    2:09 PM
+Thanks Paul, I think I read something about sequential GUID's being based on type one; whereas the non-sequential moved away from this practice with type four - but now can't find that reference and raised it in case of privacy concerns.
+from Randolph West to everyone:    2:09 PM
+for GUID v4 it changed
+from SQLskills Training to everyone:    2:09 PM
+I just read the docs
+from Randolph West to everyone:    2:09 PM
+it's pseudorandom now
+from Stephen Skidmore to everyone:    2:11 PM
+Easy to test. I think it's the last part of the [sequential] GUID which would look the same.
+from Ricky Davis to everyone:    2:12 PM
+so has anyone uses something to generate a sequential key without relying upon database server
+from SQLskills Training to everyone:    2:13 PM
+Use a tuple (serverID, bigint)
+from J Donnelly to everyone:    2:13 PM
+sounds good
+from SQLskills Training to everyone:    2:13 PM
+That's the way to do it for peer-to-peer repl, for example
+from J Donnelly to everyone:    2:14 PM
+https://danlinstedt.com/allposts/datavaultcat/dv2-keys-pros-cons/

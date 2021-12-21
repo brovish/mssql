@@ -1,0 +1,136 @@
+from Sree to everyone:    9:04 AM
+you called it a small change to database because a size of a log record is capped?
+from Sree to everyone:    9:05 AM
+and log file is not considered non-volatile storage, correct?
+from Sree to everyone:    9:05 AM
+*Is 
+from 000907116 to everyone:    9:13 AM
+Every VLF, is sacred....
+from 000907116 to everyone:    9:14 AM
+This is automatic, correct?
+from 000907116 to everyone:    9:14 AM
+Not configurable
+from 000907116 to everyone:    9:14 AM
+Thanks
+from 000907116 to everyone:    9:14 AM
+why create more work?
+from Randolph West to everyone:    9:17 AM
+a side effect of sequential writes
+from Randolph West to everyone:    9:26 AM
+does crash recovery run a checkpoint when it's done? If you cover that later it's fine, I'm patient.
+from Ricky Davis to everyone:    9:27 AM
+I am interested in what happens when data pages flush and writes a checkpoin, but the system fails when the checkpoint was being written what happens
+from Randolph West to everyone:    9:27 AM
+thanks
+from Ricky Davis to everyone:    9:28 AM
+ok. i did not know start checkpoin got written
+from Bruce Pratt to everyone:    9:29 AM
+Because undo, redo are fully logged operations?
+from Bruce Pratt to everyone:    9:29 AM
+thanks
+from Ricky Davis to everyone:    9:31 AM
+so if I am writing explicit transaction into 13 long winded tables then the allocation in the virual log could be a contention issue?
+from Ricky Davis to everyone:    9:43 AM
+when you get asked by developers how to query to find a value before and after an update, is there a way to do this with this.
+from James O'Doherty to everyone:    9:44 AM
+does log shipping impact the  number of VLFs?
+from Randolph West to everyone:    9:45 AM
+Ricky, I wouldn't give devs access to this because they'll abuse the functionality
+from Ricky Davis to everyone:    9:46 AM
+ok 
+from Ricky Davis to everyone:    9:46 AM
+@randolph they are asking me and I always say no
+from Randolph West to everyone:    9:47 AM
+Paul, if you have compressed data, is the log record going to be compressed too?
+from Bruce Pratt to everyone:    9:47 AM
+I tell them it's possible if they are willing to implenent CDC j
+from rajeshd to everyone:    9:47 AM
+recovery post restores in log shipping wouldn't effected by hugh number of VLF's?
+from Randolph West to everyone:    9:47 AM
+iiinteresting
+from Sree to everyone:    9:48 AM
+will be row compressed even if the data isn't compressed? or only when compression is in play
+from Bruce Pratt to everyone:    9:54 AM
+UPDATE vs INSERT and DELETE pair recordds depends on SQL's inplace update  ability?
+from Ricky Davis to everyone:    9:55 AM
+so did it always do that.  
+from Bruce Pratt to everyone:    9:56 AM
+ah.  thanks.
+from Randolph West to everyone:    9:59 AM
+ooh that's smart
+from Ricky Davis to everyone:    10:00 AM
+yes!
+from Oleg.Pokrovskiy to everyone:    10:00 AM
+What happens to the Page compression in a Log Shipping? Do we lose a second part of a Page compression on secondary?
+from Sree to everyone:    10:01 AM
+I got the part that each log record could only correspond to a single table but it also has to be a single record and not multiple records
+from Ricky Davis to everyone:    10:04 AM
+that is why I say no
+from Ricky Davis to everyone:    10:06 AM
+yeah baby, i have done that and that is why they thougth I could find every update change for them as well.
+from Ivan Nunez to everyone:    10:07 AM
+Nice, this is going to help me when "no one did it"
+from Randolph West to everyone:    10:07 AM
+the number of times I've done this ...
+from Randolph West to everyone:    10:08 AM
+I love temporal tables for bypassing this kind of recovery
+from Ricky Davis to everyone:    10:09 AM
+just hope they don't have it on simple recovery mode.
+from Bruce Pratt to everyone:    10:09 AM
+but it still beats the incremental log crawl approach....
+from Bruce Pratt to everyone:    10:20 AM
+does the log buffer change is size ?
+from rajeshd to everyone:    10:20 AM
+how to address if there would be HADR_SYNC_COMMITS on a peek time
+from rajeshd to everyone:    10:20 AM
+peak*
+from rajeshd to everyone:    10:23 AM
+sounds good
+from Gaurang to everyone:    10:25 AM
+would more threads with 2019 will help in synchronous replica if I have more HADR_SYNC_COMMITS ?
+from Gaurang to everyone:    10:25 AM
+Thank you!
+from Brian Kallion to everyone:    10:26 AM
+more log writer threads could result in log records being written out of order?  but it wouldn't really matter because of those LSN back-references?
+from Bruce Pratt to everyone:    10:26 AM
+I'll dig up the MS references I found that address HADR_SYNC_COMMIT "troubleshooting" during one of our breaks.
+from Ben Miller to everyone:    10:36 AM
+2005 i believe
+from Ricky Davis to everyone:    10:37 AM
+the dbas that I work with are saying we are getting lots of contention and I moved it to 1000 cached but they still say they are seing it.  what do you think may be gong on?
+from Ben Miller to everyone:    10:37 AM
+sorry 2012
+from Ricky Davis to everyone:    10:37 AM
+yep 
+from Ricky Davis to everyone:    10:38 AM
+I forgot it is wait type let me get it
+from Ben Miller to everyone:    10:44 AM
+What effect does it have on SQL to have a VLF of 8GB in size?
+from Ben Miller to everyone:    10:45 AM
+sneaky.
+from Ben Miller to everyone:    10:46 AM
+but as for performance there is no impatc?
+from Gaurang to everyone:    10:46 AM
+If user db keep feeling up twice a day, what needs to be check to find the root cause ?
+Log size is half of Database size
+from Bruce Pratt to everyone:    10:46 AM
+What is the overhead / risk of those db_log system functions on production systems?
+from Ben Miller to everyone:    10:46 AM
+ok
+from Randolph West to everyone:    10:47 AM
+does crash recovery run at every startup? I know you said it checks for clean flag, but I *always* see roll back and roll forward in my errorlog
+from Bruce Pratt to everyone:    10:48 AM
+but I can run fn_dumpblog on any same version server?
+from Randolph West to everyone:    10:49 AM
+yes, eve in system database
+from Randolph West to everyone:    10:49 AM
+*even
+from Randolph West to everyone:    10:49 AM
+yes
+from Bruce Pratt to everyone:    11:03 AM
+The MS HADR / AG references:
+from Bruce Pratt to everyone:    11:03 AM
+MSDN 12 Apr 2017Sourabh Agarwalhttps://techcommunity.microsoft.com/t5/sql-server-support/troubleshooting-data-movement-latency-between-synchronous-commit/ba-p/319141MSDN 5 Apr 2018Simon Suhttps://techcommunity.microsoft.com/t5/sql-server/troubleshooting-high-hadr-sync-commit-wait-type-with-always-on/ba-p/385369MSDN 5 Apr 2018Simon Suhttps://techcommunity.microsoft.com/t5/sql-server-support/lesson-learned-from-an-availability-group-performance-case/ba-p/31915
+
+
+

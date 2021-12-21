@@ -1,0 +1,107 @@
+from rajeshd to everyone:    9:05 AM
+sure
+from Randolph West to everyone:    9:06 AM
+I love indexed views
+from rajeshd to everyone:    9:15 AM
+We were relying on SentryOne for Plans but for some procedure with 20-40 blocks of code, it doesn't. So we started capturing plans before recompiling of such procs for analysis afterwards bad vs good plan. 
+from rajeshd to everyone:    9:19 AM
+thank you
+from Randolph West to everyone:    9:26 AM
+I love it when banks get speedups like that
+from rajeshd to everyone:    9:31 AM
+if a auto created statistics last_updated time is very recent, can that be understand as that statistics was used by query optimizer for producing an optimal plan ?
+from Bruce Pratt to everyone:    9:35 AM
+SQL Server query optimizer will sometimes have statistics created where none exists.  but it won't update any.
+from Ivan Nunez to everyone:    9:48 AM
+3
+from Ivan Nunez to everyone:    9:48 AM
+the answer is always 3 
+from Randolph West to everyone:    10:06 AM
+wow
+from Oleg.Pokrovskiy to everyone:    10:08 AM
+Why not to make a TF to activate 300 steps?
+from Randolph West to everyone:    10:15 AM
+that "not including" gets me every time
+from rajeshd to everyone:    10:21 AM
+how does the RANGE_ROWS is 7 for 244-247 excluding  the upper bound?
+from Ricky Davis to everyone:    10:47 AM
+in your thiking what is more selective a last name or a first name and if you require both what would you reccomend
+from Ricky Davis to everyone:    10:47 AM
+never mind
+from Ricky Davis to everyone:    10:48 AM
+i think so
+from Oleg.Pokrovskiy to everyone:    10:51 AM
+IndexID is actually StatsID
+from Oleg.Pokrovskiy to everyone:    10:52 AM
+Exept 5
+from Oleg.Pokrovskiy to everyone:    10:52 AM
+_WA is not an index
+from Bruce Pratt to everyone:    10:53 AM
+They probably share the same undying system table that is hidden by the views we use.
+from Randolph West to everyone:    12:15 PM
+Oh Kimberly
+from Randolph West to everyone:    12:35 PM
+I wish SQL Server did indexes on FKs by default
+from Randolph West to everyone:    12:35 PM
+I know why it doesn't
+from Randolph West to everyone:    12:35 PM
+but I wish it did
+from Randolph West to everyone:    12:35 PM
+yeah
+from Bruce Pratt to everyone:    12:36 PM
+DRI was a later feature -- 6x?  7?
+from Brian Kallion to everyone:    12:36 PM
+declarative referential integrity?
+from Bruce Pratt to everyone:    12:36 PM
+declarative refer inte
+from Christina Fetherolf to everyone:    12:37 PM
+Doesn't Ola Hallengren have scripts to check for missing FK indexes? (I know we have a job that uses something from Ola to identify missing FK indexes)
+from 000907116 to everyone:    12:38 PM
+Haha!
+from Bruce Pratt to everyone:    12:41 PM
+there's are Oracle "feature" -- multiple nulls in a unique constraint ...
+from Randolph West to everyone:    12:53 PM
+This is the correct link: https://docs.microsoft.com/en-ca/archive/blogs/bartd/are-you-using-sqls-missing-index-dmvs
+from Randolph West to everyone:    1:02 PM
+I like that you can combine the SETs in one line, so SET STATISTICS IO, NOCOUNT ON
+from Randolph West to everyone:    1:08 PM
+GAH
+from Randolph West to everyone:    1:09 PM
+don't run it in production
+from Randolph West to everyone:    1:09 PM
+??
+from Randolph West to everyone:    1:52 PM
+stunned again
+from Ben Miller to everyone:    1:52 PM
+tweet tweet
+from Randolph West to everyone:    1:55 PM
+LOL
+from Brian.Woolwine to everyone:    1:55 PM
+wow. just wow! 
+from rajeshd to everyone:    1:55 PM
+we have been seeing some blockings on secondary readable replica, because of a statistics process. We have update statistics asyn on, auto update statistics on. Any clue as to what could be the problem?
+from rajeshd to everyone:    1:55 PM
+seems like my question was missed 
+from Ben Miller to everyone:    1:57 PM
+is the AG async or synchronous?
+
+
+
+from Brian Kallion to everyone:    11:58 AM
+auto update stats will update manually-created stats correct?  hope so
+from Brian Kallion to everyone:    11:59 AM
+yes+ is always better 
+from rajeshd to everyone:    11:59 AM
+we have been seeing some blockings on secondary readable replica, because of a statistics process. We have update statistics asyn on, auto update statistics on. Any clue as to what could be the problem?
+from Oleg.Pokrovskiy to everyone:    11:59 AM
+unless norecompute is set, I guess
+from James Donnelly to everyone:    12:13 PM
+this is excellent stuff, great solution for a few things including ststs
+from Ben Miller to everyone:    1:58 PM
+only on create
+from rajeshd to everyone:    1:58 PM
+SELECT StatMan([SC0], [SB0000]) FROM (SELECT TOP 100 PERCENT [SC0], step_direction([SC0]) over (order by NULL) AS [SB0000]  FROM (SELECT [date_deleted] AS [SC0] FROM [dbo].[tablename] TABLESAMPLE SYSTEM (5.139837e-002 PERCENT) WITH (READUNCOMMITTED) ) AS _MS_UPDSTATS_TBL_HELPER ORDER BY [SC0], [SB0000] ) AS _MS_UPDSTATS_TBL  OPTION (MAXDOP 16)
+from SQLskills Training to everyone:    1:59 PM
+I wonder if the update is taking locks
+from SQLskills Training to everyone:    1:59 PM
+We'll ask Jon

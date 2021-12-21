@@ -1,0 +1,201 @@
+from Randolph West to everyone:    9:05 AM
+I wrote a blog post about the time I intentionally hit the max database limit, and it took a LOT of effort to get there.
+from John C to everyone:    9:13 AM
+it depends
+from Sree to everyone:    9:19 AM
+who would you go bother for this guidance on IO subsystem 
+from Gaurang to everyone:    9:19 AM
+How about the size of data file ? Any preference ?
+from Sree to everyone:    9:20 AM
+Are there any best practices on File Groups themselves if you are not partitioning.. or is this a IEVLT question
+from Sree to everyone:    9:21 AM
+like i've seen Non Clustered Indexes grouped together, i've seen workload specific tables grouped together
+from rajeshd to everyone:    9:25 AM
+With people implementing HA with two seconday replica and a DR, what are the chances one would end up doing peacemeal restore? just curious 
+from Sree to everyone:    9:28 AM
+Arizona? lol
+from Bruce Pratt to everyone:    9:28 AM
+east coast 
+from Connor to everyone:    9:28 AM
+The eastern states, as they'd close sooner
+from Randolph West to everyone:    9:28 AM
+the smallest one
+from Sree to everyone:    9:28 AM
+California or Newyork
+from Randolph West to everyone:    9:29 AM
+huh, talk about knowing your customers
+from John C to everyone:    9:29 AM
+the un-young
+from Bruce Pratt to everyone:    9:29 AM
+Well this old guy missed a vital part of the divisions...  ;-)
+from Gaurang to everyone:    9:36 AM
+Can I/O profiling be done from SQL end to find which DB causing I/O latency and where? Any monitoring scripts ?
+from Kimberly Slides to everyone:    9:38 AM
+https://www.sqlskills.com/blogs/paul/capturing-io-latencies-period-time/
+from Ben Miller to everyone:    9:39 AM
+How prolific is the use of BPE where you have been?
+from Ben Miller to everyone:    9:40 AM
+thx
+from Bruce Pratt to everyone:    9:41 AM
+and treat the hybrid buffer like bpe -- if Ent, add RAM?
+from Bruce Pratt to everyone:    9:42 AM
+thx
+from Sree to everyone:    9:47 AM
+Typically the IO latency seen by SQL is typically way higher than what is seen at the storage level by a SAN Admin.. how do you in this case figure out if it is the storage or something in between causing the high latency.. and how do you prevent this from skewing your decision on what to expend your SSD storage on
+from Bruce Pratt to everyone:    9:51 AM
+availability and recovery start to play a role in this separation as well as performance
+from Bruce Pratt to everyone:    9:53 AM
+Recently, Argentis has begun recommending the new 2M in 2019.
+from Ben Miller to everyone:    9:54 AM
+We have done that on all my 2019
+from Randolph West to everyone:    9:54 AM
+it's related to Pure AFAIK
+from Bruce Pratt to everyone:    9:54 AM
+That I don't know.  But I think it's general.
+from Ben Miller to everyone:    9:54 AM
+Pure and otherwise
+from Ben Miller to everyone:    9:59 AM
+I meant that I have used 2M as an allocation size on all my Windows2019/SQL2019 servers. Some are on Pure and some are on Nimble.
+from Sree to everyone:    10:10 AM
+what or when should you measure normal PLE.. or how do you go about defining your normal.. do you have one measure for different periods of day ?
+from Gaurang to everyone:    10:10 AM
+Can One NUMA node impact another node eventually ?
+from Gaurang to everyone:    10:10 AM
+pressure
+from Gaurang to everyone:    10:20 AM
+Can you plz explain one more time what is the risk enabling it ?
+from rajeshd to everyone:    10:24 AM
+or not setup to monitor file growth usage 
+from Sree to everyone:    10:24 AM
+Tempdb all files autogrow by default now
+from Sree to everyone:    10:24 AM
+but TF1117 is still useful for other dbs?
+from Sree to everyone:    10:25 AM
+also if you don't have IFS on does Tempdb auto grow need to zero Initialize or is that skipped for tempdb
+from Gaurang to everyone:    10:25 AM
+Any drawback to start with higher Initial size than 8MB ?
+from Gaurang to everyone:    10:27 AM
+Thx
+from Gaurang to everyone:    10:29 AM
+Does log shrinking impact performance too ?
+from Sree to everyone:    10:34 AM
+Reposting mine as well.. 
+from Sree to everyone:    10:34 AM
+from Sree to everyone:    1:10 PMwhat or when should you measure normal PLE.. or how do you go about defining your normal.. do you have one measure for different periods of day ?
+from Connor to everyone:    10:35 AM
+What classifies as 'modern hardware' on which the NTFS cluster block size allocation is no longer a consideration? 
+from Ben Miller to everyone:    10:35 AM
+If your Primary filegroup file does not have any data in it after moving all to another filegroup, shrinking the file, what would I have to do for system tables? Are they fragmented enough to do anything?  Or should I just leave it shrunk and no maintenance has to be done?
+from Brian.Woolwine to everyone:    10:38 AM
+You mentioned using sys.dm_os_buffer_descriptors post consolidation to find out which DB may be now hogging buffer pool resources. Could this also be useful to find out which DBs can be consolidated? is there a better way?  
+from Ben Miller to everyone:    10:38 AM
+How does PLE drop?  Can it drop lower?  When Lazy Writer ticks it up 1 when no pressure, what makes it go down?
+from Randolph West to everyone:    10:40 AM
+Gorkan
+from Brian.Woolwine to everyone:    10:41 AM
+awesome, thank you
+from rajeshd to everyone:    10:43 AM
+Why would some queries request lot of memory grant when they would actually endup needing way less, any hints that we could use for such to request less? I am hopefull once we are on 2019 its gets addressed with memory feedback ( not sure if this covers at some other module, this just passed through my mind)
+from Ben Miller to everyone:    10:43 AM
+Is the Performance Monitor the best way to monitor PLE?  Or is gathering this data every X minutes sufficient to give you a good idea of how things are going?
+from rajeshd to everyone:    10:47 AM
+thanks
+from Ben Miller to everyone:    10:47 AM
+It is
+from Ben Miller to everyone:    10:47 AM
+Ok thanks.
+from Bruce Pratt to everyone:    10:48 AM
+Sometimes, they don't like the answer!
+
+
+
+from Randolph West to everyone:    11:31 AM
+memories of vardecimal
+from Randolph West to everyone:    11:46 AM
+is there a search space limit to how it does dictionary compression? For example, if there are masses of text, does it call it off after a certain amount of time or cycles?
+from Randolph West to everyone:    11:47 AM
+proprietary FTW
+from Randolph West to everyone:    11:47 AM
+thanks
+from Brian Kallion to everyone:    11:55 AM
+does the transaction need the version from 4min ago because it started 4mins ago?
+from Sree to everyone:    11:56 AM
+That (selects using versioned records failing) could happen only when the version store grows and fills up tempdb or is version store the first to be dumped when tempdb fills up and cant grow
+from Randolph West to everyone:    12:05 PM
+minimally logged stuff still catches me out
+from Bruce Pratt to everyone:    12:10 PM
+ah.  Homework for that tf ...
+from Randolph West to everyone:    12:11 PM
+learning new things about tempdb today
+from Sree to everyone:    12:12 PM
+are both default behaviour in 2016+ or just 1118
+from Bruce Pratt to everyone:    12:25 PM
+I waited the entire module content on Tempdb to get insight into your use of ## tables vs #.  ;-) Why do you do that?
+from Randolph West to everyone:    12:25 PM
+awesome
+from Randolph West to everyone:    12:39 PM
+oof, implicit transactions and Oracle
+from Randolph West to everyone:    12:39 PM
+ha snap
+from rajeshd to everyone:    12:42 PM
+where course fee = 2999
+from Sree to everyone:    12:49 PM
+assuming remote query timeout doesn't do anything?
+from Bruce Pratt to everyone:    12:51 PM
+remote query timeout is for that serer's outbound connections
+from rajeshd to everyone:    12:51 PM
+The default value for this option is 600, which allows a 10-minute wait. This value applies to an outgoing connection initiated by the Database Engine as a remote query. This value has no effect on queries received by the Database Engine. 
+from Ricky Davis to everyone:    12:54 PM
+I have seen it but I never use it
+from Ricky Davis to everyone:    12:55 PM
+it makes me afraid
+from Bruce Pratt to everyone:    12:55 PM
+yup
+from Randolph West to everyone:    12:55 PM
+I've used syntax like that - reminds me of the Halloween issue ??
+from Randolph West to everyone:    12:59 PM
+I remember this Oracle behaviour because of a (recoverable with restore from backup) data loss scenario that occurred early in my career
+from John C to everyone:    1:08 PM
+that reminded me of a similar joke about tcp/ip and a wedding
+from Ricky Davis to everyone:    1:10 PM
+it is interesting when you think about.  tables from different databases on a server when you roll it back then all of those transacton logs for those tables are involved.  Then if one of those databases have to be recovereed, is that going to be consistient.
+from Randolph West to everyone:    1:11 PM
+my one customer uses MARS because it's on by default with Entity Framework
+from Randolph West to everyone:    1:12 PM
+when I asked if they knew what it is, they said no
+from Ricky Davis to everyone:    1:15 PM
+i wouldn't becasue xact abort on right
+from Ricky Davis to everyone:    1:15 PM
+i had the class before haha
+from Randolph West to everyone:    1:16 PM
+Redgate compare scripts use XACT_ABORT
+from rajeshd to everyone:    1:19 PM
+does it matter whether its implicit or explicit when used SET XACT_ABORT  ON
+from Bruce Pratt to everyone:    1:24 PM
+CEIP is MS telemetry... 
+from Randolph West to everyone:    1:24 PM
+CEIP is the diagnostic tool
+from Randolph West to everyone:    1:24 PM
+yeah
+from Randolph West to everyone:    1:24 PM
+telemetry
+from Bruce Pratt to everyone:    1:25 PM
+Customer Experience Improvement Program
+from Ricky Davis to everyone:    1:27 PM
+arithabort is a big one in my history
+from Randolph West to everyone:    1:35 PM
+this is my favourite thing about rollback
+from Gaurang to everyone:    1:39 PM
+8
+from Randolph West to everyone:    1:40 PM
+vodka time
+from rajeshd to everyone:    1:41 PM
+its becasue the save at 6  between the first begin commit 
+from rajeshd to everyone:    1:41 PM
+?
+from Randolph West to everyone:    1:41 PM
+yikes
+from Randolph West to everyone:    1:43 PM
+this is too much like hard work
+from Randolph West to everyone:    1:50 PM
+TRY CATCH is cool

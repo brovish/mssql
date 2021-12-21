@@ -1,0 +1,183 @@
+from rajeshd to everyone:    9:06 AM
+yeah we do that 
+from Christina Fetherolf to everyone:    9:19 AM
+Yesterday it did a scan -- today with the new index it did a seek anyways. I think?
+from Christina Fetherolf to everyone:    9:19 AM
+But that's why you had both
+from Christina Fetherolf to everyone:    9:20 AM
+Because yesterday it did the scan -- you wanted to foce the seek. Today you didn't need to force it
+from Randolph West to everyone:    9:40 AM
+Kimberly needs a soundboard for presenting: first two sounds are "Good morning Vietnam" and second is the angelic chorus
+from Randolph West to everyone:    10:06 AM
+include all the NVARCHAR(MAX) ??
+from Randolph West to everyone:    10:09 AM
+not just users, developers too
+from Randolph West to everyone:    10:10 AM
+I have an executive tuning strategy for one particular database
+from Brian Kallion to everyone:    10:27 AM
+index normal forms
+from Ricky Davis to everyone:    10:27 AM
+I am wondering if taking out mi would make that big of a difference and just put it in the inc
+from Ricky Davis to everyone:    10:28 AM
+ok
+from Randolph West to everyone:    10:29 AM
+darn, I have to jump into a meeting now
+from Ricky Davis to everyone:    10:30 AM
+I want to avoid creating a table with a different pk which seems what incl leads you to
+from Ricky Davis to everyone:    10:30 AM
+sure
+from Ricky Davis to everyone:    10:34 AM
+that is the art part
+from Brian Kallion to everyone:    10:37 AM
+sanity check... included columns are just in the leaf level of the NC index right?
+from SQLskills Training to everyone:    10:37 AM
+Yes
+from Brian Kallion to everyone:    10:38 AM
+perfect, have had a mental block on that for years :D
+from Ricky Davis to everyone:    10:40 AM
+how about the argument the mulitiple indexes can be access by different processes. so iti s good to have duplicate indexes.
+from sree to everyone:    10:40 AM
+answered my question too in my case the clustered index came in after the NC that had the clustering key as include as preexisting index
+from Randolph West to everyone:    10:45 AM
+I dig filtered indexes
+from rajeshd to everyone:    10:46 AM
+for such active and inactive data column, if there are are two different query patterns one would search with active and other with inactive, what's the best index , two filtered or one NC on state? 
+from Christina Fetherolf to everyone:    10:52 AM
+Filtered indexes sound similiar to partitioned tables to me. Could you explain why you would use one over the other?
+from Randolph West to everyone:    10:54 AM
+I like filtered indexes for excluding values that dominate a column
+from Oleg.Pokrovskiy to everyone:    10:54 AM
+Would you recommend to set optimal session settings on the instance level?
+from SQLskills Training to everyone:    10:54 AM
+She makes up phrases like 'interval subsumption' all the time...
+from SQLskills Training to everyone:    10:55 AM
+'Yes, it's the indexing fnerg-bloop problem'
+from Ricky Davis to everyone:    10:55 AM
+I never thought of that, using a filetered index instead of a partiioning
+from sree to everyone:    10:56 AM
+do we talk about filtered stats today?
+from Ricky Davis to everyone:    11:00 AM
+I think that would be a big challenge of using filtered index because the call has to be very specific for that filter.
+from Christina Fetherolf to everyone:    11:01 AM
+Thanks -- definitely helped clear it up
+from Brian Kallion to everyone:    11:01 AM
+that one-filtered-index limit, is that because a query basically only uses one NC index per table?
+from Kimberly Slides to everyone:    11:02 AM
+Brian - no, it's because the complexity would be too high AND because of interval subsumption
+from Kimberly Slides to everyone:    11:02 AM
+(I'll talk more about that though)
+from Brian Kallion to everyone:    11:02 AM
+ah ok, i thought it just had a hard limit of sorts.. gotcha
+
+
+
+from Stephen Skidmore to everyone:    11:35 AM
+We learnt that the hard way. The target queries got faster with the filtered index but inserts from an SP started to fail; and yes, the error message which advises "INSERT failed because the SET options have incorrect settings:" is comma separated!
+from Stephen Skidmore to everyone:    11:36 AM
+After digging into it, it became apparent that the 'incompatible' session settings may have been a development practice. At the time, I didn't think to look whether the vendor was actually using the settings, for example: WHERE [column] = NULL
+from Randolph West to everyone:    11:36 AM
+yes you mentioned this previously
+from Stephen Skidmore to everyone:    11:39 AM
+So many levels for it to go 'wrong' :(
+from Randolph West to everyone:    11:40 AM
+Stephen, yikes
+from Bruce Pratt to everyone:    11:40 AM
+just to keep it "interesting" , SSMS ANSI settings defaults are different from those of SQLCMD.....
+from Ricky Davis to everyone:    11:42 AM
+it is a real world problem
+from Bruce Pratt to everyone:    11:42 AM
+however, SQLCMD mode in SSMS inherits apparently the ANSI settings from SSMS 
+from Ricky Davis to everyone:    11:49 AM
+If you can then you should is my motto
+from Randolph West to everyone:    11:52 AM
+I would pivot the attributes, because wide tables are unwieldy
+from Randolph West to everyone:    11:53 AM
+filtered indexes!
+from rajeshd to everyone:    12:08 PM
+24
+from rajeshd to everyone:    12:08 PM
+hours
+from Randolph West to everyone:    12:09 PM
+DTA made me twitch
+from Randolph West to everyone:    12:20 PM
+Bing FTW
+from Stephen Skidmore to everyone:    12:33 PM
+There's some ANSI settings for the SProcin there too
+from sree to everyone:    12:44 PM
+but what's the reason for not allowing it as a config switch
+from rajeshd to everyone:    12:45 PM
+Sorry for asking now..if a procedure is created with recompile, you mentioned the proc plan will not be stored in the procedure cache, so for every execution of the proc it requires new plan generation correct? and is that not same as using with Recompile hint?
+from Christina Fetherolf to everyone:    12:45 PM
+users will always do what you allow them to do. even when the users are developers.
+from Ricky Davis to everyone:    12:48 PM
+So I have two or three queires in the database and they use a differnt predicate one uses only one set of keys so wuldn't a duplicate help
+from rajeshd to everyone:    12:49 PM
+thanks
+from Oleg.Pokrovskiy to everyone:    12:50 PM
+What are Pros and Cons of placing index on multi-file FileGroup?
+from Oleg.Pokrovskiy to everyone:    12:56 PM
+It is induce parallelism on creation & maintenance
+from Randolph West to everyone:    12:56 PM
+yessssss
+from Randolph West to everyone:    12:57 PM
+need coffee
+from Brian Kallion to everyone:    12:58 PM
+i like 'em and am ready to love 'em
+from Bruce Pratt to everyone:    12:59 PM
+"There are three kinds of lies: lies, damned lies, and statistics. "-- (Mark Twain wrote Ben Disraeli said it.)
+from Randolph West to everyone:    1:01 PM
+and Gail Shaw
+from Ricky Davis to everyone:    1:06 PM
+yeah
+from Brian Kallion to everyone:    1:07 PM
+luckily i haven't heard that THIS century
+from Brian Kallion to everyone:    1:07 PM
+oh i believe YOU have :D
+from Randolph West to everyone:    1:08 PM
+they should stop using Oracle then
+from Ricky Davis to everyone:    1:08 PM
+I am now in a process of showing how we lost 1000s of records because of the lack of integrity
+from Randolph West to everyone:    1:19 PM
+this was my aha moment the first time I did the class
+from Ricky Davis to everyone:    1:20 PM
+me too
+from Brian Kallion to everyone:    1:26 PM
+so WITH RECOMPILE is like executing a proc in incognito mode
+from Brian Kallion to everyone:    1:29 PM
+oh agreed, i don't spend all day in incognito
+from Ricky Davis to everyone:    1:30 PM
+like query store
+from Randolph West to everyone:    1:32 PM
+ugh
+from Bruce Pratt to everyone:    1:32 PM
+yeah.  i've written them. last life though
+from rajeshd to everyone:    1:32 PM
+I remember sp_recompile would INVALIDATE plan from the cache, can we be able to get the invalidated plan details? what's the lifetime of that invalidated plan? question for later.
+from John C to everyone:    1:33 PM
+yeo seen those
+from Randolph West to everyone:    1:34 PM
+Redgate has it
+from Randolph West to everyone:    1:34 PM
+but I do know yes ?? 
+from Brian Kallion to everyone:    1:44 PM
+nice cliffhanger
+from Ricky Davis to everyone:    1:46 PM
+will you be covering how temp tables use stats later in the course. 
+from Ricky Davis to everyone:    1:46 PM
+ok no problem
+from Ricky Davis to everyone:    1:47 PM
+Oh I found Paul Whits in my bookmarks for the temp table index usage
+from Randolph West to everyone:    1:48 PM
+hehe
+from SQLskills Training to everyone:    1:48 PM
+That's the best referemce for that
+from SQLskills Training to everyone:    1:48 PM
+Correct
+from Randolph West to everyone:    1:48 PM
+NZ
+from rajeshd to everyone:    1:49 PM
+thanks
+from SQLskills Training to everyone:    1:49 PM
+https://sqlperformance.com/2017/05/sql-performance/sql-server-temporary-object-caching
+from Ricky Davis to everyone:    1:50 PM
+without a plan in cache query store can't  provide you anything

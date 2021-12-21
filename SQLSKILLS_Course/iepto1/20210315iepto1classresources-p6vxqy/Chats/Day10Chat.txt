@@ -1,0 +1,254 @@
+from rajeshd to everyone:    9:06 AM
+sure, thanks
+from Randolph West to everyone:    9:09 AM
+UNION
+from Randolph West to everyone:    9:09 AM
+yeah
+from Randolph West to everyone:    9:16 AM
+yep, once or twice
+from Bruce Pratt to everyone:    9:33 AM
+Oh.  But it's so much better than the client making a call/query for each individual category_no choice!
+from James Donnelly to everyone:    9:38 AM
+I've used INTERSECT to do 1st pass on multiple unrelated AND conditions on billion record tables as well, only returning relevant keys than doing other SELECT column lookups once filtered.. back to subsecond or second performance
+from John C to everyone:    9:39 AM
+Nice tip James
+from Randolph West to everyone:    9:53 AM
+nine years later I might get started on that paper
+from rajeshd to everyone:    9:53 AM
+these links would be shared along with the demo scripts? thank you
+from rajeshd to everyone:    9:55 AM
+locking and index internals both zips downloads the same index internal zip. not sure why!
+from Randolph West to everyone:    9:55 AM
+Kimberly, do you mind adding in your duplicate index finder? The links to the script seem to be broken.
+from Randolph West to everyone:    9:56 AM
+Sorry ??
+from Randolph West to everyone:    9:56 AM
+hire me, I'll fix it :P
+from Randolph West to everyone:    9:56 AM
+I'll try that
+from James Donnelly to everyone:    9:59 AM
+just say no
+from Randolph West to everyone:    10:11 AM
+I love liquorice!
+from John C to everyone:    10:11 AM
+I (heart) black licorice
+from Randolph West to everyone:    10:18 AM
+I love that "MANY examples will work on SQL Server 2000 in addition to SQL Server 2005"
+from Randolph West to everyone:    10:18 AM
+not everyone is off 2000
+from Randolph West to everyone:    10:21 AM
+hashes shout sorts to me
+from Randolph West to everyone:    10:21 AM
+yeah
+from Brian Kallion to everyone:    10:31 AM
+so duplicate indexes suck, but at least creating them would be pretty efficient!
+from Randolph West to everyone:    10:32 AM
+provider_no
+from Oleg.Pokrovskiy to everyone:    10:40 AM
+Last query for the full scan
+from Oleg.Pokrovskiy to everyone:    10:41 AM
+INDEX(1) in the join
+from Randolph West to everyone:    10:42 AM
+Chrome!
+from Randolph West to everyone:    10:49 AM
+yes I see
+from Randolph West to everyone:    10:53 AM
+does DTA know about included columns?
+from Randolph West to everyone:    10:54 AM
+ah thanks
+from Randolph West to everyone:    11:00 AM
+merge is what I meant with sorts
+
+
+from Randolph West to everyone:    11:56 AM
+SQL Toolbelt ??
+from Randolph West to everyone:    11:57 AM
+I'll do it for you
+from Randolph West to everyone:    11:58 AM
+magic
+from Randolph West to everyone:    11:58 AM
+I've solved some cool problems with indexed views
+from Randolph West to everyone:    12:08 PM
+columnstore does LOB data in 2017 now
+from Randolph West to everyone:    12:08 PM
+yep
+from Randolph West to everyone:    12:18 PM
+when I did the Joe Obbish-inspired trillion-row table using columnstore, select performance wasn't great but it was only ~1.5GB in size.
+from Randolph West to everyone:    12:22 PM
+yup, it took several minutes to run a SELECT...WHERE
+from Oleg.Pokrovskiy to everyone:    12:24 PM
+What about Indexed Views on Columnstore table?
+from Christina Fetherolf to everyone:    12:33 PM
+I need to know how to use Google. That's it.
+from Brian Kallion to everyone:    12:45 PM
+Classic CE
+from rajeshd to everyone:    12:59 PM
+Is there a way to find approximate estimated time it would take for a statistic full scan on a VLT ? just wondering, other than try with 0/5/10/ incremental so on
+from Brian Kallion to everyone:    12:59 PM
+wish it were true
+from Bruce Pratt to everyone:    12:59 PM
+And I thought it would have been on the various JOINS....
+from rajeshd to everyone:    1:01 PM
+thanks
+from Oleg.Pokrovskiy to everyone:    1:01 PM
+It is not linear, 50% takes almost same time as 100%
+from Oleg.Pokrovskiy to everyone:    1:13 PM
+classic Pareto's rule problem
+from Brian Kallion to everyone:    1:19 PM
+almost makes me wonder if a standard deviation in the histogram would be useful someho
+from Randolph West to everyone:    1:37 PM
+that is cool
+from Stephen Skidmore to everyone:    1:37 PM
+THAT is cool
+from Randolph West to everyone:    1:37 PM
+hehe
+from Oleg.Pokrovskiy to everyone:    1:39 PM
+Perhaps, we need to address this problem to large tables (100s of mln rows) with number of histogram steps ~ 200 and highly skewed data in the index. The area of interest is a top of the distribution, as they causing the CE problem.
+from Randolph West to everyone:    1:40 PM
+*shudder*
+from Randolph West to everyone:    1:44 PM
+Ola handles those, right?
+from Randolph West to everyone:    1:44 PM
+thanks, I remember that now yes
+from Randolph West to everyone:    1:46 PM
+my customer is a vendor so they use it
+from Brian Kallion to everyone:    2:01 PM
+SSD is about to die
+from Stephen Skidmore to everyone:    2:01 PM
+Execution Plan?
+from Randolph West to everyone:    2:01 PM
+It's Chrome
+from Stephen Skidmore to everyone:    2:01 PM
+Before the second select?
+from Stephen Skidmore to everyone:    2:01 PM
+Has to render it?
+from Randolph West to everyone:    2:02 PM
+turn off the show plan
+from Randolph West to everyone:    2:03 PM
+LOL
+from Randolph West to everyone:    2:03 PM
+Stephen too
+from Stephen Skidmore to everyone:    2:03 PM
+:)
+from rajeshd to everyone:    2:12 PM
+https://support.microsoft.com/en-us/topic/kb4342424-improvement-update-to-support-query-optimizer-compatibility-level-n-in-use-hint-option-in-sql-server-2017-b326790c-9a0e-b76b-0b52-aa30f2f79f91
+from sree to everyone:    2:15 PM
+So if doing a full scan stats fixes your performance issue .. What percentage of time do you see this as being a parameter sensitivity problem and not an undersampled stats problem? 
+from sree to everyone:    2:15 PM
+In my case i am seeing the undersampled stats in the plan that performs worse and the new sampling rate getting used in the better plan so can i rule out parameter sensitivity in that case or no?
+from Stephen Skidmore to everyone:    2:18 PM
+Hypothetical... the query I mentioned the other day which ran for *hours* was because the vendor DW is populated with minus one's (-1) where data is missing (so they can inner join everything). For whatever reason, for about two months, when UPDATE STATISTICS sampled the data it didn't pickup the lowest value (i.e. -1). That seemed odd to me, but could it have been 'true' sampling?
+from rajeshd to everyone:    2:19 PM
+for paramter sensitive procedures: proc works best 99% and goes bad for 1 and fixed with sp_recompile. is option(Recompile) or ( KEEPFIXED PLAN )? what's best way
+from Bruce Pratt to everyone:    2:20 PM
+if you have captured both plans, see if the cached parameter(s) used are different and how....
+from rajeshd to everyone:    2:22 PM
+sure..Bruce. 
+from Stephen Skidmore to everyone:    2:23 PM
+The histogram should have a first step of -1, but it started much higher (which I think was the next value)
+from Stephen Skidmore to everyone:    2:23 PM
+Yeah, I FULLSCAN'ed every evening when I knew they were going to run it
+from Stephen Skidmore to everyone:    2:23 PM
+It did then
+from Stephen Skidmore to everyone:    2:24 PM
+Removed the nested loops (tens of thousands)
+from Stephen Skidmore to everyone:    2:24 PM
+Follow on question to make sure I've understood, if I had created a filtered statistic for the minus one value, without a RECOMPILE the query wouldn't use it?
+from Stephen Skidmore to everyone:    2:24 PM
+Darn, They FORCE ORDER because they knew best, but they don't recompile most of their reloads. Thanks.
+from Stephen Skidmore to everyone:    2:25 PM
+It wasn't a 'bad
+from Stephen Skidmore to everyone:    2:25 PM
+'bad' fix... it actually would have eliminated all the rows earlier and been worse; but I didn't like it either.
+from Stephen Skidmore to everyone:    2:25 PM
+Looks like they've found something that works so it's spreading; I'll keep on top of them.
+from rajeshd to everyone:    2:27 PM
+I would have to request for budget to attend PTO2
+from Bruce Pratt to everyone:    2:28 PM
+it'll be well spent, rahesh.
+from Stephen Skidmore to everyone:    2:28 PM
+(without FORCE ORDER I think I determined that the optimiser would have elimated the table sooner in the execution plan because it 'knew' the tens of thousands rows of -1 records weren't there, ahem)
+from rajeshd to everyone:    2:28 PM
+I love this training
+from Stephen Skidmore to everyone:    2:28 PM
+Thank you :D
+from Oleg.Pokrovskiy to everyone:    2:28 PM
+Thank you!
+from Brian Kallion to everyone:    2:28 PM
+muuuuch thanks
+from Brian Kallion to everyone:    2:28 PM
+gotta digest for two weeks jeez
+from Bruce Pratt to everyone:    2:28 PM
+looking forward to more!
+from James O'Doherty to everyone:    2:28 PM
+Awesome and thank you
+from Bruce Pratt to everyone:    2:29 PM
+What can I say -- I am a DBA -- no sane person would do this job.
+from Ben Miller to everyone:    2:29 PM
+This is such a great course. It is great to finally be part of this.
+from James Donnelly to everyone:    2:29 PM
+most excellent, awesome seminar!
+from Ben Miller to everyone:    2:29 PM
+This is such a great course. It is great to finally be part of this.
+from James Donnelly to everyone:    2:29 PM
+most excellent, awesome seminar!
+from Brian.Woolwine to everyone:    2:29 PM
+amazing stuff. definitely need time to process. 
+from SQLskills Training to everyone:    2:29 PM
+I have all the chat windows from all 10 days too
+from Randolph West to everyone:    2:29 PM
+Kimberly, I sent you an email with even more work
+from Stephen Skidmore to everyone:    2:29 PM
+*laughs*
+from SQLskills Training to everyone:    2:30 PM
+And all the videos up to yesterday are already processed and available
+from SQLskills Training to everyone:    2:30 PM
+No
+from Bruce Pratt to everyone:    2:30 PM
+that's wonderful.  The AS delivered replaces the AS provided beforehand.!  Much gracias
+from SQLskills Training to everyone:    2:30 PM
+:-)
+from Brian Kallion to everyone:    2:30 PM
+:D
+from rajeshd to everyone:    2:31 PM
+Could I use the slides in case if I want to present to my team about any topic from this training ?
+from Bruce Pratt to everyone:    2:31 PM
+Guiness time.
+from Stephen Skidmore to everyone:    2:31 PM
+Excellent thank you both! Have a great weekend. Take a break. :D
+from James Donnelly to everyone:    2:31 PM
+definitely guinness time
+from Ben Miller to everyone:    2:32 PM
+Old Fashioned time then for Paul
+from rajeshd to everyone:    2:32 PM
+yeah sure..just for cross train or share the bits learned 
+from James Donnelly to everyone:    2:32 PM
+love apricot ale, old school!
+from SQLskills Training to everyone:    2:32 PM
+A nap and then Old Fashioned for me today
+from sree to everyone:    2:32 PM
+Thanks Paul & Kimberly!
+from Randolph West to everyone:    2:32 PM
+Paul worked hard today
+from Christina Fetherolf to everyone:    2:32 PM
+Thank you!
+from Brian.Woolwine to everyone:    2:32 PM
+thanks a lot!
+from Gaurang to everyone:    2:32 PM
+Thank you!
+from Stephen Skidmore to everyone:    2:32 PM
+We'll be back in a few weeks. :P
+from Randolph West to everyone:    2:33 PM
+<3
+from Ben Miller to everyone:    2:33 PM
+Black Belt was a great way to get into these classes.
+from Brian Kallion to everyone:    2:33 PM
+for your throats too!
+from Bruce Pratt to everyone:    2:33 PM
+the 2 weeks will be welcome!  between job and the indigestion from IEPT01.... 
+from SQLskills Training to everyone:    2:33 PM
+And poor Paul who proctors every class end to end
+from Randolph West to everyone:    2:33 PM
+this is easier than IE1-3 back to back
+from Ben Miller to everyone:    2:33 PM
+I just love a good Learning Library.

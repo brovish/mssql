@@ -1,0 +1,187 @@
+from Bruce Pratt to everyone:    9:07 AM
+This format is probably far superior to the old VPN to work during a live session.... ugh.
+from 000907116 to everyone:    9:11 AM
+I think Paul is hiding the cat
+from Randolph West to everyone:    9:18 AM
+yay!
+from rajeshd to everyone:    9:19 AM
+Yay Badge!!
+from Bruce Pratt to everyone:    9:20 AM
+I'm grateful for the Badges!  We have continuing ed requirements that they help satisfy!
+from rajeshd to everyone:    9:21 AM
+100%
+from Sree to everyone:    9:29 AM
+Would you be back at SQL Intersection for 2022?
+from Ricky Davis to everyone:    9:29 AM
+Im in a pure azure shop and they thing monitoring is covered there, any tips on how to reply
+from Ricky Davis to everyone:    9:30 AM
+i was
+from Ricky Davis to everyone:    9:31 AM
+I know they do to
+from Randolph West to everyone:    9:41 AM
+measure it!
+from SQLskills Training to everyone:    9:48 AM
+I'm kidding...
+from Ben Miller to everyone:    9:53 AM
+Oh boy : VLT on my side is using the TB and not the GB for size. I guess I am in a little trouble.
+from Bruce Pratt to everyone:    9:57 AM
+Heard a defintion years ago regarding VLT -- VLT -- when the table becomes too large to deal with in the time alloted.from Randolph West to everyone:    10:00 AM
+no snacks!
+from rajeshd to everyone:    10:00 AM
+Thanks Kim
+from Kimberly Slides to everyone:    10:01 AM
+;-) 
+from Sree to everyone:    10:09 AM
+While getting an estimated plan the entire query optimizer phase gets to complete? i.e. it does do the serial vs parallel  determination but it doesn't go in to how much of the plan can be parallelized?
+from Bruce Pratt to everyone:    10:09 AM
+So for later, where would the RI be enforced?
+from Bruce Pratt to everyone:    10:11 AM
+yes!
+from Connor Sims to everyone:    10:11 AM
+Could you please repeat the significance of SQLOS API on the left covering both the Query Processor & the Storage Engine?
+from Bruce Pratt to everyone:    10:11 AM
+part of that Fractal delination....
+from Connor Sims to everyone:    10:13 AM
+thank you!
+from Ricky Davis to everyone:    10:17 AM
+ok so my design strategy to always have a default value and never use a null might not be optimal considering this optimization.
+from Randolph West to everyone:    10:17 AM
+I lean into NULLs a lot more since first seeing this info
+from Ricky Davis to everyone:    10:18 AM
+poor chris date
+from Sree to everyone:    10:21 AM
+A new non-null column with a default value is no longer a size of data operation since 2012 .. did i get that correctly? 
+from Ricky Davis to everyone:    10:26 AM
+sorry are you saying that the column is no longer storing the length variable.'
+from Ricky Davis to everyone:    10:26 AM
+ok that is good to know
+from Ricky Davis to everyone:    10:34 AM
+If I only do inserts no updates then will a heap be more efficient when I search on a non clustered indes? 
+from Bruce Pratt to everyone:    10:35 AM
+if i create a clusted index on what is a functionally unique key, perhaps missing a uq constraint, will the uniqifier be added?
+from Ricky Davis to everyone:    10:37 AM
+I i put all of my varchars at the end then I will save two bytes per column did I understand that correctly
+from Bruce Pratt to everyone:    10:37 AM
+oh  that is some wicked voodoo... thanks!
+from Ricky Davis to everyone:    10:37 AM
+ok
+from Randolph West to everyone:    10:37 AM
+"end of the variable length array" explains what I saw during a recent investigation, thanks Paul
+from Ricky Davis to everyone:    10:38 AM
+so the trick is to know what is commonly null
+from Brian Kallion to everyone:    10:38 AM
+so would that unused uniquifier column then be an example of one of those end of table columns that doesn't need to be stored?
+from Gaurang to everyone:    10:38 AM
+Can u explain lead and non-leaf  in data records ?
+from Gaurang to everyone:    10:39 AM
+*leaf
+from Randolph West to everyone:    10:39 AM
+ah, cool
+from Sree to everyone:    10:40 AM
+In the realm of Solid state is it still relevant to have multiple files per file group... also follow up we have multiple file groups but we don't have multiple files per file group so would that be something beneficial to consider for performance?
+from Ricky Davis to everyone:    10:41 AM
+I am trying to understand this in the azure vm.  should I wait 
+from Ricky Davis to everyone:    10:41 AM
+later to aks
+from Ricky Davis to everyone:    10:42 AM
+importance of file groups
+from Ricky Davis to everyone:    10:42 AM
+so I am ok feeling nauseous having everyitn on primary group
+from Bruce Pratt to everyone:    10:42 AM
+"There is no cloud.  It's just someone else's computer."
+from Bruce Pratt to everyone:    10:43 AM
+I wish I could credit it ..
+from Bruce Pratt to everyone:    10:43 AM
+Outstanding and auspicous "start!"
+from rajeshd to everyone:    10:44 AM
+If I am handling a database which is from 20 years old, and most of the objects created in primary group
+from rajeshd to everyone:    10:44 AM
+how I can address 
+from rajeshd to everyone:    10:45 AM
+had an incident when started with rebuilding a small index 
+from rajeshd to everyone:    10:45 AM
+got it
+
+
+
+
+from 000907116 to everyone:    11:40 AM
+Is "latest version" SQL Server 19 or ?  What was that 14-byte tag previously?
+from 000907116 to everyone:    11:40 AM
+Got it
+from Bruce Pratt to everyone:    11:46 AM
+oooh... tradeoffs of actually setting RCSI or SI on the primary to account for this...
+from rajeshd to everyone:    11:46 AM
+How to address a sharp version store growth because of long running trasaction(query finihsed running but still connected to instance with out exiting) on a heavily involved read-only replica 
+from rajeshd to everyone:    11:47 AM
+yea
+from Gaurang to everyone:    11:47 AM
+Can u plz mention extra feature with 2019 which works better with any new feature ?
+from Gaurang to everyone:    11:47 AM
+sorry like fregmentation
+from Gaurang to everyone:    11:48 AM
+ok
+from Gaurang to everyone:    11:52 AM
+so there is 1 slot array per Page , right ?
+from rajeshd to everyone:    11:52 AM
+if a record is deleted, does the space gets reused later ?
+from rajeshd to everyone:    11:55 AM
+if there would a performance problem because of this ghost cleanup process, how that can be identified ?
+from rajeshd to everyone:    11:57 AM
+got it
+from Randolph West to everyone:    12:05 PM
+LOL
+from Kimberly Slides to everyone:    12:05 PM
+https://www.sqlskills.com/blogs/paul/search-engine-qa-20-boot-pages-and-boot-page-corruption/
+from Bruce Pratt to everyone:    12:06 PM
+and a heap table at that...
+from Kimberly Slides to everyone:    12:23 PM
+https://www.sqlskills.com/blogs/paul/disaster-recovery-101-fixing-a-broken-boot-page/
+from Bruce Pratt to everyone:    12:32 PM
+This deep dive is at least as much (more?) fun as Bob Ward cranking up the debugger!  ;-)
+from Randolph West to everyone:    12:32 PM
+I think it's cool too
+from Gaurang to everyone:    12:40 PM
+I didn't get, How did clustered index helped to solve issue of forwarding record to improve performance ?
+from Gaurang to everyone:    12:41 PM
+k
+from Randolph West to everyone:    12:50 PM
+he's as humble as I am
+from Ricky Davis to everyone:    12:50 PM
+ok this answers my question.  even j\for just inserts no updates using a clustered index is more efficient.
+from Ricky Davis to everyone:    12:52 PM
+it is
+from Randolph West to everyone:    1:07 PM
+these curiosities are why I'm here
+from Randolph West to everyone:    1:19 PM
+ooooh
+from Oleg.Pokrovskiy to everyone:    1:25 PM
+Do you have a blog on the UK company case?
+from Randolph West to everyone:    1:27 PM
+LOL
+from Brian Kallion to everyone:    1:28 PM
+rrrrrrrrrrrrrr
+from Brian Kallion to everyone:    1:28 PM
+oops :)
+from rajeshd to everyone:    1:32 PM
+Always from Developers "Hey DBA, I am set to deploy my cool feature..can you just deploy the table with the datatypes I think are the best, giving you lot of time(1 min to priortize,review and deploy)"
+from Oleg.Pokrovskiy to everyone:    1:34 PM
+What is the best way to handle this UK case?
+from rajeshd to everyone:    1:36 PM
+While thre is a lot to consume from today's class, what would be the important key points to note for longer memory 
+from rajeshd to everyone:    1:45 PM
+where can I find all the scripts used in todays session?
+from rajeshd to everyone:    1:46 PM
+Thank you
+from 000907116 to everyone:    1:47 PM
+Good idea....  I'll grab a beer now :-)
+from Randolph West to everyone:    1:47 PM
+My first Bits session was like that
+from Brian Kallion to everyone:    1:47 PM
+I need a walk (then a beer)
+from Bruce Pratt to everyone:    1:47 PM
+Ya had to schedule this during  the week with St Patrick's Day !
+from Randolph West to everyone:    1:48 PM
+Ides of March today
+from Randolph West to everyone:    1:48 PM
+Et tu Paulus

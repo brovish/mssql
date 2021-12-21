@@ -1,0 +1,178 @@
+from Sree to everyone:    9:05 AM
+21 was an example?
+from Sree to everyone:    9:05 AM
+does that number signyfy anything
+from Ben Miller to everyone:    9:25 AM
+yes
+from Bruce Pratt to everyone:    9:25 AM
+yes she did
+from Randolph West to everyone:    9:25 AM
+the DMV, yes
+from Randolph West to everyone:    9:31 AM
+hah
+from Sree to everyone:    9:33 AM
+is this at any given instance if so could it be an outlier in the workload.. should we care when you rerun
+from Sree to everyone:    9:34 AM
+Can non-leaf pages be fragmented as well .. if so which kind of fragmentation affects it .. only the page density kind?
+from Ricky Davis to everyone:    9:50 AM
+can you using fill factor eliminate page splits and should you be able to reduce page splits to 0?
+from Bruce Pratt to everyone:    9:55 AM
+whoa
+from Bruce Pratt to everyone:    9:55 AM
+no wonder these are forward commit only
+from Ricky Davis to everyone:    9:56 AM
+My next question when the page splits happen and you have all the page splits freeing up space on the page, is that space used for future inserts.
+from Sree to everyone:    9:59 AM
+anyidea any of the perf tools go about differentiating the kinds of pagespits?
+from Ricky Davis to everyone:    10:01 AM
+I guess if once the system does page splits just like auto tuning could it determine that this system could use a different fill factor on the indexes and then automatically do it.
+from rajeshd to everyone:    10:13 AM
+non unique 
+from rajeshd to everyone:    10:13 AM
+4 byte
+from Christina Fetherolf to everyone:    10:13 AM
+uniquifier
+from rajeshd to everyone:    10:21 AM
+I was under impression 80% is a best practice but after todays class, it depends on the data correct? if the inserted row lives for ever, we could set fill factor 0%?
+from Ricky Davis to everyone:    10:22 AM
+the key is to coordinate the maintenance schedule with the actual fragmentation that the application can cause.  So that is hard if you don't know how to figure out your maintenance schedule.
+from rajeshd to everyone:    10:28 AM
+any problems concerns reported with using resumable index in 2019? for later 
+from rajeshd to everyone:    10:29 AM
+thanks
+from rajeshd to everyone:    10:36 AM
+yes
+from Brian Kallion to everyone:    10:36 AM
+oh yeah
+from Randolph West to everyone:    10:36 AM
+I love it
+from Sree to everyone:    10:36 AM
+Ola
+from Connor to everyone:    10:37 AM
+yes
+from Stephen Skidmore to everyone:    10:37 AM
+Yup
+from James O'Doherty to everyone:    10:37 AM
+yes
+from Bruce Pratt to everyone:    10:37 AM
+yes.  and in parallel.
+from Alex to everyone:    10:37 AM
+yes
+from Randolph West to everyone:    10:43 AM
+love it
+from Sree to everyone:    10:43 AM
+also how to measure much of the nasty pagesplits is allowable, or should you always aim for zero ? I know it is relative and there cannot be an absolute measure but looking for heuristics to go about this if zero is too impractical
+from Oleg.Pokrovskiy to everyone:    10:44 AM
+What is your opinion on AdaptiveIndexDefrag solution from Tiger team?
+from Randolph West to everyone:    10:45 AM
+it does a lot of that IIRC
+from Sree to everyone:    10:45 AM
+so apart from monitoring transaction log.. there are wait stats to look that target pagesplits to measure \ quantify how much of a problem it is
+from Oleg.Pokrovskiy to everyone:    10:45 AM
+Didn't go to much details
+from Sree to everyone:    10:46 AM
+i have one more question is it okay to unmute?
+from Stephen Skidmore to everyone:    10:48 AM
+This might be helpful to understand GUID's and fragmentation (Index Maintenance #1 - GUIDs v.s. Fragmentation by Jef Moden): https://www.youtube.com/watch?v=jx-FuNp4fOA - it also covers what Paul just said
+from Stephen Skidmore to everyone:    10:49 AM
+*Jeff Moden
+from Stephen Skidmore to everyone:    10:51 AM
+One of the many things I took away from that was also that common practice to REORGANIZE compresses the number of pages, and in a random key (such as a GUID) means you are likely to increase page splits. It's covers a lot of stuff.
+from rajeshd to everyone:    10:53 AM
+thanks
+
+
+
+
+from John C to everyone:    11:38 AM
+I think SQL 2012?  Google helped
+from SQLskills Training to everyone:    11:38 AM
+sys.dm_db_database_page_allocations 2012
+from Kimberly Slides to everyone:    11:45 AM
+123-07-9786
+from Kimberly Slides to everyone:    11:47 AM
+75996
+from Ricky Davis to everyone:    11:54 AM
+when I have dreated composite nonclustered unique indexes I always get dead lock issues.  Is there a magic thing to do
+from Ricky Davis to everyone:    11:55 AM
+ok 
+from Ricky Davis to everyone:    11:55 AM
+that does
+from Ricky Davis to everyone:    11:56 AM
+we would delete a row and add a row with the same key value and I took the unique out
+from Ricky Davis to everyone:    11:57 AM
+in the same transaction
+from Ricky Davis to everyone:    11:57 AM
+but there was multithreading so another thread could be adding it in
+from Sree to everyone:    12:00 PM
+So if you have a Heap (c1,C2,C3,c4,c5) and say you have an NC - C1,C2,C3 Includes C4 and now if you add a CLustering index on C3,C4 what happens to your NC
+from Sree to everyone:    12:00 PM
+with or without include
+from rajeshd to everyone:    12:11 PM
+is sp_sqlskills_helpindex proc available in the demo script ?
+from rajeshd to everyone:    12:11 PM
+thanks
+from Randolph West to everyone:    12:13 PM
+it's available from Kimberly's blog
+from rajeshd to everyone:    12:13 PM
+https://www.sqlskills.com/resources/sp_helpindex/20170228-sp_sqlskills_helpindex.txt
+from Ben Miller to everyone:    12:15 PM
+yup
+from Ben Miller to everyone:    12:15 PM
+2.85TB
+from Randolph West to everyone:    12:36 PM
+even with 6 levels (!), the clustered index is still more efficient in my experience
+from Ricky Davis to everyone:    12:39 PM
+this is really interesting because so many heap believers dont understand this 
+from Ricky Davis to everyone:    12:39 PM
+were stupid they are the masters
+from Ricky Davis to everyone:    12:40 PM
+i hate this debate on the internet becuase is it almost religoius
+from SQLskills Training to everyone:    12:42 PM
+Yes it is.
+from SQLskills Training to everyone:    12:42 PM
+And it's annoying.
+from Randolph West to everyone:    12:44 PM
+https://www.sqlskills.com/blogs/kimberly/sp_helpindex-v20170228/ is the latest
+from sree to everyone:    12:53 PM
+was I imagining things or did I actually hear somewhere that better/ adjusted hardware based costing might be on its way in a future release?
+from Bruce Pratt to everyone:    1:04 PM
+"I just checked the automatic indexes option in my EF...." 
+from Randolph West to everyone:    1:04 PM
+ugh
+from Randolph West to everyone:    1:04 PM
+dealing with that now
+from Bruce Pratt to everyone:    1:07 PM
+I discovered the deployment layer here does a phyisical compare to get changes, so FG placement, compression, fill factor all are drivem by dev deploymnents.  Ouch.  Attempting remediation on that now...
+from Randolph West to everyone:    1:15 PM
+Rajesh did as well
+from Randolph West to everyone:    1:21 PM
+ScarePoint says no
+from sree to everyone:    1:22 PM
+auto update stats is okay to turn off though if you are managing your regular stats updates?
+from rajeshd to everyone:    1:24 PM
+just curious what's the motivation for turning auto update stats..though managing regular stats updates? 
+from rajeshd to everyone:    1:25 PM
+turning auto update stats off^
+from sree to everyone:    1:28 PM
+the undersampling that happens for large tables due to 2016 change that auto stats kick in more frequently now and so stats are severely undersampled sometimes leading to bad plans
+from sree to everyone:    1:29 PM
+sorry was answering Rajesh
+from Bruce Pratt to everyone:    1:30 PM
+reserved work is an alias 
+from Bruce Pratt to everyone:    1:30 PM
+for sys.sdatabases
+from Randolph West to everyone:    1:35 PM
+adaptive join <3
+from Randolph West to everyone:    1:36 PM
+NOOOOO
+from Randolph West to everyone:    1:38 PM
+40 million logical reads
+from Randolph West to everyone:    1:38 PM
+LOL
+from Randolph West to everyone:    1:43 PM
+index hint
+from Ricky Davis to everyone:    1:48 PM
+a dba told me that adaptive joins are not available in standard edition.  are there any other things to think about if you are using standard edition.
+from Bruce Pratt to everyone:    1:49 PM
+https://docs.microsoft.com/en-us/sql/sql-server/editions-and-components-of-sql-server-version-15?view=sql-server-ver15
