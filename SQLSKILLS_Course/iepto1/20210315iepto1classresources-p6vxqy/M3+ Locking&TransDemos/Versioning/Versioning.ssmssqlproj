@@ -2,26 +2,13 @@
 <SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Versioning">
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
-      <Items>
-        <ConnectionNode Name="KLRANDAL\SQL2019DEV:KLRANDAL\KRandal">
-          <Created>2021-03-18T13:19:34.1208456-07:00</Created>
-          <Type>SQL</Type>
-          <Server>KLRANDAL\SQL2019DEV</Server>
-          <UserName />
-          <Authentication>Windows Authentication</Authentication>
-          <InitialDB>Credit</InitialDB>
-          <LoginTimeout>30</LoginTimeout>
-          <ExecutionTimeout>0</ExecutionTimeout>
-          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
-          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
-        </ConnectionNode>
-      </Items>
+      <Items />
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
         <FileNode Name="00_UnderstandingVersions.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KLRANDAL\SQL2019DEV:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>KLRANDAL\SQL2019DEV</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>00_UnderstandingVersions.sql</FullPath>
         </FileNode>
@@ -32,8 +19,8 @@
           <FullPath>01_OpenTransaction.sql</FullPath>
         </FileNode>
         <FileNode Name="02_Advanced - tran start time.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KLRANDAL\SQL2019DEV:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>KLRANDAL\SQL2019DEV</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>02_Advanced - tran start time.sql</FullPath>
         </FileNode>
@@ -44,8 +31,8 @@
           <FullPath>03_Member_Time-based_Update.sql</FullPath>
         </FileNode>
         <FileNode Name="ConflictDetection.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KLRANDAL\SQL2019DEV:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>KLRANDAL\SQL2019DEV</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>ConflictDetection.sql</FullPath>
         </FileNode>

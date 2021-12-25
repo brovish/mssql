@@ -3,13 +3,13 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
-        <ConnectionNode Name="KLRANDAL\SQL2019DEV:KLRANDAL\KRandal">
-          <Created>2021-03-16T13:47:10.5573405-07:00</Created>
+        <ConnectionNode Name="DATSUN-BM:NEXUS\sin17h">
+          <Created>2021-12-25T13:21:03.4803907+11:00</Created>
           <Type>SQL</Type>
-          <Server>KLRANDAL\SQL2019DEV</Server>
+          <Server>DATSUN-BM</Server>
           <UserName />
           <Authentication>Windows Authentication</Authentication>
-          <InitialDB>master</InitialDB>
+          <InitialDB />
           <LoginTimeout>30</LoginTimeout>
           <ExecutionTimeout>0</ExecutionTimeout>
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
@@ -32,14 +32,14 @@
           <FullPath>BindToken02 - BindSession.sql</FullPath>
         </FileNode>
         <FileNode Name="CheckingForXACT_ABORTinALLprocedures.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KLRANDAL\SQL2019DEV:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>KLRANDAL\SQL2019DEV</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>CheckingForXACT_ABORTinALLprocedures.sql</FullPath>
         </FileNode>
         <FileNode Name="ErrorHandling and XACT_ABORT.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KLRANDAL\SQL2019DEV:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>KLRANDAL\SQL2019DEV</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DATSUN-BM:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DATSUN-BM</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>ErrorHandling and XACT_ABORT.sql</FullPath>
         </FileNode>
