@@ -2,13 +2,26 @@
 <SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="LockingDemos">
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
-      <Items />
+      <Items>
+        <ConnectionNode Name="DATSUN-BM:NEXUS\sin17h">
+          <Created>2021-12-28T13:45:32.7216962+11:00</Created>
+          <Type>SQL</Type>
+          <Server>DATSUN-BM</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB>master</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
         <FileNode Name="00_Setup - Inconsistent Analysis in RC locking.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DATSUN-BM:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DATSUN-BM</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>00_Setup - Inconsistent Analysis in RC locking.sql</FullPath>
         </FileNode>
