@@ -1,0 +1,126 @@
+from Randolph West they/them to everyone:    9:21 AM
+RAM has a similar issue I believe, which makes sense
+from Ben Miller to everyone:    9:36 AM
+Do you recommend ReFS going forward?
+from Randolph West they/them to everyone:    9:37 AM
+I defragment SQL data files by moving the files off the drive and back again
+from SQLskills Training to everyone:    9:38 AM
+I have no opinion either way
+from Randolph West they/them to everyone:    9:39 AM
+I'm wary of the "self-healing" nature
+from SQLskills Training to everyone:    9:39 AM
+They use actual files instead of alternate streams
+from Randolph West they/them to everyone:    9:40 AM
+that's for smaller DBs yes
+from Randolph West they/them to everyone:    9:50 AM
+OS drive
+from Randolph West they/them to everyone:    9:59 AM
+aside from performance degredation, a potential disaster recovery customer was running RAID 50 (5+0) and lost enough drives to cause a really pretty pattern in the ERRORLOG file. They did not have backups.
+from SQLskills Training to everyone:    10:00 AM
+I'm constantly amazed that many companies don't take backups - I get at least a couple of emails every week asking for help recovering data from corruption, and no backups
+from Randolph West they/them to everyone:    10:00 AM
+it baffles me too
+from Randolph West they/them to everyone:    10:02 AM
+that happened to me
+from Randolph West they/them to everyone:    10:02 AM
+it was the last time I experienced data loss
+from Randolph West they/them to everyone:    10:14 AM
+the argument can be made that you need to test your backups
+from Randolph West they/them to everyone:    10:16 AM
+I use RAID 6 in my NAS at home
+from Randolph West they/them to everyone:    10:17 AM
+My Synology does scrubbing once a month
+from Randolph West they/them to everyone:    10:29 AM
+we had a double-door refrigerator from Fujitsu at the bank
+
+
+
+
+from Randolph West they/them to everyone:    11:46 AM
+my favourite performance improvement story is when I swapped out an old CAT-5e cable
+from Randolph West they/them to everyone:    12:35 PM
+yes on Azure
+from James O'Doherty to everyone:    12:35 PM
+Yes we've had various issues on AWS
+from Randolph West they/them to everyone:    12:35 PM
+but you gotta use P30s at least
+from James O'Doherty to everyone:    12:36 PM
+yes performance
+from James O'Doherty to everyone:    12:36 PM
+no this is the first time i've heard of this
+from Randolph West they/them to everyone:    12:39 PM
+the drive size
+from Ben Miller to everyone:    12:40 PM
+1TB of space and high throughput for P30.
+from Ben Miller to everyone:    12:40 PM
+Premium storage
+from Randolph West they/them to everyone:    12:40 PM
+they start at 1TB and have higher IOPS 
+from Randolph West they/them to everyone:    12:40 PM
+snap
+from Ben Miller to everyone:    12:40 PM
+Come on Randolph, just go UltraSSD :-)
+from MoutonL to everyone:    12:49 PM
+from my company's experience, to put tempdb into NVMe help performance a lot, but just need to remember to write a powershell code to create subfolder back, haha, it will disappear after server reboot
+from MoutonL to everyone:    12:50 PM
+on AWS EC2
+from Randolph West they/them to everyone:    12:50 PM
+you have to do that for Azure as well if you use the D: temp drive
+from Ben Miller to everyone:    12:53 PM
+Yes, just a scheduled task for startup to create the folder if it doesn't exist.
+from Ben Miller to everyone:    1:03 PM
+a lot in clustering
+from Ben Miller to everyone:    1:04 PM
+Not a lot of free monitoring tools understand mount points.
+from Randolph West they/them to everyone:    1:05 PM
+not a lot of people understand them either
+from Ben Miller to everyone:    1:06 PM
+It freaks the IT admins out because they want to monitor E drive and it only has 4GB left.
+from Randolph West they/them to everyone:    1:07 PM
+LOL
+from Ben Miller to everyone:    1:08 PM
+no way.
+from Ben Miller to everyone:    1:09 PM
+icky
+from Ben Miller to everyone:    1:18 PM
+I use 2MB when using Pure Storage, but I cannot say whether it is benefit, just Pure said it would help.
+from Bruce Pratt to everyone:    1:18 PM
+Ah, Ben.  You've been listening to Argenis....  ;-)
+from Ben Miller to everyone:    1:18 PM
+uh huh
+from Bruce Pratt to everyone:    1:18 PM
+same here.
+from Bruce Pratt to everyone:    1:21 PM
+he mentioned the 2M during a Group By.  I followed up and it seemed to be related to a reduction in the metadata for the storage allocation. 
+from SQLskills Training to everyone:    1:27 PM
+Makes sense to me
+from SQLskills Training to everyone:    1:27 PM
+And there is a maximum number of allocation units NTFS allows in a volume
+from SQLskills Training to everyone:    1:29 PM
+Oh my goodness no
+from SQLskills Training to everyone:    1:29 PM
+On prem will be around until we're all retired
+from SQLskills Training to everyone:    1:29 PM
+Agreed
+from Bruce Pratt to everyone:    1:30 PM
+And SQLSkills will not only be premier training, but one of the few sources!
+from Randolph West they/them to everyone:    1:30 PM
+I was in the 2012 training - it's the same
+from Ben Miller to everyone:    1:30 PM
+I hope I am still relevant for a while now. I love the deep stuff.
+from Randolph West they/them to everyone:    1:31 PM
+yep
+from Ben Miller to everyone:    1:31 PM
+Daily learning is my life.
+from Randolph West they/them to everyone:    1:31 PM
+Speaking of life-long learning, I have a user group presentation now, so thanks for the session today Jonathan. I enjoyed it.
+from Ben Miller to everyone:    1:31 PM
+agree
+from SQLskills Training to everyone:    1:36 PM
+https://www.sqlskills.com/blogs/paul/the-curious-case-of-log-generated-during-a-drop-table/
+from Bruce Pratt to everyone:    1:36 PM
+Oh.  Yeah  The "Geeee, I've never seen that before..."
+from SQLskills Training to everyone:    1:37 PM
+0.35-0.4% the size of the table gets logged
+from SQLskills Training to everyone:    1:38 PM
+https://www.sqlskills.com/blogs/jonathan/tracking-problematic-pages-splits-in-sql-server-2012-extended-events-no-really-this-time/

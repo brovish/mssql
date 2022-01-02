@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="03_OptimizingProceduralCode">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="(local)\SQLDEV01:RoadRunnerKT\Kimberly">
+          <Created>2011-10-27T11:16:49.7685523-04:00</Created>
+          <Type>SQL</Type>
+          <Server>(local)\SQLDEV01</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB>master</InitialDB>
+          <LoginTimeout>15</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="01 RecompilationIssues.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\SQLDEV01:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)\SQLDEV01</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>01 RecompilationIssues.sql</FullPath>
+        </FileNode>
+        <FileNode Name="02 ModularProcedures.SQL">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\SQLDEV01:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)\SQLDEV01</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>02 ModularProcedures.SQL</FullPath>
+        </FileNode>
+        <FileNode Name="03 Multipurpose Procs.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\SQLDEV01:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)\SQLDEV01</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>03 Multipurpose Procs.sql</FullPath>
+        </FileNode>
+        <FileNode Name="05 ScalarFunctions.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\SQLDEV01:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)\SQLDEV01</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>05 ScalarFunctions.sql</FullPath>
+        </FileNode>
+        <FileNode Name="04 PSP and UNKNOWN.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\SQLDEV01:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)\SQLDEV01</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>04 PSP and UNKNOWN.sql</FullPath>
+        </FileNode>
+        <FileNode Name="dm_exec_procedure_stats.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\SQLDEV01:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)\SQLDEV01</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>dm_exec_procedure_stats.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

@@ -1,0 +1,9 @@
+Overview of Database Experimentation Assistant
+https://docs.microsoft.com/en-us/sql/dea/database-experimentation-assistant-overview?view=sql-server-ver15
+
+Overview of using DEA to evaluate Azure SQL Managed Instance or Azure SQL Database
+https://techcommunity.microsoft.com/t5/microsoft-data-migration/overview-of-using-dea-to-evaluate-azure-sql-managed-instance-or/ba-p/1361751
+
+Release: Database Experimentation Assistant (DEA) v2.6
+http://thewindowsupdate.com/2019/06/12/release-database-experimentation-assistant-dea-v2-6/
+

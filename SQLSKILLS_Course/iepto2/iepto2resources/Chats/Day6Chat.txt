@@ -1,0 +1,85 @@
+from Bruce Pratt to everyone:    9:20 AM
+I discovered that you can also cause recompiles with a misconfigured querystore.
+from Bruce Pratt to everyone:    9:35 AM
+:-)
+from Bruce Pratt to everyone:    9:35 AM
+yes
+from Operations Geauga County to everyone:    9:35 AM
+no
+from Danitza to everyone:    9:35 AM
+no
+from sree to everyone:    9:35 AM
+Yes
+from Ben Miller to everyone:    9:35 AM
+yes
+from Michael Pekatowski to everyone:    9:35 AM
+yes
+from sree to everyone:    9:48 AM
+Does it capture the parameters?
+from sree to everyone:    9:49 AM
+So the example you showed with difference in what was passed were literals?
+from Ben Miller to everyone:    9:53 AM
+Learned something new:  Check!
+from sree to everyone:    9:54 AM
+And the interval is just one of the query store parameters?
+from Randolph West they/them to everyone:    9:54 AM
+showplan!
+from Randolph West they/them to everyone:    10:00 AM
+wooo
+from sree to everyone:    10:01 AM
+curious why the IO was off by 10 .. did the show plan had to do anything with it
+from sree to everyone:    10:04 AM
+you got that one
+from Randolph West they/them to everyone:    10:22 AM
+hahaha yikes
+from Randolph West they/them to everyone:    10:22 AM
+as recently as last year I was playing with it
+from Randolph West they/them to everyone:    10:22 AM
+it was testing yeah
+from Randolph West they/them to everyone:    10:22 AM
+last production support was 2013
+from Randolph West they/them to everyone:    10:26 AM
+I look at the thick lines
+
+
+
+from Ben Miller to everyone:    11:38 AM
+But REORGANIZE won't flush them?
+from sree to everyone:    11:39 AM
+that is what i remember from IEPTO1 .. i need to revisit already it looks like lol
+from Ben Miller to everyone:    11:43 AM
+thanks.
+from Randolph West they/them to everyone:    1:04 PM
+"do as I say, not as I do"
+from Randolph West they/them to everyone:    1:06 PM
+in rpc_completed, there's statement text
+from Randolph West they/them to everyone:    1:06 PM
+ah I see
+from Randolph West they/them to everyone:    1:22 PM
+that was a lot but I enjoyed it
+from Bruce Pratt to everyone:    1:23 PM
+is there an operator library like Paul's wait stats one>
+from Randolph West they/them to everyone:    1:23 PM
+have you looked at Erik's new query store proc?
+from SQLskills Training to everyone:    1:24 PM
+https://docs.microsoft.com/en-us/sql/relational-databases/showplan-logical-and-physical-operators-reference?view=sql-server-ver15
+from sree to everyone:    1:24 PM
+Hugo?
+from SQLskills Training to everyone:    1:25 PM
+https://sqlserverfast.com/epr/
+from Bruce Pratt to everyone:    1:26 PM
+That;'s an awesome start!  Merci.
+from Erin Stellato to everyone:    1:26 PM
+https://github.com/channeladvisor/qdstoolbox
+from Randolph West they/them to everyone:    1:27 PM
+it's very new
+from Stephen Skidmore to everyone:    1:27 PM
+sp_HumanEvents
+from Randolph West they/them to everyone:    1:27 PM
+it's not that one
+from Randolph West they/them to everyone:    1:27 PM
+it's a query store one
+from Stephen Skidmore to everyone:    1:28 PM
+Gotcha, apologies
+from Randolph West they/them to everyone:    1:29 PM
+https://github.com/erikdarlingdata/DarlingData/tree/master/sp_QuickieStore

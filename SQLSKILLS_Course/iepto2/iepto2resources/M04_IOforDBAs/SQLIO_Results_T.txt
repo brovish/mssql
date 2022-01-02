@@ -1,0 +1,380 @@
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads writing for 360 secs to file T:\testfile1.dat
+	using 8KB random IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:  4838.78
+MBs/sec:    37.80
+latency metrics:
+Min_Latency(ms): 1
+Avg_Latency(ms): 12
+Max_Latency(ms): 589
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  1  3  6 10  9  8  7  7  5  5  4  4  3  3  3  2  2  2  2  2  1  1 11
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads writing for 360 secs to file T:\testfile1.dat
+	using 32KB random IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:  4145.96
+MBs/sec:   129.56
+latency metrics:
+Min_Latency(ms): 2
+Avg_Latency(ms): 14
+Max_Latency(ms): 314
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  0  0  1  4  7  9  8  7  7  6  5  5  4  4  3  3  3  3  2  2  2  2 14
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads writing for 360 secs to file T:\testfile1.dat
+	using 64KB random IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:  2215.13
+MBs/sec:   138.44
+latency metrics:
+Min_Latency(ms): 2
+Avg_Latency(ms): 28
+Max_Latency(ms): 392
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  0  0  0  0  0  0  0  1  1  2  4  5  6  7  6  6  5  4  4  3  3  3 39
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads writing for 360 secs to file T:\testfile1.dat
+	using 128KB random IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:  1254.83
+MBs/sec:   156.85
+latency metrics:
+Min_Latency(ms): 5
+Avg_Latency(ms): 50
+Max_Latency(ms): 674
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1 97
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads writing for 360 secs to file T:\testfile1.dat
+	using 256KB random IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:   756.82
+MBs/sec:   189.20
+latency metrics:
+Min_Latency(ms): 7
+Avg_Latency(ms): 84
+Max_Latency(ms): 1083
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 100
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads reading for 360 secs from file T:\testfile1.dat
+	using 8KB random IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:  9285.97
+MBs/sec:    72.54
+latency metrics:
+Min_Latency(ms): 0
+Avg_Latency(ms): 6
+Max_Latency(ms): 284
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  2  2  8 13 15 16 11  7  6  4  3  2  2  2  1  1  1  1  0  0  0  0  0  0  1
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads reading for 360 secs from file T:\testfile1.dat
+	using 32KB random IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:  5601.14
+MBs/sec:   175.03
+latency metrics:
+Min_Latency(ms): 0
+Avg_Latency(ms): 10
+Max_Latency(ms): 312
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  0  1  2  4  7 10 11 11 10  9  7  6  5  4  3  2  2  1  1  1  1  0  2
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads reading for 360 secs from file T:\testfile1.dat
+	using 64KB random IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:  2876.96
+MBs/sec:   179.81
+latency metrics:
+Min_Latency(ms): 1
+Avg_Latency(ms): 21
+Max_Latency(ms): 404
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  0  0  0  0  0  1  1  2  2  3  4  4  5  5  6  6  6  6  5  5  4  4 30
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads reading for 360 secs from file T:\testfile1.dat
+	using 128KB random IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:  1486.51
+MBs/sec:   185.81
+latency metrics:
+Min_Latency(ms): 2
+Avg_Latency(ms): 42
+Max_Latency(ms): 563
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  1  1  1  1  2  2  2  2  2 84
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads reading for 360 secs from file T:\testfile1.dat
+	using 256KB random IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:   806.69
+MBs/sec:   201.67
+latency metrics:
+Min_Latency(ms): 2
+Avg_Latency(ms): 78
+Max_Latency(ms): 947
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 99
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads writing for 360 secs to file T:\testfile1.dat
+	using 8KB sequential IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:   324.68
+MBs/sec:     2.53
+latency metrics:
+Min_Latency(ms): 1
+Avg_Latency(ms): 196
+Max_Latency(ms): 1068
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 96
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads writing for 360 secs to file T:\testfile1.dat
+	using 32KB sequential IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:   768.53
+MBs/sec:    24.01
+latency metrics:
+Min_Latency(ms): 1
+Avg_Latency(ms): 82
+Max_Latency(ms): 437
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  0  0  1  0  0  1  1  1  0  0  1  1  0  1  1  0  0  1  1  0  1  1 87
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads writing for 360 secs to file T:\testfile1.dat
+	using 64KB sequential IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:  1308.37
+MBs/sec:    81.77
+latency metrics:
+Min_Latency(ms): 1
+Avg_Latency(ms): 48
+Max_Latency(ms): 283
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1 77
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads writing for 360 secs to file T:\testfile1.dat
+	using 128KB sequential IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:  1664.95
+MBs/sec:   208.11
+latency metrics:
+Min_Latency(ms): 3
+Avg_Latency(ms): 37
+Max_Latency(ms): 458
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  0  0  0  0  0  0  0  1  1  1  2  2  2  2  2  2  2  2  2  2  2  2 72
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads writing for 360 secs to file T:\testfile1.dat
+	using 256KB sequential IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:   853.66
+MBs/sec:   213.41
+latency metrics:
+Min_Latency(ms): 6
+Avg_Latency(ms): 74
+Max_Latency(ms): 873
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 100
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads reading for 360 secs from file T:\testfile1.dat
+	using 8KB sequential IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec: 12435.50
+MBs/sec:    97.15
+latency metrics:
+Min_Latency(ms): 0
+Avg_Latency(ms): 4
+Max_Latency(ms): 222
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  3 23 34 20 10  5  2  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads reading for 360 secs from file T:\testfile1.dat
+	using 32KB sequential IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:  5254.72
+MBs/sec:   164.21
+latency metrics:
+Min_Latency(ms): 0
+Avg_Latency(ms): 11
+Max_Latency(ms): 69511
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  0  0  0  1  2  5 36 32 11  4  2  1  1  1  1  1  0  0  0  0  0  0  1
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads reading for 360 secs from file T:\testfile1.dat
+	using 64KB sequential IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:  3259.90
+MBs/sec:   203.74
+latency metrics:
+Min_Latency(ms): 0
+Avg_Latency(ms): 19
+Max_Latency(ms): 314
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  0  0  0  0  1  1  2  3  3  3  4  3  4  5  9 19  8  6  4  2  2  1 19
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads reading for 360 secs from file T:\testfile1.dat
+	using 128KB sequential IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:  1646.42
+MBs/sec:   205.80
+latency metrics:
+Min_Latency(ms): 1
+Avg_Latency(ms): 38
+Max_Latency(ms): 464
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  1  1  2  2  2  2  2  2  2 82
+sqlio v1.5.SG
+using system counter for latency timings, 2539121 counts per second
+8 threads reading for 360 secs from file T:\testfile1.dat
+	using 256KB sequential IOs
+	enabling multiple I/Os per thread with 8 outstanding
+	buffering set to use hardware disk cache (but not file cache)
+using current size: 36864 MB for file: T:\testfile1.dat
+initialization done
+CUMULATIVE DATA:
+throughput metrics:
+IOs/sec:   835.78
+MBs/sec:   208.94
+latency metrics:
+Min_Latency(ms): 2
+Avg_Latency(ms): 76
+Max_Latency(ms): 856
+histogram:
+ms: 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24+
+%:  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 98

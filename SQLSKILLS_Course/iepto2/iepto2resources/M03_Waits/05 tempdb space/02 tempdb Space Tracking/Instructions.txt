@@ -1,0 +1,9 @@
+- setup SP and run it using TempdbSetup.sql
+- run it using TempdbWorkload.sql and show tempdb usage using TempdbDebug.sql
+- script proc as drop/create to new window
+- add in tempdb space tracking from TrackingTempdbUsage.sql, making sure to set the SPID
+- turn on set statistics IO on
+- re-run the new proc
+- look at code, plan, remove extra indexes
+- re-run
+- show difference in IOs etc

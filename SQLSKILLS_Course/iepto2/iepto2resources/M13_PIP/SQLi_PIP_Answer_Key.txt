@@ -1,0 +1,15 @@
+A - XE Observer Overhead **
+B - Execution Memory Grant Starvation **
+C - Row Versioning Overhead **
+D - Serializable Reverse Order Deadlock **
+E - Allocation Page Contention **
+F - Excessive Compilations **
+G - Cache Pollution **
+H - Parallelism Inhibit **
+I - Unintended Side-effects **
+J - Slow Storage on USB Drive **
+K - Parameter Sniffing AND missing CHECK constraints **
+
+
+
+

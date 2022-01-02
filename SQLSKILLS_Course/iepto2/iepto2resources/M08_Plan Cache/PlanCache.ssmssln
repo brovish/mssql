@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# SQL Server Management Studio Solution File, Format Version 18.00
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "OtherUsefulScripts", "OtherUsefulScripts\OtherUsefulScripts.ssmssqlproj", "{AD01B31D-F1C3-45E8-962E-1D2400D19C51}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "01_UnderstandingPlanCache", "01_UnderstandingPlanCache\01_UnderstandingPlanCache.ssmssqlproj", "{4DE81154-84D8-413B-8A8F-94FF5CD1A940}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "02_AnalyzingPlanCache", "02_AnalyzingPlanCache\02_AnalyzingPlanCache.ssmssqlproj", "{325BE2F7-ED18-46B7-A41F-6CB48A5C848E}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "03_OptimizingProceduralCode", "03_OptimizingProceduralCode\03_OptimizingProceduralCode.ssmssqlproj", "{01E3C225-AD64-4219-8963-E8D08720AF90}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "MultipurposeProcs", "MultipurposeProc\MultipurposeProcs.ssmssqlproj", "{C57EE2DD-F990-4016-8DAF-505FEF7E989C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Default|Default = Default|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD01B31D-F1C3-45E8-962E-1D2400D19C51}.Default|Default.ActiveCfg = Default
+		{4DE81154-84D8-413B-8A8F-94FF5CD1A940}.Default|Default.ActiveCfg = Default
+		{325BE2F7-ED18-46B7-A41F-6CB48A5C848E}.Default|Default.ActiveCfg = Default
+		{01E3C225-AD64-4219-8963-E8D08720AF90}.Default|Default.ActiveCfg = Default
+		{C57EE2DD-F990-4016-8DAF-505FEF7E989C}.Default|Default.ActiveCfg = Default
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {91B2FBDA-2F77-4FB7-840A-F8575213F2BE}
+	EndGlobalSection
+EndGlobal

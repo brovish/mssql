@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="01_UnderstandingPlanCache">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items />
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="01 Dynamic String Execution vs. sp_executesql.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>01 Dynamic String Execution vs. sp_executesql.sql</FullPath>
+        </FileNode>
+        <FileNode Name="02 AnalyzingQueryHash.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>02 AnalyzingQueryHash.sql</FullPath>
+        </FileNode>
+        <FileNode Name="03 Analyzing Plan Cache Pollution.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>03 Analyzing Plan Cache Pollution.sql</FullPath>
+        </FileNode>
+        <FileNode Name="03a Analyzing ADHOC Plan Cache Pollution.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>03a Analyzing ADHOC Plan Cache Pollution.sql</FullPath>
+        </FileNode>
+        <FileNode Name="04 Safe Plans and Plan Guides.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>04 Safe Plans and Plan Guides.sql</FullPath>
+        </FileNode>
+        <FileNode Name="2010_4_sp_SQLskills_CheckPlanCache.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>2010_4_sp_SQLskills_CheckPlanCache.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SqlWorkbenchSqlProject Name="02_AnalyzingPlanCache" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <Items>
+      <LogicalFolder Name="Connections" Type="2" Sorted="true">
+         <Items>
+            <ConnectionNode Name="(local)\SQLDEV01:RoadRunnerKT\Kimberly">
+               <Created>2011-10-27T10:16:09.7582639-05:00</Created>
+               <Type>SQL</Type>
+               <Server>(local)\SQLDEV01</Server>
+               <UserName />
+               <Authentication>Windows Authentication</Authentication>
+               <InitialDB />
+               <LoginTimeout>15</LoginTimeout>
+               <ExecutionTimeout>0</ExecutionTimeout>
+               <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+               <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+            </ConnectionNode>
+         </Items>
+      </LogicalFolder>
+      <LogicalFolder Name="Queries" Type="0" Sorted="true">
+         <Items>
+            <FileNode Name="01 DMVPlanCache.sql">
+               <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\SQLDEV01:True</AssociatedConnectionMoniker>
+               <AssociatedConnSrvName>(local)\SQLDEV01</AssociatedConnSrvName>
+               <AssociatedConnUserName />
+               <FullPath>01 DMVPlanCache.sql</FullPath>
+            </FileNode>
+            <FileNode Name="02 ImplicitConversions.sql">
+               <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\SQLDEV01:True</AssociatedConnectionMoniker>
+               <AssociatedConnSrvName>(local)\SQLDEV01</AssociatedConnSrvName>
+               <AssociatedConnUserName />
+               <FullPath>02 ImplicitConversions.sql</FullPath>
+            </FileNode>
+            <FileNode Name="03 LookupsFromPlanCache.sql">
+               <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local)\SQLDEV01:True</AssociatedConnectionMoniker>
+               <AssociatedConnSrvName>(local)\SQLDEV01</AssociatedConnSrvName>
+               <AssociatedConnUserName />
+               <FullPath>03 LookupsFromPlanCache.sql</FullPath>
+            </FileNode>
+         </Items>
+      </LogicalFolder>
+      <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+         <Items />
+      </LogicalFolder>
+   </Items>
+</SqlWorkbenchSqlProject>

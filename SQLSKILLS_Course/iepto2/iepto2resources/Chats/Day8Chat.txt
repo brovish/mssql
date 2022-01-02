@@ -1,0 +1,165 @@
+from Randolph West they/them to everyone:    9:37 AM
+it's only 800
+from James O'Doherty to everyone:    9:43 AM
+Nuts
+from Randolph West they/them to everyone:    9:45 AM
+Entity Framework 6 says hi
+from Randolph West they/them to everyone:    9:48 AM
+it was too much ??
+from James O'Doherty to everyone:    9:48 AM
+i did - same here
+from Randolph West they/them to everyone:    9:48 AM
+nope :P
+from Bruce Pratt to everyone:    9:48 AM
+we track it and keep after it.
+from Randolph West they/them to everyone:    9:49 AM
+we deployed a job today to clear it periodically
+from sree to everyone:    9:49 AM
+2 to 5 GB from previous check couple of years back. not sure if it is avg too much
+from Bruce Pratt to everyone:    9:49 AM
+fortunately, we are a 99% proc env
+from Randolph West they/them to everyone:    9:49 AM
+wow
+from Bruce Pratt to everyone:    9:49 AM
+well, some procs are ad hoc generatores like mad!
+from Randolph West they/them to everyone:    9:49 AM
+ugh
+from Randolph West they/them to everyone:    9:49 AM
+most of them
+from James O'Doherty to everyone:    9:50 AM
+all stored procedures for our apps
+from Bruce McManus to everyone:    9:50 AM
+a LOT of adhoc
+from sree to everyone:    9:50 AM
+^ EF and decent amount of adhoc
+from Randolph West they/them to everyone:    9:51 AM
+oh heck no
+from James O'Doherty to everyone:    9:51 AM
+No
+from Bruce Pratt to everyone:    9:51 AM
+1 time.  and i changed the problem to something more managable.
+from Bruce Pratt to everyone:    9:52 AM
+several thing.  broke the query apart.  coached the developer.
+from Randolph West they/them to everyone:    9:55 AM
+late 80s? when you were in high school?
+from Randolph West they/them to everyone:    9:55 AM
+amazing
+from Bruce Pratt to everyone:    9:56 AM
+fox introduced SQL in FP 2.0 if I recall correctly
+from Randolph West they/them to everyone:    10:02 AM
+troubleshooting procs is sometimes annoying
+from Randolph West they/them to everyone:    10:16 AM
+hello ScarePoint
+from Jeff Farr to everyone:    10:28 AM
+can I get a copy of this code :)
+from Randolph West they/them to everyone:    10:30 AM
+ahhhh, this is why the code inside an IF should be in its own proc
+from Randolph West they/them to everyone:    10:31 AM
+[have to jump off for a meeting]
+from James O'Doherty to everyone:    10:48 AM
+yes
+from SQLskills Training to everyone:    10:49 AM
+There are so many little perf issues that new clients usually don't know they have
+from SQLskills Training to everyone:    10:49 AM
+And people wonder whether there's a future for DBAs....
+from SQLskills Training to everyone:    10:50 AM
+Nope - every new feature is more potential for consulting
+
+
+
+from Randolph West they/them to everyone:    11:46 AM
+I vividly remember this script from 2012, it had a profound effect on me
+from Randolph West they/them to everyone:    11:48 AM
+excellent choice
+from Randolph West they/them to everyone:    11:59 AM
+that would be neat, thank you
+from Randolph West they/them to everyone:    12:01 PM
+ugh yes!
+from James O'Doherty to everyone:    12:06 PM
+solves everyone's problem = solves no one's problem
+from Randolph West they/them to everyone:    12:06 PM
+Ctrl-?-R
+from Randolph West they/them to everyone:    12:07 PM
+¯\_(?)_/¯
+from Randolph West they/them to everyone:    12:19 PM
+LOL
+from Randolph West they/them to everyone:    12:19 PM
+showing your hand
+from Randolph West they/them to everyone:    12:33 PM
+lines 14 - 128 blew my mind the first time I saw this
+from Randolph West they/them to everyone:    12:33 PM
+*214
+from Randolph West they/them to everyone:    12:34 PM
+oh Gods, 124
+from Randolph West they/them to everyone:    12:43 PM
+prime the cache in the app, not the database
+from James O'Doherty to everyone:    12:58 PM
+it's really helpful
+from Randolph West they/them to everyone:    1:05 PM
+now this is a story all about how my script got flipped, turned upside down ??
+from Randolph West they/them to everyone:    1:06 PM
+hahaha
+from Randolph West they/them to everyone:    1:11 PM
+nope
+from Randolph West they/them to everyone:    1:11 PM
+I read about it once - it's like the switch statement in C# I think?
+from Randolph West they/them to everyone:    1:11 PM
+https://docs.microsoft.com/sql/t-sql/functions/logical-functions-choose-transact-sql
+from Randolph West they/them to everyone:    1:11 PM
+I think everyone has seen it ??
+from James O'Doherty to everyone:    1:11 PM
+ yes
+from Bruce Pratt to everyone:    1:12 PM
+absolutely
+from Randolph West they/them to everyone:    1:19 PM
+awesome
+from Randolph West they/them to everyone:    1:21 PM
+I know someone who archived all the old PASStv sessions
+from Bruce Pratt to everyone:    1:21 PM
+red gate has the pass library
+from Randolph West they/them to everyone:    1:21 PM
+yep
+from Bruce Pratt to everyone:    1:22 PM
+i saw a note that they have posted public access
+from Brian Kallion to everyone:    1:22 PM
+https://www.youtube.com/user/SQLPASSTV
+from Randolph West they/them to everyone:    1:23 PM
+SESSION: Dealing with Multipurpose Procs and PSP the RIGHT Way! - Kimberly Tripp - https://www.youtube.com/watch?v=p-6ii2NiUI0
+from Randolph West they/them to everyone:    1:23 PM
+lots of stuff here
+from Bruce Pratt to everyone:    1:23 PM
+some ninja search skills being demoed here...
+from Randolph West they/them to everyone:    1:26 PM
+searching
+from Brian Kallion to everyone:    1:26 PM
+http://web.archive.org/web/20150303124426/http://support.microsoft.com:80/kb/243586
+from Randolph West they/them to everyone:    1:27 PM
+This one? https://support.microsoft.com/en-us/topic/inf-frequently-asked-questions-sql-server-2000-table-variables-0664724a-30dd-3c75-1abd-fd6684342655
+from Randolph West they/them to everyone:    1:27 PM
+it's from 2000
+from Randolph West they/them to everyone:    1:28 PM
+sad face
+from SQLskills Training to everyone:    1:28 PM
+I can;'t find that KB in the Wayback Machine either
+from Randolph West they/them to everyone:    1:29 PM
+https://www.betaarchive.com/wiki/index.php?title=Microsoft_KB_Archive/243586
+from Randolph West they/them to everyone:    1:29 PM
+found it
+from Randolph West they/them to everyone:    1:29 PM
+this is one of my secret talents ??
+from SQLskills Training to everyone:    1:29 PM
+Got it
+from SQLskills Training to everyone:    1:29 PM
+https://web.archive.org/web/20121120232158/http://support.microsoft.com/kb/243586/
+from SQLskills Training to everyone:    1:30 PM
+Had to change to the old kb URL format
+from Eric Reid to everyone:    1:50 PM
+can you check for that in the object definition (index hints)
+from Eric Reid to everyone:    1:51 PM
+yup
+from Eric Reid to everyone:    1:51 PM
+simple
+from Eric Reid to everyone:    1:52 PM
+thank you
+from Randolph West they/them to everyone:    2:00 PM
+perfect timing

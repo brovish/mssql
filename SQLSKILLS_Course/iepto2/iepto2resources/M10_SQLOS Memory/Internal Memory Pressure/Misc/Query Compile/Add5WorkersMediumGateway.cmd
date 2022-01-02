@@ -1,0 +1,6 @@
+start RunWorkerMediumGateway.cmd
+start RunWorkerMediumGateway.cmd
+start RunWorkerMediumGateway.cmd
+start RunWorkerMediumGateway.cmd
+start RunWorkerMediumGateway.cmd
+exit

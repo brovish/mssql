@@ -1,0 +1,6 @@
+start RunWorkerSmallGateway.cmd
+start RunWorkerSmallGateway.cmd
+start RunWorkerSmallGateway.cmd
+start RunWorkerSmallGateway.cmd
+start RunWorkerSmallGateway.cmd
+exit

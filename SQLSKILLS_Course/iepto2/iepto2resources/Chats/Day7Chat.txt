@@ -1,0 +1,87 @@
+from Randolph West they/them to everyone:    9:29 AM
+this is cool
+from sree to everyone:    9:33 AM
+guessing the partition_number on the row groups view is also not the usual partition we are used to?
+from sree to everyone:    9:34 AM
+ok
+from Ben Miller to everyone:    9:42 AM
+The CREATE @OrderInfo TABLE probably should be DECLARE @OrderInfo TABLE :-)
+from sree to everyone:    9:42 AM
+are there any downsides of using memory optimized table type in STD edition
+from Ben Miller to everyone:    9:44 AM
+Have you had clients that have had great success with high load workloads using IMOLTP Table Types?
+from sree to everyone:    9:44 AM
+or limitation
+from Randolph West they/them to everyone:    9:47 AM
+that's a good way to explain it: it's not In-Memory DW
+from Randolph West they/them to everyone:    9:52 AM
+isn't there like a 4x RAM requirement for the table size?
+from sree to everyone:    9:53 AM
+To clarify the file group is needed for ANYTHING that is in memory (except for mem optimized tempdb) including the table type?
+from Ben Miller to everyone:    9:53 AM
+and to be clear in my mind, this IMOLTP is NOT part of Buffer Pool or is it? We leave memory out of Max Server Memory to accomodate it?
+from Ben Miller to everyone:    9:55 AM
+thx
+from sree to everyone:    9:55 AM
+Follow up on Ben's question, could you plz spend a couple of min on the STD edition restriction on the 32GB Mem Cache for Columnstore per instance and 32GB per Datbase inmemory data.. Like what happens when you hit these limits..
+from Randolph West they/them to everyone:    9:56 AM
+when you hit those limits, SQL crashes
+from Randolph West they/them to everyone:    9:56 AM
+it's really ugly
+from Randolph West they/them to everyone:    9:59 AM
+http://nedotter.com/archive/2018/01/in-memory-oltp-resources-part-4-oom-the-most-feared-acronym-in-all-of-in-memory-oltp/
+from Randolph West they/them to everyone:    10:04 AM
+crossing the in-memory-to-disk boundary is so expensive
+from Randolph West they/them to everyone:    10:10 AM
+we use it for session state only
+from Randolph West they/them to everyone:    10:19 AM
+oh neat
+from Randolph West they/them to everyone:    10:25 AM
+nice
+from Randolph West they/them to everyone:    10:27 AM
+hanging in
+from Randolph West they/them to everyone:    10:30 AM
+eeek plan guide
+from Randolph West they/them to everyone:    10:35 AM
+wow that's obscure
+from Randolph West they/them to everyone:    10:43 AM
+if you recreate the index, does it have to match the columns only, or the name as well?
+from Randolph West they/them to everyone:    10:43 AM
+makes sense
+from Randolph West they/them to everyone:    10:44 AM
+I figured it was a string parser thing
+from Randolph West they/them to everyone:    10:46 AM
+ohhhh the ALTER vs CREATE
+from sree to everyone:    10:47 AM
+Any workaround for 'NO_INDEX' failure for plan forcing when your query uses TempTables\Table Variables that has a PK defined that gets a 'system created name' each time
+
+
+
+from sree to everyone:    11:33 AM
+the second regression is in comparison to original or first regression?
+from sree to everyone:    11:58 AM
+how does the overhead compare with using like Xevents for this or a server side trace... Is it fair to say that the overhead incurred is in this order.. 1) DRU , 2) XEvents and 3) Server side traces with 2 and 3 being near equal?
+from sree to everyone:    12:00 PM
+Also targetted XE sessions like the one you had to monitor Plan Forcing failures etc.. are okay to have running permanently in prod correct as long as you are staying away from the problem events like show plan ?
+from SQLskills Training to everyone:    12:00 PM
+You've got other problems in that case... lol
+from Jeff Farr to everyone:    12:10 PM
+still lingering 2008 servers :(
+from Ben Miller to everyone:    1:04 PM
+yes that is it
+from Ben Miller to everyone:    1:04 PM
+without statistics stuff.  SET STATISTICS TIME, IO ON
+from Randolph West they/them to everyone:    1:09 PM
+different
+from Ben Miller to everyone:    1:09 PM
+different
+from Randolph West they/them to everyone:    1:53 PM
+stored procedures all the way
+from Ben Miller to everyone:    1:54 PM
+we are just mesmerized.
+from Randolph West they/them to everyone:    1:54 PM
+we are
+from Randolph West they/them to everyone:    1:55 PM
+performant is a perfectly cromulent word
+from Ben Miller to everyone:    1:56 PM
+And I did not pull out the timer either

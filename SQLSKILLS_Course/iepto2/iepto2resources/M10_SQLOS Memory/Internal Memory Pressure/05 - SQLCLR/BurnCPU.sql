@@ -1,0 +1,1 @@
+EXECUTE BurnCPU 0, 100000;

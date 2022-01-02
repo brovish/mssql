@@ -1,0 +1,91 @@
+from Randolph West they/them to everyone:    9:23 AM
+ooh, beat me to the question
+from Randolph West they/them to everyone:    9:27 AM
+is there any significance to base-10 group size number, vs base-2 counts of CPU cores? Or is this just for example if your core count is a multiple of 10?
+from Randolph West they/them to everyone:    9:29 AM
+got it, thanks
+from Randolph West they/them to everyone:    9:30 AM
+excellent, you answered my question
+from Bruce Pratt to everyone:    9:36 AM
+https://techcommunity.microsoft.com/t5/sql-server-support/sql-2016-it-just-runs-faster-multiple-log-writer-workers/ba-p/318732     The number of log writers created during the SQL Server instance startup depends on the number of hardware NUMA nodes present on the system. 
+from Randolph West they/them to everyone:    9:49 AM
+yikes
+from Randolph West they/them to everyone:    10:01 AM
+MCSE: mouse-click system engineer
+from Randolph West they/them to everyone:    10:01 AM
+that was me
+from Randolph West they/them to everyone:    10:06 AM
+nope
+from Randolph West they/them to everyone:    10:07 AM
+well that explains why it doesn't improve performance at least
+from Randolph West they/them to everyone:    10:09 AM
+yep
+from Randolph West they/them to everyone:    10:22 AM
+hahahahahahaha (sob) @ licensing
+from Randolph West they/them to everyone:    10:40 AM
+I'm reveling in the information dump
+from Bruce Pratt to everyone:    10:41 AM
+Calibration, please!  How frequently does a CPU resource implication lead to this kind of dive into the guts?
+from Bruce Pratt to everyone:    10:43 AM
+Scale plays a part -- either in #transactions or resources, eg large cpu, memory,  ?
+from Bruce Pratt to everyone:    10:44 AM
+I have run into worker thread pressure, exhaustion and it's always been a bad query or 2.... 
+from SQLskills Training to everyone:    10:45 AM
+https://michaeljswart.com/2020/10/detect-excessive-spinlock-contention-on-sql-server/
+from Bruce Pratt to everyone:    10:45 AM
+thanks!
+from Randolph West they/them to everyone:    10:46 AM
+reminds me when we moved from 32-bit to 64-bit, where performance could have tanked
+from SQLskills Training to everyone:    10:46 AM
+More cores = faster is such a fallacy
+from SQLskills Training to everyone:    10:46 AM
+And is common management-think
+from Bruce Pratt to everyone:    10:47 AM
+Fred Brooks "Mythical Man Month" and N Wirth's proposition alive and well still.
+from SQLskills Training to everyone:    10:47 AM
+Indeed
+from Bruce Pratt to everyone:    10:48 AM
+And Wirth -- best programs written by individuals.  but "useful" programs too big for 1 person.
+
+
+
+from sree to everyone:    12:05 PM
+how do multiple instances on same node play out here 
+from sree to everyone:    12:08 PM
+yes
+from Bruce Pratt to everyone:    12:11 PM
+A/V -- yeah.  We did not have exclusions configured properly in Windows Defender.....
+from Randolph West they/them to everyone:    12:16 PM
+I show the top ten waits, and then the top ten with CXPACKET filtered out
+from Randolph West they/them to everyone:    12:26 PM
+yes
+from Bruce Pratt to everyone:    1:08 PM
+ my jaw just dropped.... 
+from Bruce Pratt to everyone:    1:09 PM
+thought and been "led to believe...."
+from Randolph West they/them to everyone:    1:20 PM
+it did
+from sree to everyone:    1:20 PM
+threads used
+from Randolph West they/them to everyone:    1:20 PM
+haha
+from Randolph West they/them to everyone:    1:20 PM
+dang
+from Bruce Pratt to everyone:    1:22 PM
+there is only the estimated plan... and it may be the parallel one
+from sree to everyone:    1:28 PM
+what is a good way to get an apples to apples comparison when changing\upgrading CPU
+from James O'Doherty to everyone:    1:28 PM
+do you kinow of any issues/gotchas running under Nutanix AHV virtualization
+from sree to everyone:    1:28 PM
+sorry if reduntant i did miss the first 45min
+from sree to everyone:    1:29 PM
+Distributed replay?
+from James O'Doherty to everyone:    1:32 PM
+yes thanks
+from James O'Doherty to everyone:    1:32 PM
+a customer is looking at this primarily because licensing is not per core migrating from VMWare 
+from sree to everyone:    1:32 PM
+what you mentioned about %privileged time vs %user time .. does that hold good for VMs as well?
+from sree to everyone:    1:34 PM
+any corelation between clockspeed\core count and the type of workload OLTP\DW .. any skew  work better for any kind of workload ?

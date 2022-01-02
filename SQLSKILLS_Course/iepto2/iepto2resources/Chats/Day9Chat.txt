@@ -1,0 +1,153 @@
+from sree to everyone:    9:18 AM
+Memory Objects is not the same as 'in Memory'Objects? if not is 'In Memory' allocation is separate to this diagram?
+from sree to everyone:    9:21 AM
+yes
+from Bruce Pratt to everyone:    9:24 AM
+oh... the in mem oltp and column store additions are per database?
+from sree to everyone:    9:25 AM
+one is per instance
+from Randolph West they/them to everyone:    9:25 AM
+one of them is per instance
+from sree to everyone:    9:25 AM
+isnt it?
+from Randolph West they/them to everyone:    9:25 AM
+I think it's in-memory
+from Randolph West they/them to everyone:    9:25 AM
+https://docs.microsoft.com/en-us/sql/sql-server/maximum-capacity-specifications-for-sql-server?view=sql-server-ver15
+from sree to everyone:    9:25 AM
+do you know of ppl staying on 2005 to get around the std edition mem restrictions lol
+from Randolph West they/them to everyone:    9:28 AM
+according to this, I got it backward - it's columnstore that's limited to 32 GB per instance on Std Edition: https://docs.microsoft.com/en-us/SQL/SQL-server/editions-and-components-of-SQL-server-2017?view=sql-server-ver15
+from Randolph West they/them to everyone:    9:41 AM
+oh don't worry about me
+from Randolph West they/them to everyone:    9:41 AM
+you're presenting
+from SQLskills Training to everyone:    9:46 AM
+LRU-k, with k=2
+from sree to everyone:    9:52 AM
+how about Min Server Memory? is that something that is allocated on demand as well
+from Randolph West they/them to everyone:    10:09 AM
+no one would ever run all of those on one box ... *hides*
+from Randolph West they/them to everyone:    10:10 AM
+I did at the bank
+from SQLskills Training to everyone:    10:19 AM
+HelpLazyWriter is also run at the start of a log backup
+from SQLskills Training to everyone:    10:21 AM
+Not a checkpoint
+from SQLskills Training to everyone:    10:21 AM
+Checkpoint is at start of data backup
+from SQLskills Training to everyone:    10:24 AM
+Sorry - start of a log backup restore. Makes some space because it's going to read data pages in to see if redo required based on LSNs. How is all this stuff in my head?
+from sree to everyone:    10:34 AM
+must be what Paul calls merry go around :D 
+from Randolph West they/them to everyone:    10:36 AM
+my concern is SQL on VMs on shared hosts with LPIM
+from Randolph West they/them to everyone:    10:36 AM
+yep
+from Randolph West they/them to everyone:    10:39 AM
+Yeah, the overcommit is a thing anyway so that makes sense. It's all about nuance.
+from sree to everyone:    10:41 AM
+if locked pages is not configured is there an order of preference in which what gets paged out first viz. datapages\plan cache etc.. or is everything fair game as in it doesn't care
+from Randolph West they/them to everyone:    10:41 AM
+yes thanks
+from SQLskills Training to everyone:    10:44 AM
+So 834 and 876 are mutually exclusive?
+from SQLskills Training to everyone:    10:45 AM
+ok
+from sree to everyone:    10:49 AM
+posting for  Q\A Time : follow up to above article link from Randolph .. This says columnstore max memory for segment cache per instance is 32GB .. so may be the 32gb per database could also be correct? https://techcommunity.microsoft.com/t5/sql-server/sql-server-2016-sp1-know-your-limits/ba-p/385012
+from Randolph West they/them to everyone:    10:50 AM
+huh
+from Randolph West they/them to everyone:    10:50 AM
+the best way to test it is to... test it
+from Randolph West they/them to everyone:    10:50 AM
+I have a VM I can try it on, but I need to shuffle things around
+
+
+
+from Randolph West they/them to everyone:    11:33 AM
+RDP sessions, folks!
+from Randolph West they/them to everyone:    11:37 AM
+I created a table (and a script) for recommended Max Server Memory using Jon's algorithm, based on physical memory available, at https://bornsql.ca/memory. It can't account for columnstore or in-memory OLTP of course.
+from sree to everyone:    11:42 AM
+missing calculator view ;)
+from Randolph West they/them to everyone:    11:42 AM
+yeah really
+from Randolph West they/them to everyone:    11:43 AM
+but we have good imaginations
+from sree to everyone:    11:43 AM
+yes
+from SQLskills Training to everyone:    11:43 AM
+yes
+from Randolph West they/them to everyone:    11:43 AM
+yes
+from Randolph West they/them to everyone:    11:45 AM
+I dig this algorithm and a lot of folks swear by it
+from Jeff Farr to everyone:    11:46 AM
+our enterprise defaults it 85% of total server memory
+from Randolph West they/them to everyone:    11:48 AM
+FWIW, SQL on Linux has 80% of physical as default to avoid the OOM killer (not even counting Max Server Memory)
+from sree to everyone:    12:14 PM
+which one is for CLR usage?
+from sree to everyone:    12:20 PM
+sounds like they are named counter intuitive
+from SQLskills Training to everyone:    12:20 PM
+Jon - it's the other way around
+from SQLskills Training to everyone:    12:20 PM
+Outstanding = granted, pending = waiting
+from SQLskills Training to everyone:    12:20 PM
+I just checked the docs
+from SQLskills Training to everyone:    12:21 PM
+Memory Grants Outstanding    Specifies the total number of processes that have successfully acquired a workspace memory grant.Memory Grants Pending    
+from SQLskills Training to everyone:    12:21 PM
+Specifies the total number of processes waiting for a workspace memory grant.
+from Randolph West they/them to everyone:    12:45 PM
+yikes
+from Randolph West they/them to everyone:    12:52 PM
+Auto-close is great
+from Randolph West they/them to everyone:    12:52 PM
+I am
+from Randolph West they/them to everyone:    12:53 PM
+I have to turn it off when we move databases from Express to Standard
+from Randolph West they/them to everyone:    12:53 PM
+yes
+from Randolph West they/them to everyone:    12:53 PM
+yes it does
+from Randolph West they/them to everyone:    12:54 PM
+it's on by default on Express, cannot be disabled
+from Randolph West they/them to everyone:    1:09 PM
+goodbye PLE
+from Randolph West they/them to everyone:    1:24 PM
+good information thus far
+from sree to everyone:    1:25 PM
+execution memory grants .. is that tomorrow?
+from Randolph West they/them to everyone:    1:25 PM
+do you have a recommended set of perf counters or do you have a different set per type of problem?
+from Randolph West they/them to everyone:    1:26 PM
+ohhhhhh nice
+from sree to everyone:    1:28 PM
+Reg. Perf counters why is my batch req. \ sec consistently zero and i know the server isn't idling around
+from SQLskills Training to everyone:    1:29 PM
+Code is running in a loop?
+from SQLskills Training to everyone:    1:29 PM
+One btach with a while(1)
+from sree to everyone:    1:29 PM
+yes but i have other stuff running on the server as well
+from Bruce Pratt to everyone:    1:30 PM
+Yeah.  A batch is essentially the stuff before a GO.
+from Bruce Pratt to everyone:    1:30 PM
+All the stuff...
+from sree to everyone:    1:30 PM
+i seem get the value when querying
+from sree to everyone:    1:31 PM
+but just doesn't show in the live view in perf mon
+from SQLskills Training to everyone:    1:37 PM
+The batch hasn't finished yet while the query is running
+from SQLskills Training to everyone:    1:38 PM
+Sree - we'd need to look at your system to see what's going on
+from sree to everyone:    1:39 PM
+i just want to make sure it isn't PBKAC
+from Randolph West they/them to everyone:    1:40 PM
+observer overhead
+from Randolph West they/them to everyone:    1:41 PM
+I'm looking forward to playing with the scripts

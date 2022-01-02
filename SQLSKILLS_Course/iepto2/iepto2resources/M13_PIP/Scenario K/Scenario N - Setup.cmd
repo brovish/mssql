@@ -1,0 +1,1 @@
+start /b sqlcmd /E /S. /dAdventureWorks2008R2 /i"Scenario N - Setup.sql"

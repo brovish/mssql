@@ -1,0 +1,127 @@
+from Randolph West they/them to everyone:    9:09 AM
+I have never seen this issue in the wild
+from Bruce Pratt to everyone:    9:09 AM
+sounds like this is a last option for "high cpu with no good explanation otherwise."
+from Ben Miller to everyone:    9:10 AM
+And this "always" exhibits itself with MANY connections, not just high CPU, correct?
+from Ben Miller to everyone:    9:11 AM
+no, only had the client think so
+from Ben Miller to everyone:    9:11 AM
+exactly
+from Jonathan Kehayias to everyone:    9:12 AM
+There is a bug I’m looking for on high core systems from last year where the only fix is run on a smaller hardware server 
+from Jonathan Kehayias to everyone:    9:14 AM
+SECURITY_CACHE was split into two different spinlocks due to scalability issues in the cache stores
+from Jonathan Kehayias to everyone:    9:14 AM
+That one from Michael Was the bug 
+from Jonathan Kehayias to everyone:    9:17 AM
+EVERYONE should subscribe to notifications for CU releases and take the time to read the release notes 
+from Randolph West they/them to everyone:    9:18 AM
+amusingly I saw a lot of these unusual ones in Linux because my database was so rarely used
+from Ben Miller to everyone:    9:23 AM
+how many CPUs would you say is many?
+from Ben Miller to everyone:    9:24 AM
+ok
+from sree to everyone:    9:24 AM
+32 logical
+from sree to everyone:    9:25 AM
+is that physical cores or is the default usually to assume logical cores everytime
+from Bruce Pratt to everyone:    9:28 AM
+do you include both cxpacket and cxconsumer when you mention cxpacket?
+from Bruce Pratt to everyone:    9:31 AM
+as i suspected.  thanks!
+from Jonathan Kehayias to everyone:    9:46 AM
+This also can point out non-intuitive patterns like the distribution database taking up all the buffer pool from incorrect retention settings, code changes that force a clustered index to be scanned constantly due to missing FK constraint indexing during cascade operations 
+from Randolph West they/them to everyone:    10:27 AM
+that was cool
+from Ben Miller to everyone:    10:31 AM
+Agree, that was cool
+from Ben Miller to everyone:    10:40 AM
+Is that something you are seeing as a good idea to turn on?
+from Ben Miller to everyone:    10:40 AM
+Or is it based on what you find?
+from Bruce Pratt to everyone:    10:42 AM
+they probably had an edge case ..... 
+from sree to everyone:    10:42 AM
+is it defaulted on in azure?
+
+
+
+from SQLskills Training to everyone:    11:09 AM
+In-mem tempdb limitations: https://docs.microsoft.com/en-us/sql/relational-databases/databases/tempdb-database?view=sql-server-ver15 and look for the section on Memory-optimized tempdb limitations
+from Jonathan Kehayias to everyone:    11:57 AM
+The size of the Log Pool for the instance can be seen in PerfMon under SQLServer:Memory Manager\Log Pool Memory (KB) 
+from Bruce Pratt to everyone:    11:58 AM
+waiting to read
+from Ben Miller to everyone:    11:58 AM
+hotspot contention
+from sree to everyone:    11:59 AM
+But that reasoning of more number of waits happening wouldn't apply to CXpacket type wait?
+from sree to everyone:    11:59 AM
+wanted to park that for later 
+from sree to everyone:    12:03 PM
+is transactions\sec or batchrequests\sec better measure for througput .. if each has their use when to use which.. sorry if a tangent can wait till q\a 
+from Jonathan Kehayias to everyone:    12:03 PM
+It depends... CXPACKET is NEVER “the problem”, personally I don’t even pay attention to that wait type until there is another thing pointing to an actual problem/bottleneck. 
+from sree to everyone:    12:04 PM
+but why would you say batch ]sec is the got o
+from Jonathan Kehayias to everyone:    12:04 PM
+Batch Requests/sec because there are things counted in a single request that can make it produce thousands of Transactions/sec 
+from sree to everyone:    12:05 PM
+thx
+from sree to everyone:    12:10 PM
+why is it x2
+from Randolph West they/them to everyone:    12:18 PM
+CXPACKET waits are the reason I got into performance tuning
+from sree to everyone:    12:21 PM
+what is the heuristic to go for when trying to find the right maxdop for your workload? are we trying to determine how high you can go safely
+from Randolph West they/them to everyone:    12:22 PM
+and workloads can change during a business period too
+from sree to everyone:    12:22 PM
+wait COP at DB level as well?
+from Randolph West they/them to everyone:    12:23 PM
+opening SSMS now ??
+from Bruce Pratt to everyone:    12:23 PM
+DOP is database scoped
+from Bruce Pratt to everyone:    12:23 PM
+as of 2019 anyhow.
+from Ben Miller to everyone:    12:23 PM
+Cost threshold is not in the database.
+from Jonathan Kehayias to everyone:    12:23 PM
+For the earlier question on CXPACKET increases during tuning, yes it can happen if you fix one bottleneck that affected multiple threads in the parallel task execution. For example PAGELATCH contention in tempdb can impact multiple threads in the same query. If you eliminate that, you could shift to a PAGEIOLATCH wait reading a page from disk that is only on one of the sub-tasks and all the other sub-tasks wait with CCPACKET on just that one thread 
+from Ben Miller to everyone:    12:24 PM
+Optimize for adhoc workloads was moved to the database level.
+from Randolph West they/them to everyone:    12:25 PM
+yep
+from Jonathan Kehayias to everyone:    12:27 PM
+This is why I don’t pay attention to CXPACKET on its own. It just means I’m running with parallelism. The non-CXPACKET wait is what I want to work on because that is what’s causing the CXPACKET waits on threads with execution_id>0. The parent task is execution_id=0 and always waits on CXPACKET as shown in the slide animation 
+from sree to everyone:    12:28 PM
+thnx Jon
+from Jonathan Kehayias to everyone:    12:29 PM
+Your code? LOL!
+from Randolph West they/them to everyone:    12:32 PM
+LOL
+from Jonathan Kehayias to everyone:    12:33 PM
+Wikipedia 
+from Jonathan Kehayias to everyone:    12:33 PM
+Because Paul tried to confuse me with an overly complex detailed explanation 
+from Ben Miller to everyone:    12:34 PM
+Just don't get fired again LOL!
+from Randolph West they/them to everyone:    1:04 PM
+I dig it
+from Jonathan Kehayias to everyone:    1:07 PM
+Paul’s first version of CHECKDB only had to validate the punch cards were all in numerical order 
+from Ben Miller to everyone:    1:07 PM
+well done
+from Jeff Farr to everyone:    1:07 PM
+yes bravo
+from Ben Miller to everyone:    1:08 PM
+I told you NOT to get fired.
+from Randolph West they/them to everyone:    1:10 PM
+hoo boy
+from Bruce Pratt to everyone:    1:19 PM
+2019 has checkdb maxdop settings... :-)  DBCC CHECKDB() WITH MAXDOP=1
+from Ben Miller to everyone:    1:30 PM
+I believe it was 2016+
+from SQLskills Training to everyone:    1:30 PM
+Yup

@@ -1,0 +1,149 @@
+from Randolph West to everyone:    9:03 AM
+nested functions are incredibly hard to trace
+from Bruce Pratt to everyone:    9:07 AM
+too busy debugging to check on database scoped configuration options....  :-)
+from Randolph West to everyone:    9:13 AM
+very cool
+from Bruce Pratt to everyone:    9:14 AM
+and no XE data collected for the objectid that is the function...  
+from Bruce Pratt to everyone:    9:14 AM
+Interesting.....
+from Bruce Pratt to everyone:    9:17 AM
+Thanks you.  yup!
+from Randolph West to everyone:    9:17 AM
+it does to me!
+from Bruce Pratt to everyone:    9:18 AM
+better and more accurate than the old school grep on module definitions.....
+from Randolph West to everyone:    9:18 AM
+yes definitely
+from Jeff Farr to everyone:    9:19 AM
+Very cool, is there also a way to track SSIS containers execution in a package using this same process?
+from Bruce Pratt to everyone:    9:20 AM
+oooh...  but if we have query stYore enabled, we have a better handle retention.  would that help?
+from Bruce Pratt to everyone:    9:23 AM
+Typical SQL answer coming.... well, it depends on ...  a) your configuration and b) your expertise and c) other factors....
+from Bruce Pratt to everyone:    9:28 AM
+Can we go back to the prior slide and discuss xe sessions that don't have a defined target and where that happens?
+from Bruce Pratt to everyone:    9:32 AM
+thanks.  again.
+from Bruce McManus to everyone:    9:41 AM
+thanks for that hint!
+from Randolph West to everyone:    9:53 AM
+no questions, but I dig this
+from sree (privately):    9:58 AM
+How does single event loss measure up as ? it's a single event lost over what period of time?
+from Randolph West to everyone:    10:00 AM
+all this math ...
+from sree to everyone:    10:28 AM
+Guessing one of the use cases for XE sessions could be 's
+from sree to everyone:    10:34 AM
+'studying performance impact of turning on new features in sql server' ? Wondering if there is a reference i could lookup to see what events are related the feature or just a reference of all events in general?
+from Bruce Pratt to everyone:    10:35 AM
+So is the live data viewer sorta, kinda a different target for the xe session?  looks like xevents has something similar to trace in terms of a pipeline that some monitoring tools use, a reader pipeline of sorts.
+from SQLskills Training to everyone:    10:35 AM
+I wish...
+from Bruce Pratt to everyone:    10:35 AM
+And your query on targets system dmv tells me the answer is yes:  event_stream  :-)
+from sree to everyone:    10:39 AM
+Full Disclosure : I am tasked with quantifying the performance impact of turning on CDC on a DB.. planning to use extended events for this .. any pointers there ?
+from SQLskills Training to everyone:    10:40 AM
+WHy not just measure workload throughput?
+from Bruce Pratt to everyone:    10:42 AM
+IEPTO2_M13_AppendixBaselining  :-)
+from Erin Stellato to everyone:    10:43 AM
+https://docs.microsoft.com/en-us/previous-versions/technet-magazine/cc987538(v=msdn.10)?redirectedfrom=MSDN
+from sree to everyone:    10:43 AM
+thanks !
+
+
+
+
+
+I'm staying out of this one
+from Eric Reid to everyone:    11:48 AM
+very new
+from Christopher Daly to everyone:    11:48 AM
+New
+from Randolph West to everyone:    11:49 AM
+LOL
+from Randolph West to everyone:    11:58 AM
+yep
+from Randolph West to everyone:    12:16 PM
+yes
+from Randolph West to everyone:    12:16 PM
+yes
+from Jeff Farr to everyone:    12:16 PM
+yep
+from Randolph West to everyone:    12:16 PM
+fortunately dev box
+from Bruce Pratt to everyone:    12:16 PM
+yes.  not in a while though.  and yes reboot.
+from Jonathan Kehayias to everyone:    12:20 PM
+There is a known non-yielding scheduler issue in all versions of SQL Server including SQL Server 2019 for the .NET SqlDependency class if the devs don't handle the queue activation notification task firing properly and clean up the SqlDependency by calling Dispose() before enlisting a new one.   even in 2019
+from Randolph West to everyone:    12:20 PM
+wow
+from Jonathan Kehayias to everyone:    12:20 PM
+It has to do with the fact that there is a system internal table that tracks the dependency and the execution plans show that they exist
+from Jonathan Kehayias to everyone:    12:20 PM
+Yes
+from Jonathan Kehayias to everyone:    12:20 PM
+very old bug
+from Jonathan Kehayias to everyone:    12:21 PM
+Scale
+from sree to everyone:    12:26 PM
+what guarantees that SQLOS can spawn additonal threads when it needs to and won't be starved due to anything outside of SQLOS
+from Jonathan Kehayias to everyone:    12:26 PM
+Nothing
+from Jonathan Kehayias to everyone:    12:26 PM
+Max worker threads 
+from Jonathan Kehayias to everyone:    12:26 PM
+available memory and address space 
+from sree to everyone:    12:26 PM
+yes
+from Jonathan Kehayias to everyone:    12:26 PM
+There is no thread limit in the OS
+from Jonathan Kehayias to everyone:    12:26 PM
+Nope
+from Jonathan Kehayias to everyone:    12:27 PM
+Windows will respond to memory pressure by paging and then the thread stack would allocate
+from Jonathan Kehayias to everyone:    12:34 PM
+Additional information about thread creation in Windows OS and limits can be found on this post:
+from Jonathan Kehayias to everyone:    12:34 PM
+https://techcommunity.microsoft.com/t5/windows-blog-archive/pushing-the-limits-of-windows-processes-and-threads/ba-p/723824
+from Jonathan Kehayias to everyone:    12:38 PM
+The scheduling change Paul talked about in 2016+ is called Large Deficit First (LDF) scheduling.  We will discuss it a little more in the SQLOS CPU module. 
+from sree to everyone:    12:38 PM
+does dm_db_waitstats work outside of azure sql db
+from Jonathan Kehayias to everyone:    12:39 PM
+Not how you would want it to 
+from Jonathan Kehayias to everyone:    12:47 PM
+That is_user_process filter is incredibly important on any system using IMOLTP because there will be at least #CPU’s of system internal sessions on the server when that is enabled on any database 
+from Bruce Pratt to everyone:    1:15 PM
+does cpu affinity affect max thread count?
+from Randolph West to everyone:    1:16 PM
+Jon doesn't want to talk to us ??
+from Jonathan Kehayias to everyone:    1:17 PM
+How is it being done?
+from Jonathan Kehayias to everyone:    1:17 PM
+You shouldn’t be using that 
+from Jonathan Kehayias to everyone:    1:17 PM
+Use alter server configuration instead 
+from Jonathan Kehayias to everyone:    1:17 PM
+2012
+from Jonathan Kehayias to everyone:    1:18 PM
+And No 
+from Jonathan Kehayias to everyone:    1:18 PM
+changing affinity doesn't affect the worker thread count
+from Jonathan Kehayias to everyone:    1:19 PM
+no
+from Jonathan Kehayias to everyone:    1:19 PM
+setting affinity max doesn't affect the calculated value
+from Jonathan Kehayias to everyone:    1:19 PM
+Because you managed the engine team in 2008
+from Jonathan Kehayias to everyone:    1:19 PM
+???
+from sree to everyone:    1:21 PM
+Trying to understand the difference you talked about in the execution plan actual vs estimated in terms of parallel plan evaluation.. 
+from sree to everyone:    1:21 PM
+COP drives whether it is a Serial \ Parallel plan and then MAXDOP drives whether it is executed in parallel?
+

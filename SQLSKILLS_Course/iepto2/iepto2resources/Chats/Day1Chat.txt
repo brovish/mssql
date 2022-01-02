@@ -1,0 +1,99 @@
+from Bruce Pratt to everyone:    10:55 AM
+I had a boss one time that when called for an emergency, the first thing he’d do was go get a cup of coffee.
+from SQLskills Training to everyone:    10:55 AM
+Deep breath...
+from Randolph West to everyone:    10:55 AM
+always have a plan
+from Randolph West to everyone:    10:55 AM
+yup, each environment is different
+from Eric Reid to everyone:    10:56 AM
+One of our vendors insists that 20% fill factor on a few of their tables is by design... is there ever a case for a FF this low?
+from SQLskills Training to everyone:    10:56 AM
+Eric - that's ridiculously low
+from SQLskills Training to everyone:    10:56 AM
+I wonder if they have it backwards - thinking that FF 20 means leave 20% space
+from SQLskills Training to everyone:    10:57 AM
+Why?
+from Bruce Pratt to everyone:    10:58 AM
+How old is this app?  This have vestiges of antiquated issues..
+
+from Bruce McManus to everyone:    11:31 AM
+Haven't used it.
+from Randolph West to everyone:    11:31 AM
+the best thing about XE is the (newish) SSMS XE Profiler
+from Bruce Pratt to everyone:    11:32 AM
+MS support had us collect 2.3GB HADR related stuff.  Had to parse it.  Now I am a fan...  getting better at it.from James Donnelly to everyone:    11:32 AM
+EE is cool, I liked Profiler and love EE, super useful for debugging/optimization.
+from Danitza to everyone:    11:32 AM
+have seen it but i'm so used to profiler
+
+from Michael Pekatowski to everyone:    11:34 AM
+I have used Xevents a few times
+from James Donnelly to everyone:    11:35 AM
+spills
+from Eric Reid to everyone:    11:51 AM
+1). If the action is on the same thread, and you are looking at the execution timing, if those actions introduce a delay on the query TAT will that influence or affect the reported execution time?
+from Randolph West to everyone:    11:54 AM
+same
+from Bruce Pratt to everyone:    11:58 AM
+For that 2.3GB, powershell module to the rescue..
+from Randolph West to everyone:    12:11 PM
+this is the cool stuff - filtering per event
+from sree to everyone:    12:26 PM
+could you repeat how to got to this aggegration view lost trak of it
+from Bruce Pratt to everyone:    12:26 PM
+Actually you can only filter at the event level from my experience...
+from SQLskills Training to everyone:    12:41 PM
+Jeff asks: Does predicate syntax  support XAND and XOR?  Just curious.
+from SQLskills Training to everyone:    12:42 PM
+Sounds like some people don't have 'Everyone' in the chat menu - don't know why - chat to me privately and I'll pass on the question.
+from SQLskills Training to everyone:    12:43 PM
+I'll show you an awesome use of causality tracking on Wednesday
+from Bruce Pratt to everyone:    12:43 PM
+That’s a real teaser!  Cool!
+from SQLskills Training to everyone:    12:43 PM
+I have - unless you have a debugger attached, you need to reboot SQL Server
+from Bruce Pratt to everyone:    12:45 PM
+I’ve never seen a supported Xop in the GUI or the sys tables.from SQLskills Training to everyone:    12:46 PM
+Yuip - I checked - not there
+from Randolph West to everyone:    1:02 PM
+hanging in there
+from Randolph West to everyone:    1:02 PM
+it helps that you presented this at my user group
+from Bruce Pratt to everyone:    1:03 PM
+Yeah.   This is much better than my other exposure and experience
+from Bruce Pratt to everyone:    1:03 PM
+15 min of what?  More XE?  Yes!from sree to everyone:    1:03 PM
+15more!
+from James Donnelly (privately):    1:03 PM
+I'm ready for more
+from Randolph West to everyone:    1:04 PM
+gimme more (a la Britney)
+from Bruce Pratt to everyone:    1:08 PM
+Quicken ui....  I think their first windows product introduced that 
+from Randolph West to everyone:    1:15 PM
+I used this recently to figure out the test environment wasn't actually running against the correct database — because the data NEVER populated after 30 seconds
+from Eric Reid to everyone:    1:17 PM
+were the bracketed values the variable values or session IDs?
+from Bruce Pratt to everyone:    1:23 PM
+There has been an addition to some XE for queryhash_unsigned.  Yay!
+from Randolph West to everyone:    1:23 PM
+yep
+from Eric Reid to everyone:    1:24 PM
+different page.
+from Eric Reid to everyone:    1:24 PM
+think it may not have been the variables
+from Eric Reid to everyone:    1:24 PM
+was a while back
+from sree to everyone:    1:24 PM
+i think it is just the number of times it ran
+from Eric Reid to everyone:    1:24 PM
+similar not that page
+from sree to everyone:    1:26 PM
+you mentioned how server side traces and XE sessions are close as far as their overhead is considered.. how do i go about measuring the overhead for either .. trying to make the determination if a session\trace is okay to be left running?
+from Bruce Pratt to everyone:    1:26 PM
+We need an XEsession tsql definition beautifier....
+from SQLskills Training to everyone:    1:27 PM
+https://sqlperformance.com/2012/10/sql-trace/observer-overhead-trace-extended-events
+from sree to everyone:    1:30 PM
+how many other events have that warning lol..

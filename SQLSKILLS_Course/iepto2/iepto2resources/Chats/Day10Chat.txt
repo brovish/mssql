@@ -1,0 +1,343 @@
+from Randolph West they/them to everyone:    9:09 AM
+ehhh, I was going to say 4
+from sree to everyone:    9:18 AM
+is there a heuristic to determine what is considered a large memory grant ? sorry if i missed it
+from sree to everyone:    9:18 AM
+is it a percent 
+from sree to everyone:    9:18 AM
+of total memory
+from sree to everyone:    9:26 AM
+yes
+from sree to everyone:    9:40 AM
+is it 2019 feature?
+from Randolph West they/them to everyone:    10:24 AM
+oh cool
+from Bruce Pratt to everyone:    10:28 AM
+if they are running defauls, it timed out.
+from Randolph West they/them to everyone:    10:28 AM
+what one customer the "white screen bug"
+from Bruce Pratt to everyone:    10:28 AM
+yes.  dev *never* asks the dba until it breaks....
+from Ben Miller to everyone:    10:29 AM
+I deal with it a lot in PowerShell and SMO.
+from Ben Miller to everyone:    10:29 AM
+A LOT
+from SQLskills Training to everyone:    10:55 AM
+https://www.sqlskills.com/blogs/jonathan/dbcc-checkdb-execution-memory-grants-not-quite-what-you-expect/
+
+
+
+from sree to everyone:    11:50 AM
+could this happen on a heap?
+from sree to everyone:    12:12 PM
+ In a deadlock involving exchange events.. how is the amount of log needed to determine deadlock victim determined.. is it the log used per thread that is taken into account? 
+from sree to everyone:    12:13 PM
+ok might have an outlier example will email you
+from Bruce Pratt to everyone:    12:13 PM
+we saw this parallelism deadlocks.  turns out the table had a number of indexes and trriggers.  tweaking the fill factor and clustering key resolved it,
+from Bruce Pratt to everyone:    12:15 PM
+certainly a case by case kind of thing.  and we got lucky is my opinion.
+from sree to everyone:    12:19 PM
+Do you have recommendations to identify which TRY Catch blocks need to retry for deadlocks... are you saying ALL or are there patterns to look for
+from sree to everyone:    12:30 PM
+SOS Scheduler yield at 61 doesn't bode well
+from Randolph West they/them to everyone:    12:35 PM
+when were stats last updated?
+from Randolph West they/them to everyone:    12:36 PM
+is Query Store configured?
+from James Donnelly to everyone:    12:36 PM
+ok, I was just about to suggest sys.dm_io_virtual_stats lol, but if it's not disk subsystem...
+from Randolph West they/them to everyone:    12:38 PM
+resource governor?
+from Randolph West they/them to everyone:    12:40 PM
+oh come on
+from Randolph West they/them to everyone:    12:40 PM
+Profiler
+from sree to everyone:    12:40 PM
+trace
+from sree to everyone:    12:40 PM
+showplan events
+from Randolph West they/them to everyone:    12:40 PM
+what extended events?
+from Randolph West they/them to everyone:    12:41 PM
+what is the last one?
+from Randolph West they/them to everyone:    12:41 PM
+this has a showplan I bet
+from Randolph West they/them to everyone:    12:41 PM
+LOL
+from Randolph West they/them to everyone:    12:42 PM
+I hate that I needed a hint to get this one
+from James Donnelly to everyone:    12:42 PM
+do we have a baseline trace taken in the good times?  (to compare against)
+from Randolph West they/them to everyone:    12:44 PM
+the nine years between training took their toll on my memory apparently
+from sree to everyone:    12:49 PM
+Memory issues?
+from sree to everyone:    12:51 PM
+wait stats as well
+from Randolph West they/them to everyone:    12:51 PM
+my first suspicion is MAXDOP, so I'd want to see that too
+from sree to everyone:    12:51 PM
+PLE seems too low
+from sree to everyone:    12:52 PM
+is that a symptom as well lol
+from Randolph West they/them to everyone:    12:52 PM
+that was very single-user-mode
+from Randolph West they/them to everyone:    12:53 PM
+I see MAXDOP is 0, and I'd like to know how many CPU cores there are, and how many NUMA nodes there are
+from Randolph West they/them to everyone:    12:54 PM
+what is cost threshold?
+from Randolph West they/them to everyone:    12:54 PM
+I missed it
+from Randolph West they/them to everyone:    12:54 PM
+1?
+from Randolph West they/them to everyone:    12:54 PM
+yeah....
+from sree to everyone:    12:55 PM
+100
+from Randolph West they/them to everyone:    12:55 PM
+what are the log writes?
+from Randolph West they/them to everyone:    12:56 PM
+huh
+from Bruce Pratt to everyone:    12:58 PM
+this is a tough exercise for me in this virtual environment.  the irl distractions here.....  
+from Randolph West they/them to everyone:    12:58 PM
+are there any blocking queries?
+from Bruce Pratt to everyone:    12:59 PM
+just like a production issue with the brass breathing down my neck....
+from Randolph West they/them to everyone:    12:59 PM
+thinking in terms of read committed versus, I dunno, serializeable?
+from Randolph West they/them to everyone:    1:00 PM
+I feel like this is RBAR stuff
+from Randolph West they/them to everyone:    1:01 PM
+when were statistics last updated?
+from Jeff Farr to everyone:    1:02 PM
+Maybe check for spill data?
+from Randolph West they/them to everyone:    1:02 PM
+oh dear, he's typing
+from Randolph West they/them to everyone:    1:03 PM
+dang
+from Randolph West they/them to everyone:    1:03 PM
+are there any deadlocks?
+from Randolph West they/them to everyone:    1:06 PM
+tempdb usage?
+from Randolph West they/them to everyone:    1:06 PM
+waiting tasks
+from Randolph West they/them to everyone:    1:06 PM
+and outstanding tasks
+from Randolph West they/them to everyone:    1:07 PM
+so what is that task?
+from Randolph West they/them to everyone:    1:08 PM
+oh DAMN
+from Randolph West they/them to everyone:    1:09 PM
+93MB? no
+from Randolph West they/them to everyone:    1:09 PM
+it's too low
+from Randolph West they/them to everyone:    1:09 PM
+I want to know the query text
+from Randolph West they/them to everyone:    1:11 PM
+so we're out of memory
+from sree to everyone:    1:11 PM
+target server memory
+from Randolph West they/them to everyone:    1:11 PM
+Mem to leave is also a way
+from Randolph West they/them to everyone:    1:12 PM
+stolen memory
+from Jeff Farr to everyone:    1:13 PM
+512GB
+from Randolph West they/them to everyone:    1:13 PM
+what is max server memory?
+from Randolph West they/them to everyone:    1:13 PM
+yikes
+from Randolph West they/them to everyone:    1:14 PM
+boom
+from Randolph West they/them to everyone:    1:14 PM
+LPIM
+from sree to everyone:    1:15 PM
+stats were fudged with?
+from Randolph West they/them to everyone:    1:16 PM
+I feel better that when I asked about stats I was on the right track
+from Randolph West they/them to everyone:    1:19 PM
+there was a lot, yes
+from Randolph West they/them to everyone:    1:20 PM
+has anyone solved these right away?
+from Randolph West they/them to everyone:    1:21 PM
+LOL
+from Randolph West they/them to everyone:    1:22 PM
+memory thing, firstly
+from Randolph West they/them to everyone:    1:23 PM
+yeah, that's what I see when there's not enough RAM for the workload (which itself has several causes)
+from Randolph West they/them to everyone:    1:24 PM
+the writing is small
+from Randolph West they/them to everyone:    1:24 PM
+is this tempdb contention?
+from sree to everyone:    1:25 PM
+hotspot contention
+from Randolph West they/them to everyone:    1:25 PM
+I'm thinking out loud
+from Randolph West they/them to everyone:    1:25 PM
+file 2
+from Randolph West they/them to everyone:    1:25 PM
+is tempdb
+from Randolph West they/them to everyone:    1:26 PM
+8088
+from Randolph West they/them to everyone:    1:27 PM
+allocation
+from Randolph West they/them to everyone:    1:27 PM
+I'm with Sree here, it's a hotspot
+from sree to everyone:    1:27 PM
+Log?
+from Randolph West they/them to everyone:    1:27 PM
+well let's look at the page
+from Randolph West they/them to everyone:    1:28 PM
+that's a low number for an object_ID
+from Randolph West they/them to everyone:    1:29 PM
+do it
+from Randolph West they/them to everyone:    1:31 PM
+in memory
+from Randolph West they/them to everyone:    1:31 PM
+clustered GUIDs for everyone!
+from Randolph West they/them to everyone:    1:32 PM
+I'm sitting really close to the screen and I see PAGELATCH_EX now
+from Randolph West they/them to everyone:    1:32 PM
+hahaha
+from Jeff Farr to everyone:    1:33 PM
+I can only imagine the nightmare of interviewing with you guys :)
+from Randolph West they/them to everyone:    1:33 PM
+no
+from Randolph West they/them to everyone:    1:34 PM
+you can use a derived table
+from James Donnelly to everyone:    1:34 PM
+not
+from Randolph West they/them to everyone:    1:34 PM
+that too
+from Randolph West they/them to everyone:    1:34 PM
+look, the text is small
+from Randolph West they/them to everyone:    1:34 PM
+thank you
+from Randolph West they/them to everyone:    1:34 PM
+LOL
+from James Donnelly to everyone:    1:34 PM
+text is very small, as is my laptop unfortunately
+from SQLskills Training to everyone:    1:35 PM
+@Jeff - Erin does DBA interviews for some of our clients. 
+from James Donnelly to everyone:    1:35 PM
+that's a weird standard
+from Randolph West they/them to everyone:    1:35 PM
+I had one where they switched to table variables because I got better perf out of one once
+from James Donnelly to everyone:    1:37 PM
+only small sets right?
+from James Donnelly to everyone:    1:37 PM
+i've seen that too
+from SQLskills Training to everyone:    1:38 PM
+When I was at Microsoft, my favorite interview question was to have them whiteboard pseudo-code to print the contents of an arbitrary X x Y size array of numbers, starting the centre, in clockwise spiral order.
+from Randolph West they/them to everyone:    1:40 PM
+cargo cult programming
+from Randolph West they/them to everyone:    1:41 PM
+I'd like to do the scenario if the other folks don't mind
+from Randolph West they/them to everyone:    1:43 PM
+if something isn't going parallel, it's that function
+from Randolph West they/them to everyone:    1:44 PM
+yep
+from Randolph West they/them to everyone:    1:44 PM
+I'd inline that to start, because it's so simple
+from Randolph West they/them to everyone:    1:46 PM
+MAXDOP, cost threshold
+from sree to everyone:    1:46 PM
+COP
+from Randolph West they/them to everyone:    1:47 PM
+haha
+from Randolph West they/them to everyone:    1:47 PM
+it's slow yeah
+from sree to everyone:    1:47 PM
+I\O statistics
+from Randolph West they/them to everyone:    1:47 PM
+indexes
+from James Donnelly to everyone:    1:48 PM
+so hard to read
+from Randolph West they/them to everyone:    1:48 PM
+that's better thanks
+from sree to everyone:    1:49 PM
+any warnings in the plan
+from Randolph West they/them to everyone:    1:49 PM
+I don't like the HAVING and WHERE conditions being like that
+from sree to everyone:    1:49 PM
+memory grant info in the execution plan
+from Randolph West they/them to everyone:    1:49 PM
+the index suggestion is probably on to something
+from Jeff Farr to everyone:    1:50 PM
+that seemed way to obvious lol
+from Randolph West they/them to everyone:    1:50 PM
+but I'd rewrite the query to move the > 2000 predicate to the WHERE clause if that's what they want
+from Randolph West they/them to everyone:    1:51 PM
+oh ok, yes
+from sree to everyone:    1:51 PM
+windowing function?
+from Randolph West they/them to everyone:    1:52 PM
+repartitition streams
+from sree to everyone:    1:52 PM
+oh yeah you look at the threads
+from James Donnelly to everyone:    1:52 PM
+ya
+from Randolph West they/them to everyone:    1:52 PM
+it's skewed on threads
+from sree to everyone:    1:52 PM
+still 1
+from James Donnelly to everyone:    1:52 PM
+interesting
+from Randolph West they/them to everyone:    1:52 PM
+oh we saw this
+from Randolph West they/them to everyone:    1:52 PM
+yes
+from James Donnelly to everyone:    1:52 PM
+lol
+from Randolph West they/them to everyone:    1:53 PM
+the plan is forced
+from Randolph West they/them to everyone:    1:53 PM
+wrong term
+from Randolph West they/them to everyone:    1:53 PM
+that thing
+from James Donnelly to everyone:    1:54 PM
+I do seem to forget about Resource Governor all the time...
+from Randolph West they/them to everyone:    1:55 PM
+please don't say power saving
+from Randolph West they/them to everyone:    1:55 PM
+oh gosh I hate triggers
+from James Donnelly to everyone:    1:55 PM
+ya not a fan
+from Eric Reid to everyone:    1:56 PM
+TRIGGERS!!!!!  the best & most common punchline!  
+from Randolph West they/them to everyone:    1:57 PM
+yeah
+from Jeff Farr to everyone:    1:57 PM
+SQL Triggers me
+from James Donnelly to everyone:    1:58 PM
+my plan is definitely to go through this module 3 times
+from Randolph West they/them to everyone:    1:59 PM
+Jon doesn't remember me
+from Randolph West they/them to everyone:    1:59 PM
+I take it personally every time
+from Bruce Pratt to everyone:    1:59 PM
+If you forget my face, I will take it personally!   :-)
+from Randolph West they/them to everyone:    1:59 PM
+thank you
+from James O'Doherty to everyone:    1:59 PM
+thank you for awesome two weeks
+from Bruce Pratt to everyone:    1:59 PM
+Much obliged.
+from Bruce McManus to everyone:    2:00 PM
+thanks much.
+from Bruce Pratt to everyone:    2:00 PM
+Guiness time!
+from James Donnelly to everyone:    2:00 PM
+Thanks for all the time and insight!
+from sree to everyone:    2:00 PM
+Thank you guys!
+from Jeff Farr to everyone:    2:00 PM
+Great course, lots of information,  Thanks.
+from Danitza to everyone:    2:00 PM
+thanks so much!
+from Randolph West they/them to everyone:    2:01 PM
+good stuff
+
+

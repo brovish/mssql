@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="03_OptimizingProceduralCode">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items />
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="01 RecompilationIssues.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>01 RecompilationIssues.sql</FullPath>
+        </FileNode>
+        <FileNode Name="02 ModularProcedures.SQL">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>02 ModularProcedures.SQL</FullPath>
+        </FileNode>
+        <FileNode Name="03 Multipurpose Procs.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>03 Multipurpose Procs.sql</FullPath>
+        </FileNode>
+        <FileNode Name="04 PSP and UNKNOWN.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>04 PSP and UNKNOWN.sql</FullPath>
+        </FileNode>
+        <FileNode Name="05 ScalarFunctions.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>05 ScalarFunctions.sql</FullPath>
+        </FileNode>
+        <FileNode Name="06 DoNotTurnOffAutoUpdateStatistics.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>06 DoNotTurnOffAutoUpdateStatistics.sql</FullPath>
+        </FileNode>
+        <FileNode Name="07 Parameters and filters.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>07 Parameters and filters.sql</FullPath>
+        </FileNode>
+        <FileNode Name="dm_exec_procedure_stats.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>dm_exec_procedure_stats.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>
