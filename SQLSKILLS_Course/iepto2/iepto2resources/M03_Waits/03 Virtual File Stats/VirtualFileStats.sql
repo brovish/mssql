@@ -48,7 +48,8 @@ FROM sys.dm_io_virtual_file_stats (NULL,NULL) AS [vfs]
 JOIN sys.master_files AS [mf]
 	ON [vfs].[database_id] = [mf].[database_id]
 	AND [vfs].[file_id] = [mf].[file_id]
-WHERE [vfs].[file_id] = 2 -- log files
+--WHERE [vfs].[file_id] = 2 -- log files
+WHERE mf.[type] = 1 -- log files
 ORDER BY [WriteLatency] DESC;
 GO
 
