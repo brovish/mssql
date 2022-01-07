@@ -48,8 +48,8 @@ namespace BigCSVImportTest2
             int millionsYouWantToRead = 0;
             while (streamreader.Peek() > 0)
             {
-                if (millionsYouWantToRead == 8)
-                    break;
+                //if (millionsYouWantToRead == 8)
+                //    break;
                 if (count < 2000000)
                 {
                     DataRow datarow = datatable.NewRow();
