@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="BigCSBImportTest2\**" />
+    <EmbeddedResource Remove="BigCSBImportTest2\**" />
+    <None Remove="BigCSBImportTest2\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
