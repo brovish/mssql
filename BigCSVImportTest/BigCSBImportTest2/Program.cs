@@ -42,7 +42,7 @@ namespace BigCSVImportTest2
             datatable.Columns.Add("X", typeof(SqlDecimal));
 
 
-            myConnection = new SqlConnection(@"Server=DATSUN-BM\sql2019;Database=NetCDFWarehouse1;Trusted_Connection=True;");
+            myConnection = new SqlConnection(@"Server=DATSUN-BM\sql2019;Database=NetCDFWarehouse;Trusted_Connection=True;");
             myConnection.Open();
             int count = 0;
             int millionsYouWantToRead = 0;
@@ -85,12 +85,9 @@ namespace BigCSVImportTest2
                     millionsYouWantToRead = millionsYouWantToRead + 2;
 
                     using (SqlCommand command = new SqlCommand("CHECKPOINT", myConnection))
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        //Console.WriteLine("CHECKPOINT done.");
-                    }
-
+                        command.ExecuteNonQuery();
                 }
+
             }
 
             DateTime endTime = DateTime.Now;
