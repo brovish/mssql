@@ -42,7 +42,7 @@ namespace BigCSVImportTest2
             datatable.Columns.Add("X", typeof(SqlDecimal));
 
 
-            myConnection = new SqlConnection(@"Server=DATSUN-BM\sql2019;Database=NetCDFWarehouse;Trusted_Connection=True;");
+            myConnection = new SqlConnection(@"Server=DATSUN-BM\sql2019;Database=NetCDFWarehouse1;Trusted_Connection=True;");
             myConnection.Open();
             int count = 0;
             int millionsYouWantToRead = 0;
@@ -58,38 +58,44 @@ namespace BigCSVImportTest2
                     List<object> modColVals = new List<object>();
                     modColVals.Add(int.Parse(colVals[0]));
                     modColVals.Add(int.Parse(colVals[1]));
-                    
+
                     decimal temp;
-                    decimal? numericValue =  decimal.TryParse(colVals[2], out temp) ? temp : (decimal?)null;
+                    decimal? numericValue = decimal.TryParse(colVals[2], out temp) ? temp : (decimal?)null;
                     modColVals.Add(numericValue);
-                    
+
 
                     datarow.ItemArray = modColVals.ToArray();
                     datatable.Rows.Add(datarow);
                     count++;
-                    }
+                }
                 else
+                {
+                    SqlBulkCopy bulkcopy = new SqlBulkCopy(myConnection);
+                    bulkcopy.DestinationTableName = datatable.TableName;
+                    try
                     {
-                        SqlBulkCopy bulkcopy = new SqlBulkCopy(myConnection);
-                        bulkcopy.DestinationTableName = datatable.TableName;
-                        try
-                        {
-                            bulkcopy.WriteToServer(datatable);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e.Message);
-                        }
-                        count = 0;
-                        datatable.Clear();
-                        millionsYouWantToRead = millionsYouWantToRead + 2;
+                        bulkcopy.WriteToServer(datatable);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    count = 0;
+                    datatable.Clear();
+                    millionsYouWantToRead = millionsYouWantToRead + 2;
+
+                    using (SqlCommand command = new SqlCommand("CHECKPOINT", myConnection))
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        //Console.WriteLine("CHECKPOINT done.");
                     }
 
                 }
-
-                DateTime endTime = DateTime.Now;
-                double totalSeconds = (endTime - startTime).TotalSeconds;
-                Console.WriteLine($"Total time in seconds for {millionsYouWantToRead} millon records is {totalSeconds}");
             }
+
+            DateTime endTime = DateTime.Now;
+            double totalSeconds = (endTime - startTime).TotalSeconds;
+            Console.WriteLine($"Total time in seconds for {millionsYouWantToRead} millon records is {totalSeconds}");
         }
     }
+}
